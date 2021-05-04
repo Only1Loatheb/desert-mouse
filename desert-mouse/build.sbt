@@ -26,6 +26,7 @@ version := "1.0"
 
 libraryDependencies += "org.scala-lang.modules" %% "scala-parser-combinators" % "1.1.2"
 libraryDependencies += "org.scala-graph" %% "graph-core" % "1.13.2"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.8" % Test
 
 // Here, `libraryDependencies` is a set of dependencies, and by using `+=`,
 // we're adding the scala-parser-combinators dependency to the set of dependencies

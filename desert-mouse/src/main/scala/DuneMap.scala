@@ -11,7 +11,6 @@ object DuneMap {
       , Basin
       , SihayaRidge
       , GaraKulon
-      , RedChasm
       , SouthMesa
       , CielagoEast
       , CielagoSouth
@@ -27,7 +26,7 @@ object DuneMap {
       , Tsimpo
       , HoleInTheRock
       , TheMinorErg
-      , RedChasma
+      , RedChasm
       , CielagoNorth
       , CielagoDepression
       , CielagoWest
@@ -71,8 +70,8 @@ object DuneMap {
       , PastyMesa ~ FalseWallSouth
       , PastyMesa ~ TueksSietch
       , PastyMesa ~ SouthMesa
-      , PastyMesa ~ RedChasma
-      , RedChasma ~ SouthMesa
+      , PastyMesa ~ RedChasm
+      , RedChasm ~ SouthMesa
       , SouthMesa ~ TueksSietch
       , SouthMesa ~ FalseWallSouth
       , SouthMesa ~ CielagoEast
@@ -165,7 +164,6 @@ case object OldGap extends Region
 case object Basin extends Region
 case object SihayaRidge extends Region
 case object GaraKulon extends Region
-case object RedChasm extends Region
 case object SouthMesa extends Region
 case object CielagoEast extends Region
 case object CielagoSouth extends Region
@@ -181,7 +179,7 @@ case object ImperialBasin extends Region
 case object Tsimpo extends Region
 case object HoleInTheRock extends Region
 case object TheMinorErg extends Region
-case object RedChasma extends Region
+case object RedChasm extends Region
 case object CielagoNorth extends Region
 case object CielagoDepression extends Region
 case object CielagoWest extends Region
