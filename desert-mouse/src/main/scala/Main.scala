@@ -1,4 +1,4 @@
-import dune_map._
+import game._
 object Main extends App {
   println("Hello, World!")
 }

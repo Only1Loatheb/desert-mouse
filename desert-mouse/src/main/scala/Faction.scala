@@ -1,9 +1,10 @@
-trait Faction {
-}
+package game.faction
 
-case class Atreides() extends Faction
-case class Harkonnen() extends Faction
-case class Fremen() extends Faction
-case class Emperor() extends Faction
-case class Guild() extends Faction
-case class BeneGesserit() extends Faction
+sealed trait Faction {}
+
+case object Atreides extends Faction
+case object Harkonnen extends Faction
+case object Fremen extends Faction
+case object Emperor extends Faction
+case object Guild extends Faction
+case object BeneGesserit extends Faction

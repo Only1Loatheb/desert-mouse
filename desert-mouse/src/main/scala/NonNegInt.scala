@@ -1,3 +1,5 @@
+package util
+// http://erikerlandson.github.io/blog/2015/08/18/lightweight-non-negative-numerics-for-better-scala-type-signatures/
 object nonneg {
   import scala.language.implicitConversions
 

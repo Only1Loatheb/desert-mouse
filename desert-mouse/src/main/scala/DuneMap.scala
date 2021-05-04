@@ -1,8 +1,9 @@
-package dune_map
+package game.dune_map
 
 import scalax.collection.Graph // or scalax.collection.mutable.Graph
 import scalax.collection.GraphPredef._, scalax.collection.GraphEdge._
 
+sealed trait Region {}
 object DuneMap {
   val duneMap = {
     val nodes = List(
@@ -159,55 +160,53 @@ object DuneMap {
   }
 }
 
-trait Region {
-}
 // sand regions:
-case class OldGap() extends Region
-case class Basin() extends Region
-case class SihayaRidge() extends Region
-case class GaraKulon() extends Region
-case class RedChasm() extends Region
-case class SouthMesa() extends Region
-case class CielagoEast() extends Region
-case class CielagoSouth() extends Region
-case class Meridan() extends Region
-case class HabbanyaRidgeFlat() extends Region
-case class THE_GREAT_FLAT() extends Region
-case class TheGreaterFlat() extends Region
-case class FuneralPlains() extends Region
-case class BlightOfTheCliff() extends Region
-case class RockOutcroppings() extends Region
-case class BrokenLand() extends Region
-case class ImperialBasin() extends Region
-case class Tsimpo() extends Region
-case class HoleInTheRock() extends Region
-case class TheMinorErg() extends Region
-case class RedChasma() extends Region
-case class CielagoNorth() extends Region
-case class CielagoDepression() extends Region
-case class CielagoWest() extends Region
-case class HabbanyaErg() extends Region
-case class WindPass() extends Region
-case class HargPass() extends Region
-case class WindPassNorth() extends Region
-case class HaggaBasin() extends Region
-case class Arsunt() extends Region
+case object OldGap extends Region
+case object Basin extends Region
+case object SihayaRidge extends Region
+case object GaraKulon extends Region
+case object RedChasm extends Region
+case object SouthMesa extends Region
+case object CielagoEast extends Region
+case object CielagoSouth extends Region
+case object Meridan extends Region
+case object HabbanyaRidgeFlat extends Region
+case object THE_GREAT_FLAT extends Region
+case object TheGreaterFlat extends Region
+case object FuneralPlains extends Region
+case object BlightOfTheCliff extends Region
+case object RockOutcroppings extends Region
+case object BrokenLand extends Region
+case object ImperialBasin extends Region
+case object Tsimpo extends Region
+case object HoleInTheRock extends Region
+case object TheMinorErg extends Region
+case object RedChasma extends Region
+case object CielagoNorth extends Region
+case object CielagoDepression extends Region
+case object CielagoWest extends Region
+case object HabbanyaErg extends Region
+case object WindPass extends Region
+case object HargPass extends Region
+case object WindPassNorth extends Region
+case object HaggaBasin extends Region
+case object Arsunt extends Region
 
 // City Regions:
-case class Carthag() extends Region
-case class Arrakeen() extends Region
-case class TueksSietch() extends Region
-case class HabanyaRidgeSietch() extends Region
-case class SietchTabr() extends Region
+case object Carthag extends Region
+case object Arrakeen extends Region
+case object TueksSietch extends Region
+case object HabanyaRidgeSietch extends Region
+case object SietchTabr extends Region
 
 // Rock Regions:
-case class RimWallWest() extends Region
-case class ShieldWall() extends Region
-case class PastyMesa() extends Region
-case class FalseWallSouth() extends Region
-case class FalseWallEast() extends Region
-case class FalseWallWest() extends Region
-case class PlasticBasin() extends Region
+case object RimWallWest extends Region
+case object ShieldWall extends Region
+case object PastyMesa extends Region
+case object FalseWallSouth extends Region
+case object FalseWallEast extends Region
+case object FalseWallWest extends Region
+case object PlasticBasin extends Region
 
 // IceRegion:
-case class PolarSink() extends Region
+case object PolarSink extends Region
