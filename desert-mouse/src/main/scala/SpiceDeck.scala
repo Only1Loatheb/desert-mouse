@@ -4,7 +4,7 @@ import scala.util.Random
 import game.dune_map._
 
 sealed trait SpiceCard{}
-case class SpiceBlow(region: Region) extends SpiceCard
+case class SpiceBlow(Territory: Territory) extends SpiceCard
 case object ShaiHulud extends SpiceCard
 
 // 21 cards in original game

@@ -2,8 +2,14 @@ package game.dune_map
 
 import scalax.collection.Graph // or scalax.collection.mutable.Graph
 import scalax.collection.GraphPredef._, scalax.collection.GraphEdge._
+import game.sector._
 
-sealed trait Region {}
+sealed trait Territory{}
+sealed trait Sand{}
+sealed trait Rock{}
+sealed trait Ice{}
+sealed trait City{}
+
 object DuneMap {
   val duneMap = {
     val nodes = List(
@@ -39,7 +45,7 @@ object DuneMap {
       , Carthag
       , Arrakeen
       , TueksSietch
-      , HabanyaRidgeSietch
+      , HabbanyaRidgeSietch
       , SietchTabr
       , RimWallWest
       , ShieldWall
@@ -87,7 +93,7 @@ object DuneMap {
       , HabbanyaRidgeFlat ~ CielagoWest
       , HabbanyaRidgeFlat ~ FalseWallWest
       , HabbanyaRidgeFlat ~ HabbanyaErg
-      , HabbanyaRidgeFlat ~ HabanyaRidgeSietch
+      , HabbanyaRidgeFlat ~ HabbanyaRidgeSietch
       , HabbanyaErg ~ FalseWallWest
       , HabbanyaErg ~ TheGreaterFlat
       , TheGreaterFlat ~ FalseWallWest
@@ -159,52 +165,52 @@ object DuneMap {
   }
 }
 
-// sand regions:
-case object OldGap extends Region
-case object Basin extends Region
-case object SihayaRidge extends Region
-case object GaraKulon extends Region
-case object SouthMesa extends Region
-case object CielagoEast extends Region
-case object CielagoSouth extends Region
-case object Meridan extends Region
-case object HabbanyaRidgeFlat extends Region
-case object THE_GREAT_FLAT extends Region
-case object TheGreaterFlat extends Region
-case object FuneralPlains extends Region
-case object BlightOfTheCliff extends Region
-case object RockOutcroppings extends Region
-case object BrokenLand extends Region
-case object ImperialBasin extends Region
-case object Tsimpo extends Region
-case object HoleInTheRock extends Region
-case object TheMinorErg extends Region
-case object RedChasm extends Region
-case object CielagoNorth extends Region
-case object CielagoDepression extends Region
-case object CielagoWest extends Region
-case object HabbanyaErg extends Region
-case object WindPass extends Region
-case object HargPass extends Region
-case object WindPassNorth extends Region
-case object HaggaBasin extends Region
-case object Arsunt extends Region
+// sand Territorys:
+case object OldGap extends Territory with Sand
+case object Basin extends Territory with Sand
+case object SihayaRidge extends Territory with Sand
+case object GaraKulon extends Territory with Sand
+case object SouthMesa extends Territory with Sand
+case object CielagoEast extends Territory with Sand
+case object CielagoSouth extends Territory with Sand
+case object Meridan extends Territory with Sand
+case object HabbanyaRidgeFlat extends Territory with Sand
+case object THE_GREAT_FLAT extends Territory with Sand
+case object TheGreaterFlat extends Territory with Sand
+case object FuneralPlains extends Territory with Sand
+case object BlightOfTheCliff extends Territory with Sand
+case object RockOutcroppings extends Territory with Sand
+case object BrokenLand extends Territory with Sand
+case object ImperialBasin extends Territory with Sand
+case object Tsimpo extends Territory with Sand
+case object HoleInTheRock extends Territory with Sand
+case object TheMinorErg extends Territory with Sand
+case object RedChasm extends Territory with Sand
+case object CielagoNorth extends Territory with Sand
+case object CielagoDepression extends Territory with Sand
+case object CielagoWest extends Territory with Sand
+case object HabbanyaErg extends Territory with Sand
+case object WindPass extends Territory with Sand
+case object HargPass extends Territory with Sand
+case object WindPassNorth extends Territory with Sand
+case object HaggaBasin extends Territory with Sand
+case object Arsunt extends Territory with Sand
 
-// City Regions:
-case object Carthag extends Region
-case object Arrakeen extends Region
-case object TueksSietch extends Region
-case object HabanyaRidgeSietch extends Region
-case object SietchTabr extends Region
+// City Territorys:
+case object Carthag extends Territory with City
+case object Arrakeen extends Territory with City
+case object TueksSietch extends Territory with City
+case object HabbanyaRidgeSietch extends Territory with City
+case object SietchTabr extends Territory with City
 
-// Rock Regions:
-case object RimWallWest extends Region
-case object ShieldWall extends Region
-case object PastyMesa extends Region
-case object FalseWallSouth extends Region
-case object FalseWallEast extends Region
-case object FalseWallWest extends Region
-case object PlasticBasin extends Region
+// Rock Territorys:
+case object RimWallWest extends Territory with Rock
+case object ShieldWall extends Territory with Rock
+case object PastyMesa extends Territory with Rock
+case object FalseWallSouth extends Territory with Rock
+case object FalseWallEast extends Territory with Rock
+case object FalseWallWest extends Territory with Rock
+case object PlasticBasin extends Territory with Rock
 
-// IceRegion:
-case object PolarSink extends Region
+// IceTerritory:
+case object PolarSink extends Territory with Ice
