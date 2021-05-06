@@ -2,6 +2,7 @@
 *.log
 .vscode/*
 .metals/*
+.bloop/*
 
 # sbt specific
 .cache/
@@ -13,5 +14,6 @@ lib_managed/
 src_managed/
 project/boot/
 project/plugins/project/
+project/.bloop/*
 
-desert-mouse/.bsp
+.bsp

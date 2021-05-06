@@ -10,7 +10,6 @@ You can create your dune boardgame AI, test and train it to determine how to pla
 ## Running
 
 ```bash
-cd ./desert-mouse
 sbt
 test
 ~run
