@@ -1,5 +1,5 @@
 package game.state
 
-import game.armies_on_dune.ArmiesOnDune
+import game.armies.Armies
 
 class BoardState(){}

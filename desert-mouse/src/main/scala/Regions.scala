@@ -6,35 +6,35 @@ import game.sector.{Sector}
 object Regions {
   type RegionsBySector = List[List[Territory]]
 
-  val sector1Regions = List(
+  val sector0Regions = List(
     Meridan
   , CielagoWest
   , CielagoDepression
   , CielagoNorth
   )
 
-  val sector2Regions = List(
+  val sector1Regions = List(
     Meridan
   , CielagoSouth
   , CielagoDepression
   , CielagoNorth
   )
 
-  val sector3Regions = List(
+  val sector2Regions = List(
     CielagoSouth
   , CielagoEast
   , CielagoDepression
   , CielagoNorth
   )
 
-  val sector4Regions = List(
+  val sector3Regions = List(
     CielagoEast
   , SouthMesa
   , FalseWallSouth
   , HargPass
   )
   
-  val sector5Regions = List(
+  val sector4Regions = List(
     SouthMesa
   , TueksSietch
   , FalseWallSouth
@@ -44,21 +44,21 @@ object Regions {
   , FalseWallEast
   )
 
-  val sector6Regions = List(
+  val sector5Regions = List(
     SouthMesa
   , PastyMesa
   , TheMinorErg
   , FalseWallEast
   )
 
-  val sector7Regions = List(
+  val sector6Regions = List(
     RedChasm
   , PastyMesa
   , TheMinorErg
   , FalseWallEast
   )
 
-  val sector8Regions = List(
+  val sector7Regions = List(
     GaraKulon
   , PastyMesa
   , ShieldWall
@@ -66,7 +66,7 @@ object Regions {
   , FalseWallEast
   )
 
-  val sector9Regions = List(
+  val sector8Regions = List(
     SihayaRidge
   , Basin
   , OldGap
@@ -77,13 +77,13 @@ object Regions {
   , FalseWallEast
   )
 
-  val sector10Regions = List(
+  val sector9Regions = List(
     OldGap
   , Arrakeen
   , ImperialBasin
   )
 
-  val sector11Regions = List(
+  val sector10Regions = List(
     OldGap
   , Tsimpo
   , BrokenLand
@@ -92,7 +92,7 @@ object Regions {
   , Arsunt
   )
 
-  val sector12Regions = List(
+  val sector11Regions = List(
     BrokenLand
   , Tsimpo
   , PlasticBasin
@@ -100,14 +100,14 @@ object Regions {
   , Arsunt
   )
 
-  val sector13Regions = List(
+  val sector12Regions = List(
     RockOutcroppings
   , PlasticBasin
   , Tsimpo
   , HaggaBasin
   )
 
-  val sector14Regions = List(
+  val sector13Regions = List(
     RockOutcroppings
   , SietchTabr
   , BlightOfTheCliff
@@ -115,21 +115,21 @@ object Regions {
   , WindPass
   )
 
-  val sector15Regions = List(
+  val sector14Regions = List(
     BlightOfTheCliff
   , FuneralPlains
   , TheGreaterFlat
   , WindPass
   )
 
-  val sector16Regions = List(
+  val sector15Regions = List(
     THE_GREAT_FLAT
   , HabbanyaErg
   , FalseWallWest
   , WindPass
   )
 
-  val sector17Regions = List(
+  val sector16Regions = List(
     HabbanyaRidgeFlat
   , HabbanyaRidgeSietch
   , HabbanyaErg
@@ -138,7 +138,7 @@ object Regions {
   , WindPassNorth
   )
 
-  val sector18Regions = List(
+  val sector17Regions = List(
     HabbanyaRidgeFlat
   , FalseWallWest
   , CielagoWest
@@ -146,7 +146,8 @@ object Regions {
   )
 
   val duneRegionsBySector: RegionsBySector = List(
-      sector1Regions 
+      sector0Regions 
+    , sector1Regions 
     , sector2Regions 
     , sector3Regions 
     , sector4Regions 
@@ -163,6 +164,5 @@ object Regions {
     , sector15Regions 
     , sector16Regions 
     , sector17Regions 
-    , sector18Regions 
     )
 }
