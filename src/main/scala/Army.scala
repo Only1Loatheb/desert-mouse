@@ -6,6 +6,8 @@ import game.faction._
 sealed trait Army{
   def faction: Faction
   def force: Int
+  def normalTroops: Int
+  def specialTroops: Int
 }
 
 case class AtreidesArmy(
@@ -14,6 +16,8 @@ case class AtreidesArmy(
 {
   override def faction: Faction = Atreides
   override def force: Int = troops.toInt
+  override def normalTroops: Int = troops.toInt
+  override def specialTroops: Int = 0
 }
 
 
@@ -23,6 +27,8 @@ case class HarkonnenArmy(
 {
   override def faction: Faction = Harkonnen
   override def force: Int = troops.toInt
+  override def normalTroops: Int = troops.toInt
+  override def specialTroops: Int = 0
 }
 
 
@@ -33,6 +39,8 @@ case class FremenArmy(
 {
   override def faction: Faction = Fremen
   override def force: Int = {troops.toInt + fedaykins.toInt + fedaykins.toInt}
+  override def normalTroops: Int = troops.toInt
+  override def specialTroops: Int = fedaykins.toInt
 }
 
 
@@ -43,6 +51,8 @@ case class EmperorArmy(
 {
   override def faction: Faction = Emperor
   override def force: Int = {troops.toInt + sardaukars.toInt + sardaukars.toInt}
+  override def normalTroops: Int = troops.toInt
+  override def specialTroops: Int = sardaukars.toInt
 }
 
 
@@ -51,8 +61,9 @@ case class GuildArmy(
   ) extends Army
 {
   override def faction: Faction = Guild
-
   override def force: Int = troops.toInt
+  override def normalTroops: Int = troops.toInt
+  override def specialTroops: Int = 0
 }
 
 
@@ -63,4 +74,15 @@ case class BeneGesseritArmy(
 {
   override def faction: Faction = BeneGesserit
   override def force: Int = fighters.toInt
+  override def normalTroops: Int = fighters.toInt
+  override def specialTroops: Int = advisors.toInt
+}
+
+object ArmyOps{
+  def isSmallerOrEqualArmyOfTheSameFaction(shouldBeSmaller: Army)(other: Army) = {
+    (shouldBeSmaller.faction == other.faction 
+    && shouldBeSmaller.normalTroops <= other.normalTroops
+    && shouldBeSmaller.specialTroops <= other.specialTroops
+    )
+  }
 }

@@ -4,14 +4,17 @@ import scalax.collection.Graph // or scalax.collection.mutable.Graph
 import scalax.collection.GraphPredef._, scalax.collection.GraphEdge._
 import game.sector._
 
-sealed trait Territory{}
+sealed trait DuneMapNode{}
 sealed trait Sand{}
 sealed trait Rock{}
 sealed trait Ice{}
 sealed trait City{}
 
 object DuneMap {
-  val duneMap = {
+  type Territory = Product with DuneMapNode with Serializable
+  type DuneMapEdge = UnDiEdge[Territory]
+  type DuneMapGraph = Graph[Territory,UnDiEdge]
+  val duneMap: DuneMapGraph = {
     val nodes = List(
         OldGap
       , Basin
@@ -165,52 +168,52 @@ object DuneMap {
   }
 }
 
-// sand Territorys:
-case object OldGap extends Territory with Sand
-case object Basin extends Territory with Sand
-case object SihayaRidge extends Territory with Sand
-case object GaraKulon extends Territory with Sand
-case object SouthMesa extends Territory with Sand
-case object CielagoEast extends Territory with Sand
-case object CielagoSouth extends Territory with Sand
-case object Meridan extends Territory with Sand
-case object HabbanyaRidgeFlat extends Territory with Sand
-case object THE_GREAT_FLAT extends Territory with Sand
-case object TheGreaterFlat extends Territory with Sand
-case object FuneralPlains extends Territory with Sand
-case object BlightOfTheCliff extends Territory with Sand
-case object RockOutcroppings extends Territory with Sand
-case object BrokenLand extends Territory with Sand
-case object ImperialBasin extends Territory with Sand
-case object Tsimpo extends Territory with Sand
-case object HoleInTheRock extends Territory with Sand
-case object TheMinorErg extends Territory with Sand
-case object RedChasm extends Territory with Sand
-case object CielagoNorth extends Territory with Sand
-case object CielagoDepression extends Territory with Sand
-case object CielagoWest extends Territory with Sand
-case object HabbanyaErg extends Territory with Sand
-case object WindPass extends Territory with Sand
-case object HargPass extends Territory with Sand
-case object WindPassNorth extends Territory with Sand
-case object HaggaBasin extends Territory with Sand
-case object Arsunt extends Territory with Sand
+  // sand
+  case object OldGap extends Product with DuneMapNode with Serializable with Sand
+  case object Basin extends Product with DuneMapNode with Serializable with Sand
+  case object SihayaRidge extends Product with DuneMapNode with Serializable with Sand
+  case object GaraKulon extends Product with DuneMapNode with Serializable with Sand
+  case object SouthMesa extends Product with DuneMapNode with Serializable with Sand
+  case object CielagoEast extends Product with DuneMapNode with Serializable with Sand
+  case object CielagoSouth extends Product with DuneMapNode with Serializable with Sand
+  case object Meridan extends Product with DuneMapNode with Serializable with Sand
+  case object HabbanyaRidgeFlat extends Product with DuneMapNode with Serializable with Sand
+  case object THE_GREAT_FLAT extends Product with DuneMapNode with Serializable with Sand
+  case object TheGreaterFlat extends Product with DuneMapNode with Serializable with Sand
+  case object FuneralPlains extends Product with DuneMapNode with Serializable with Sand
+  case object BlightOfTheCliff extends Product with DuneMapNode with Serializable with Sand
+  case object RockOutcroppings extends Product with DuneMapNode with Serializable with Sand
+  case object BrokenLand extends Product with DuneMapNode with Serializable with Sand
+  case object ImperialBasin extends Product with DuneMapNode with Serializable with Sand
+  case object Tsimpo extends Product with DuneMapNode with Serializable with Sand
+  case object HoleInTheRock extends Product with DuneMapNode with Serializable with Sand
+  case object TheMinorErg extends Product with DuneMapNode with Serializable with Sand
+  case object RedChasm extends Product with DuneMapNode with Serializable with Sand
+  case object CielagoNorth extends Product with DuneMapNode with Serializable with Sand
+  case object CielagoDepression extends Product with DuneMapNode with Serializable with Sand
+  case object CielagoWest extends Product with DuneMapNode with Serializable with Sand
+  case object HabbanyaErg extends Product with DuneMapNode with Serializable with Sand
+  case object WindPass extends Product with DuneMapNode with Serializable with Sand
+  case object HargPass extends Product with DuneMapNode with Serializable with Sand
+  case object WindPassNorth extends Product with DuneMapNode with Serializable with Sand
+  case object HaggaBasin extends Product with DuneMapNode with Serializable with Sand
+  case object Arsunt extends Product with DuneMapNode with Serializable with Sand
 
-// City Territorys:
-case object Carthag extends Territory with City
-case object Arrakeen extends Territory with City
-case object TueksSietch extends Territory with City
-case object HabbanyaRidgeSietch extends Territory with City
-case object SietchTabr extends Territory with City
+  // City
+  case object Carthag extends Product with DuneMapNode with Serializable with City
+  case object Arrakeen extends Product with DuneMapNode with Serializable with City
+  case object TueksSietch extends Product with DuneMapNode with Serializable with City
+  case object HabbanyaRidgeSietch extends Product with DuneMapNode with Serializable with City
+  case object SietchTabr extends Product with DuneMapNode with Serializable with City
 
-// Rock Territorys:
-case object RimWallWest extends Territory with Rock
-case object ShieldWall extends Territory with Rock
-case object PastyMesa extends Territory with Rock
-case object FalseWallSouth extends Territory with Rock
-case object FalseWallEast extends Territory with Rock
-case object FalseWallWest extends Territory with Rock
-case object PlasticBasin extends Territory with Rock
+  // Rock
+  case object RimWallWest extends Product with DuneMapNode with Serializable with Rock
+  case object ShieldWall extends Product with DuneMapNode with Serializable with Rock
+  case object PastyMesa extends Product with DuneMapNode with Serializable with Rock
+  case object FalseWallSouth extends Product with DuneMapNode with Serializable with Rock
+  case object FalseWallEast extends Product with DuneMapNode with Serializable with Rock
+  case object FalseWallWest extends Product with DuneMapNode with Serializable with Rock
+  case object PlasticBasin extends Product with DuneMapNode with Serializable with Rock
 
-// IceTerritory:
-case object PolarSink extends Territory with Ice
+  // Ice
+  case object PolarSink extends Product with DuneMapNode with Serializable with Ice

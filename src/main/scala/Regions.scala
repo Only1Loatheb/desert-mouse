@@ -1,6 +1,7 @@
 package game.region
 
 import game.dune_map._
+import game.dune_map.DuneMap.Territory
 import game.sector.{Sector}
 
 object Regions {
