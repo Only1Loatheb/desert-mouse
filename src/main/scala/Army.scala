@@ -8,9 +8,10 @@ sealed trait Army{
   def force: Int
   def normalTroops: Int
   def specialTroops: Int
+  def troopsAbleToCollect: Int
 }
 
-case class AtreidesArmy(
+final case class AtreidesArmy(
     val troops: NonNegInt
   ) extends Army
 {
@@ -18,10 +19,11 @@ case class AtreidesArmy(
   override def force: Int = troops.toInt
   override def normalTroops: Int = troops.toInt
   override def specialTroops: Int = 0
+  override def troopsAbleToCollect: Int = troops.toInt
 }
 
 
-case class HarkonnenArmy(
+final case class HarkonnenArmy(
     val troops: NonNegInt
   ) extends Army
 {
@@ -29,10 +31,11 @@ case class HarkonnenArmy(
   override def force: Int = troops.toInt
   override def normalTroops: Int = troops.toInt
   override def specialTroops: Int = 0
+  override def troopsAbleToCollect: Int = troops.toInt
 }
 
 
-case class FremenArmy(
+final case class FremenArmy(
     val troops: NonNegInt
   , val fedaykins: NonNegInt
   ) extends Army
@@ -41,10 +44,11 @@ case class FremenArmy(
   override def force: Int = {troops.toInt + fedaykins.toInt + fedaykins.toInt}
   override def normalTroops: Int = troops.toInt
   override def specialTroops: Int = fedaykins.toInt
+  override def troopsAbleToCollect: Int = troops.toInt + fedaykins.toInt
 }
 
 
-case class EmperorArmy(
+final case class EmperorArmy(
     val troops: NonNegInt
   , val sardaukars: NonNegInt
   ) extends Army
@@ -53,10 +57,11 @@ case class EmperorArmy(
   override def force: Int = {troops.toInt + sardaukars.toInt + sardaukars.toInt}
   override def normalTroops: Int = troops.toInt
   override def specialTroops: Int = sardaukars.toInt
+  override def troopsAbleToCollect: Int = troops.toInt + sardaukars.toInt
 }
 
 
-case class GuildArmy(
+final case class GuildArmy(
     val troops: NonNegInt
   ) extends Army
 {
@@ -64,10 +69,21 @@ case class GuildArmy(
   override def force: Int = troops.toInt
   override def normalTroops: Int = troops.toInt
   override def specialTroops: Int = 0
+  override def troopsAbleToCollect: Int = troops.toInt
 }
 
-
-case class BeneGesseritArmy(
+/**
+  * Advisors cannot collect spice.
+  * Advisors cannot be involved in combat.
+  * Advisors prevent another faction’s control of a stronghold.
+  * Advisors cannot prevent another faction from challenging a stronghold.
+  * Advisors cannot use ornithopters.
+  * Advisors cannot play Family Atomics
+  * 
+  * @param fighters
+  * @param advisors
+  */
+final case class BeneGesseritArmy(
     val fighters: NonNegInt
   , val advisors: NonNegInt
   ) extends Army
@@ -76,6 +92,7 @@ case class BeneGesseritArmy(
   override def force: Int = fighters.toInt
   override def normalTroops: Int = fighters.toInt
   override def specialTroops: Int = advisors.toInt
+  override def troopsAbleToCollect: Int = fighters.toInt
 }
 
 object ArmyOps{
@@ -85,4 +102,8 @@ object ArmyOps{
     && shouldBeSmaller.specialTroops <= other.specialTroops
     )
   }
+  val filterNotAdvisors: Iterable[Army] => Iterable[Army] = _.filterNot({
+    case army: BeneGesseritArmy if(army.normalTroops == 0) => true
+    case _ => false
+  })
 }

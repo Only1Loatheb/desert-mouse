@@ -7,6 +7,10 @@ import game.sector.{Sector}
 object Regions {
   type RegionsBySector = List[List[Territory]]
 
+  def isTerritoryOnThisSector(territory: Territory, sector: Sector): Boolean = {
+    duneRegionsBySector(sector.number).contains(territory)
+  }
+
   val sector0Regions = List(
     Meridan
   , CielagoWest
@@ -119,12 +123,12 @@ object Regions {
   val sector14Regions = List(
     BlightOfTheCliff
   , FuneralPlains
-  , TheGreaterFlat
+  , THE_GREAT_FLAT
   , WindPass
   )
 
   val sector15Regions = List(
-    THE_GREAT_FLAT
+    TheGreaterFlat
   , HabbanyaErg
   , FalseWallWest
   , WindPass
@@ -146,6 +150,8 @@ object Regions {
   , WindPassNorth
   )
 
+  val polarRegion = List(PolarSink)
+
   val duneRegionsBySector: RegionsBySector = List(
       sector0Regions 
     , sector1Regions 
@@ -164,6 +170,7 @@ object Regions {
     , sector14Regions 
     , sector15Regions 
     , sector16Regions 
-    , sector17Regions 
+    , sector17Regions
+    , polarRegion 
     )
 }

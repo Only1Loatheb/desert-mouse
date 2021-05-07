@@ -10,20 +10,26 @@ object Armies{
   type ArmiesOnTerritory = Map[Sector,List[Army]]
   type ArmiesOnDune = Map[Territory,ArmiesOnTerritory]
   
-  val maxArmiesOnTerritory = 2
+  val maxArmiesOnCity = 2
 
   val noUnitsOnDune: ArmiesOnDune = Map()
 
   def hasSpaceToMoveTo(armiesOnDune: ArmiesOnDune, territory: Territory): Boolean = {
-    val armies: Iterable[Army] = armiesOnDune.getOrElse(territory,Map(Sector(-1)->List())).values.flatten
-    val armiesByFaction = armies.groupBy(_.faction)
-    armiesByFaction.size < maxArmiesOnTerritory
+    territory match { 
+      case city: City if(armiesOnDune.isDefinedAt(territory)) => {
+        val armies: Iterable[Army] = armiesOnDune(territory).values.flatten
+        val armiesWihoutAdvisors = ArmyOps.filterNotAdvisors(armies)
+        val armiesByFaction = armiesWihoutAdvisors.groupBy(_.faction)
+        armiesByFaction.size < maxArmiesOnCity
+      }
+      case _ => true
+    }
   }
 
-  def isOnDune(armiesOnTerritory: ArmiesOnTerritory)(sectorAndArmy: (Sector,Army)): Boolean = {
+  private def isOnDune(armiesOnTerritory: ArmiesOnTerritory)(sectorAndArmy: (Sector,Army)): Boolean = {
     sectorAndArmy match {
       case (sector, army) if (armiesOnTerritory.keySet.contains(sector)) => {
-        val armiesOnSector = armiesOnTerritory.getOrElse(sector,List())
+        val armiesOnSector = armiesOnTerritory(sector)
         armiesOnSector.exists(ArmyOps.isSmallerOrEqualArmyOfTheSameFaction(army)(_))
       }
       case other => false
@@ -31,7 +37,7 @@ object Armies{
   }
 
   def hasThisArmy(armiesOnDune: ArmiesOnDune, territory: Territory, armies: Map[Sector,Army]): Boolean = {
-    val armiesOnTerritory: ArmiesOnTerritory = armiesOnDune.getOrElse(territory,Map(Sector(-1)->List()))
-    armies.forall(isOnDune(armiesOnTerritory)(_))
+    val oArmiesOnTerritory = armiesOnDune.get(territory)
+    oArmiesOnTerritory.exists(armiesOnTerritory => armies.forall(isOnDune(armiesOnTerritory)(_)))
   }
 }
