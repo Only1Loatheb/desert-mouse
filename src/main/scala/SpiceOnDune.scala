@@ -50,6 +50,7 @@ object Spice{
 
   val normalCollectionRate = 2
   val withOrnithoptersCollectionRate = 3
+  val noSpiceOnDune: SpiceOnDune = Map()
 
   private def getCollectionRate(factionsWithOrnithopters: Set[Faction])(faction: Faction): Int = {
     if(factionsWithOrnithopters.contains(faction)) normalCollectionRate
@@ -84,6 +85,12 @@ object Spice{
     (territory1, spice1 + spice2)
   } 
 
+  private def getCollectedSpiceByFaction(leftAndCollectedSpice: Map[Territory,CollectionResult]): CollectedSpice = {
+    val collectedSpice = leftAndCollectedSpice.map({case (k,v)=>(k,v._2)})
+    val collectedSpiceByFaction = collectedSpice.groupMapReduce({case (k,v)=>v._1})({case (k,v)=>v})(sumSpice)
+    collectedSpiceByFaction.values.toMap.filterNot(_._2 == 0)
+  }
+
   private def splitSpiceInTerritories(
       spiceOnDune: SpiceOnDune
     , territoryAndArmySet: Set[(Territory,Army)]
@@ -91,10 +98,9 @@ object Spice{
   ): (SpiceOnDune,CollectedSpice)  = {
     val territoryAndArmyMap = territoryAndArmySet.toMap
     val leftAndCollectedSpice = spiceOnDune.map(splitSpiceInTerritory(territoryAndArmyMap, collectionRate)(_))
-    val leftSpice = leftAndCollectedSpice.map({case (k,v)=>(k,v._1)})
-    val collectedSpice = leftAndCollectedSpice.map({case (k,v)=>(k,v._2)})
-    val collectedSpiceByFaction = collectedSpice.groupMapReduce({case (k,v)=>v._1})({case (k,v)=>v})(sumSpice)
-    (leftSpice,Map())
+    val leftSpice = leftAndCollectedSpice.map({case (k,v)=>(k,v._1)}).filterNot(_._2 == 0)
+    val collectedSpiceByFaction = getCollectedSpiceByFaction(leftAndCollectedSpice)
+    (leftSpice, collectedSpiceByFaction)
   }
 
   private def optionArmiesOnSpiceRegions(armiesOnDune: ArmiesOnDune)(territory: Territory): (Territory,Option[Army]) = {
@@ -109,6 +115,7 @@ object Spice{
     splitSpiceInTerritories(spiceOnDune, territoryAndArmySet, collectionRate)
   }
   /** Calculates amounts of spice left on Dune and amounts of spice collected by each player.
+    * During collection faze of the game there is only one army per territory exception being Advisors.
     * Faction that controlled Arrakeen or Carthag in previous turn have ornithopters.
     * Ornithopters allow army to collect 3 spice per troop.
     * Without ornithopters army collects 2 spice per troop.

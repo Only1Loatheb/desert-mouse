@@ -12,7 +12,7 @@ object Armies{
   
   val maxArmiesOnCity = 2
 
-  val noUnitsOnDune: ArmiesOnDune = Map()
+  val noArmiesOnDune: ArmiesOnDune = Map()
 
   def hasSpaceToMoveTo(armiesOnDune: ArmiesOnDune, territory: Territory): Boolean = {
     territory match { 

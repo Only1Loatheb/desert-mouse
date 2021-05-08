@@ -12,12 +12,12 @@ class StormTest  extends FunSuite {
   }
 
   test("Storm.affectSector.preservesEmptyMap") {
-    val emptyMap = Armies.noUnitsOnDune
+    val emptyMap = Armies.noArmiesOnDune
     assert(Storm.affectSector(emptyMap,Sector1) === emptyMap)
   }
 
   test("Storm.affectSector.removesUnits") {
-    val emptyMap = Armies.noUnitsOnDune
+    val emptyMap = Armies.noArmiesOnDune
     val sector = Sector1
     val sandTerritory = Meridan
     val mapWithArmy: Armies.ArmiesOnDune = Map(sandTerritory -> Map(sector -> List(AtreidesArmy(1))))
