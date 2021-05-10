@@ -3,43 +3,45 @@ package game.region
 import game.dune_map._
 import game.dune_map.DuneMap.Territory
 import game.sector.{Sector}
-
+/**
+  * Region is a part of territory that lays on one sector 
+  */
 object Regions {
-  type RegionsBySector = List[List[Territory]]
+  type TerritoriesBySector = List[List[Territory]]
 
   def isTerritoryOnThisSector(territory: Territory, sector: Sector): Boolean = {
-    duneRegionsBySector(sector.number).contains(territory)
+    duneTerritoriesBySector(sector.number).contains(territory)
   }
 
-  val sector0Regions = List(
+  val sector0Territories = List(
     Meridan
   , CielagoWest
   , CielagoDepression
   , CielagoNorth
   )
 
-  val sector1Regions = List(
+  val sector1Territories = List(
     Meridan
   , CielagoSouth
   , CielagoDepression
   , CielagoNorth
   )
 
-  val sector2Regions = List(
+  val sector2Territories = List(
     CielagoSouth
   , CielagoEast
   , CielagoDepression
   , CielagoNorth
   )
 
-  val sector3Regions = List(
+  val sector3Territories = List(
     CielagoEast
   , SouthMesa
   , FalseWallSouth
   , HargPass
   )
   
-  val sector4Regions = List(
+  val sector4Territories = List(
     SouthMesa
   , TueksSietch
   , FalseWallSouth
@@ -49,21 +51,21 @@ object Regions {
   , FalseWallEast
   )
 
-  val sector5Regions = List(
+  val sector5Territories = List(
     SouthMesa
   , PastyMesa
   , TheMinorErg
   , FalseWallEast
   )
 
-  val sector6Regions = List(
+  val sector6Territories = List(
     RedChasm
   , PastyMesa
   , TheMinorErg
   , FalseWallEast
   )
 
-  val sector7Regions = List(
+  val sector7Territories = List(
     GaraKulon
   , PastyMesa
   , ShieldWall
@@ -71,7 +73,7 @@ object Regions {
   , FalseWallEast
   )
 
-  val sector8Regions = List(
+  val sector8Territories = List(
     SihayaRidge
   , Basin
   , OldGap
@@ -82,13 +84,13 @@ object Regions {
   , FalseWallEast
   )
 
-  val sector9Regions = List(
+  val sector9Territories = List(
     OldGap
   , Arrakeen
   , ImperialBasin
   )
 
-  val sector10Regions = List(
+  val sector10Territories = List(
     OldGap
   , Tsimpo
   , BrokenLand
@@ -97,7 +99,7 @@ object Regions {
   , Arsunt
   )
 
-  val sector11Regions = List(
+  val sector11Territories = List(
     BrokenLand
   , Tsimpo
   , PlasticBasin
@@ -105,14 +107,14 @@ object Regions {
   , Arsunt
   )
 
-  val sector12Regions = List(
+  val sector12Territories = List(
     RockOutcroppings
   , PlasticBasin
   , Tsimpo
   , HaggaBasin
   )
 
-  val sector13Regions = List(
+  val sector13Territories = List(
     RockOutcroppings
   , SietchTabr
   , BlightOfTheCliff
@@ -120,21 +122,21 @@ object Regions {
   , WindPass
   )
 
-  val sector14Regions = List(
+  val sector14Territories = List(
     BlightOfTheCliff
   , FuneralPlains
   , THE_GREAT_FLAT
   , WindPass
   )
 
-  val sector15Regions = List(
+  val sector15Territories = List(
     TheGreaterFlat
   , HabbanyaErg
   , FalseWallWest
   , WindPass
   )
 
-  val sector16Regions = List(
+  val sector16Territories = List(
     HabbanyaRidgeFlat
   , HabbanyaRidgeSietch
   , HabbanyaErg
@@ -143,7 +145,7 @@ object Regions {
   , WindPassNorth
   )
 
-  val sector17Regions = List(
+  val sector17Territories = List(
     HabbanyaRidgeFlat
   , FalseWallWest
   , CielagoWest
@@ -152,25 +154,25 @@ object Regions {
 
   val polarRegion = List(PolarSink)
 
-  val duneRegionsBySector: RegionsBySector = List(
-      sector0Regions 
-    , sector1Regions 
-    , sector2Regions 
-    , sector3Regions 
-    , sector4Regions 
-    , sector5Regions 
-    , sector6Regions 
-    , sector7Regions 
-    , sector8Regions 
-    , sector9Regions 
-    , sector10Regions 
-    , sector11Regions 
-    , sector12Regions 
-    , sector13Regions 
-    , sector14Regions 
-    , sector15Regions 
-    , sector16Regions 
-    , sector17Regions
+  val duneTerritoriesBySector: TerritoriesBySector = List(
+      sector0Territories 
+    , sector1Territories 
+    , sector2Territories 
+    , sector3Territories 
+    , sector4Territories 
+    , sector5Territories 
+    , sector6Territories 
+    , sector7Territories 
+    , sector8Territories 
+    , sector9Territories 
+    , sector10Territories 
+    , sector11Territories 
+    , sector12Territories 
+    , sector13Territories 
+    , sector14Territories 
+    , sector15Territories 
+    , sector16Territories 
+    , sector17Territories
     , polarRegion 
     )
 }

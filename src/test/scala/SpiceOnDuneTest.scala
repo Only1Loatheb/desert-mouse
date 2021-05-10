@@ -11,20 +11,20 @@ import game.dune_map._
 import game.dune_map.DuneMap._
 
 class SpiceTest  extends FunSuite {
-  test("Spice.spiceSectorsAreOnTheTerritory") {
+  test("Spice.collectSpice.spiceSectorsAreOnTheTerritory") {
     assert(territoriesWithSpiceBlows.forall(
       territory => isTerritoryOnThisSector(territory, Spice.spiceSector(territory))
     ))
   }
 
-  test("Spice.itWorksOnEmptyDune") {
+  test("Spice.collectSpice.itWorksOnEmptyDune") {
     val armies = Armies.noArmiesOnDune
     val spice = Spice.noSpiceOnDune
     val factionsWithOrnithopters: Set[Faction] = Set()
-    assert(Spice.collectSpice(armies,spice,factionsWithOrnithopters) == (Spice.noSpiceOnDune, Map()))
+    assert(Spice.collectSpice(armies,spice,factionsWithOrnithopters) === (Spice.noSpiceOnDune, Map()))
   }
 
-  test("Spice.advisorsCannotCollectSpice") {
+  test("Spice.collectSpice.advisorsCannotCollectSpice") {
     val army = BeneGesseritArmy(0,2)
     val territory = OldGap
     val armies: Armies.ArmiesOnDune = Map(
@@ -35,11 +35,11 @@ class SpiceTest  extends FunSuite {
     val factionsWithOrnithopters: Set[Faction] = Set()
     assert(
       Spice.collectSpice(armies,spice,factionsWithOrnithopters) 
-      == (spice, Map())
+      === (spice, Map())
     )
   }
 
-  test("Spice.otherArmyCanCollectSpice") {
+  test("Spice.collectSpice.otherArmyCanCollectSpice") {
     val army = HarkonnenArmy(2)
     val territory = OldGap
     val armies: Armies.ArmiesOnDune = Map(
@@ -50,11 +50,11 @@ class SpiceTest  extends FunSuite {
     val factionsWithOrnithopters: Set[Faction] = Set()
     assert(
       Spice.collectSpice(armies,spice,factionsWithOrnithopters)
-      == (Spice.noSpiceOnDune, Map(army.faction -> spiceAmount))
+      === (Spice.noSpiceOnDune, Map(army.faction -> spiceAmount))
     )
   }
 
-  test("Spice.otherArmyCanCollectSpiceIfAccompaniedByAdvisors") {
+  test("Spice.collectSpice.otherArmyCanCollectSpiceIfAccompaniedByAdvisors") {
     val army = HarkonnenArmy(2)
     val advisors = BeneGesseritArmy(0,2)
     val territory = OldGap
@@ -66,11 +66,11 @@ class SpiceTest  extends FunSuite {
     val factionsWithOrnithopters: Set[Faction] = Set()
     assert(
       Spice.collectSpice(armies,spice,factionsWithOrnithopters)
-      == (Spice.noSpiceOnDune, Map(army.faction -> spiceAmount))
+      === (Spice.noSpiceOnDune, Map(army.faction -> spiceAmount))
     )
   }
 
-  test("Spice.multipleArmiesCanCollectSpice") {
+  test("Spice.collectSpice.multipleArmiesCanCollectSpice") {
     val army1 = HarkonnenArmy(2)
     val army2 = HarkonnenArmy(2)
     val territory1 = OldGap
@@ -84,11 +84,11 @@ class SpiceTest  extends FunSuite {
     val factionsWithOrnithopters: Set[Faction] = Set()
     assert(
       Spice.collectSpice(armies,spice,factionsWithOrnithopters)
-      == (Spice.noSpiceOnDune, Map(army1.faction -> (spiceAmount * 2)))
+      === (Spice.noSpiceOnDune, Map(army1.faction -> (spiceAmount * 2)))
     )
   }
 
-  test("Spice.differentArmiesCanCollectSpice") {
+  test("Spice.collectSpice.differentArmiesCanCollectSpice") {
     val army1 = HarkonnenArmy(2)
     val army2 = FremenArmy(2,0)
     val territory1 = OldGap
@@ -102,12 +102,12 @@ class SpiceTest  extends FunSuite {
     val factionsWithOrnithopters: Set[Faction] = Set()
     assert(
       Spice.collectSpice(armies,spice,factionsWithOrnithopters)
-      == (Spice.noSpiceOnDune, Map(army1.faction -> spiceAmount,army2.faction -> spiceAmount))
+      === (Spice.noSpiceOnDune, Map(army1.faction -> spiceAmount,army2.faction -> spiceAmount))
     )
   }
 
 
-  test("Spice.nothingIsCollectedWhenThereIsNoSpice") {
+  test("Spice.collectSpice.nothingIsCollectedWhenThereIsNoSpice") {
     val army1 = HarkonnenArmy(2)
     val army2 = FremenArmy(2,0)
     val territory1 = OldGap
@@ -120,7 +120,7 @@ class SpiceTest  extends FunSuite {
     val factionsWithOrnithopters: Set[Faction] = Set()
     assert(
       Spice.collectSpice(armies,spice,factionsWithOrnithopters)
-      == (Spice.noSpiceOnDune, Map())
+      === (Spice.noSpiceOnDune, Map())
     )
   }
 }

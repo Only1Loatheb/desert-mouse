@@ -114,7 +114,8 @@ object Spice{
     val territoryAndArmySet = territoryAndArmyOptionSet.collect({case (t,oA: Some[Army]) => (t,oA.value)})
     splitSpiceInTerritories(spiceOnDune, territoryAndArmySet, collectionRate)
   }
-  /** Calculates amounts of spice left on Dune and amounts of spice collected by each player.
+  /**
+    * Calculates amounts of spice left on Dune and amounts of spice collected by each player.
     * During collection faze of the game there is only one army per territory exception being Advisors.
     * Faction that controlled Arrakeen or Carthag in previous turn have ornithopters.
     * Ornithopters allow army to collect 3 spice per troop.

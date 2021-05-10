@@ -4,7 +4,50 @@ sealed trait Sector{
   def number: Int
 }
 
-final case object PolarSector extends Sector{
+object Sector{
+  private val numberOfSectors = 18
+
+  private val sectorsOrdered: LazyList[Sector] = (
+    Sector0
+    #:: Sector1
+    #:: Sector2
+    #:: Sector3
+    #:: Sector4
+    #:: Sector5
+    #:: Sector6
+    #:: Sector7
+    #:: Sector8
+    #:: Sector9
+    #:: Sector10
+    #:: Sector11
+    #:: Sector12
+    #:: Sector13
+    #:: Sector14
+    #:: Sector15
+    #:: Sector16
+    #:: Sector17
+    #:: sectorsOrdered
+  )
+
+  /**
+    * Returns secotors that have to be visited during the travel
+    *
+    * @param sectorFrom Movement starting sector
+    * @param sectorTo Movement end sector
+    * @return Set of secotors visited that includes sectorFrom and sectorTo.
+    */
+  def sectorsFromTo(sectorFrom: Sector, sectorTo: Sector): Set[Sector] = {
+    if (sectorFrom == FakePolarSector || sectorTo == FakePolarSector) Set(sectorFrom,sectorTo)
+    else {
+      val (smaller, bigger) = if (sectorFrom.number > sectorTo.number) (sectorTo, sectorFrom)  else (sectorFrom, sectorTo)
+      val isAnticlockwise = (bigger.number - smaller.number) < (smaller.number + numberOfSectors - bigger.number)
+      val (from,to) = if (isAnticlockwise) (smaller, bigger) else (bigger, smaller)
+      sectorsOrdered.dropWhile(_ != from).takeWhile(_ != to).appended(to).toSet
+    }
+  }
+}
+
+final case object FakePolarSector extends Sector{
   override def number = 18
 }
 

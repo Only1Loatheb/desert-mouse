@@ -6,13 +6,17 @@ import game.sector.{Sector}
 import game.army._
 import game.armies.Armies._
 import game.region.Regions._
+import game.spice.Spice._
 
+/**
+  * Storm moves anticlockwise. (Sectors are also indexed anticlockwise)
+  * Storm destroys armies in sand territories.
+  * Half of the Fremen army can survive the storm (rounded up).
+  * Storm destroys spice.
+  */
 object Storm {
-  // https://gist.github.com/ashee/3996385
-  def cycle[T](seq: Seq[T]) = Stream.continually(seq).flatten
-
-  val stormRegionsBySector: RegionsBySector = {
-    duneRegionsBySector.map(_.filter(_ match {
+  val stormTerritoriesBySector: TerritoriesBySector = {
+    duneTerritoriesBySector.map(_.filter(_ match {
       case territory: Sand if (territory != ImperialBasin) => true
       case _ => false
     }))
@@ -23,28 +27,32 @@ object Storm {
     if (int % 2 == 1) quotient + 1 else quotient
   }
 
-  val affectArmy: PartialFunction[Army,Army]= {
+  private val affectArmy: PartialFunction[Army,Army]= {
     case FremenArmy(troops, fedaykins)
       => FremenArmy(devideBy2AndRoundUp(troops.toInt),devideBy2AndRoundUp(fedaykins.toInt))
   }
 
-  def affectArmies(armies: ArmiesOnTerritory, stormSector: Sector) = {
+  private def affectArmies(armies: ArmiesOnTerritory, stormSectors: Set[Sector]) = {
     armies.map({ 
-      case (sector, armies) if (sector == stormSector) => (sector, armies.collect(affectArmy))
+      case (sector, armies) if (stormSectors.contains(sector)) => (sector, armies.collect(affectArmy))
       case other => other
     }).filterNot(_._2.isEmpty)
   }
 
-  def affectTerritory(stormRegions: List[Territory], stormSector: Sector)
+  private def affectTerritory(stormRegions: Set[Territory], stormSectors: Set[Sector])
     (territoryAndArmies: (Territory,ArmiesOnTerritory)): (Territory,ArmiesOnTerritory) = {
       territoryAndArmies match { 
-        case (territory, armies) if (stormRegions.contains(territory)) => (territory, affectArmies(armies,stormSector))
+        case (territory, armies) if (stormRegions.contains(territory)) => (territory, affectArmies(armies,stormSectors))
         case other => other
       }
   } 
 
-  def affectSector(unitsOnDune: ArmiesOnDune, stormSector: Sector): ArmiesOnDune = {
-    val stormRegions = stormRegionsBySector(stormSector.number)
-    unitsOnDune.map(affectTerritory(stormRegions, stormSector)(_)).filterNot(_._2.isEmpty)
+  def affectArmiesOnSectors(unitsOnDune: ArmiesOnDune, stormSectors: Set[Sector]): ArmiesOnDune = {
+    val stormRegions = stormSectors.map(sector => stormTerritoriesBySector(sector.number)).flatten
+    unitsOnDune.map(affectTerritory(stormRegions, stormSectors)(_)).filterNot(_._2.isEmpty)
+  }
+
+  def affectSpiceOnSectors(spiceOnDune: SpiceOnDune, stormSectors: Set[Sector]): SpiceOnDune = {
+    spiceOnDune.collect({case (territory,spiceCount) if (!stormSectors.contains(spiceSector(territory))) => (territory,spiceCount)})
   }
 }

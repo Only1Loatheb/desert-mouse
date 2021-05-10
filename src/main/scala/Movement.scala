@@ -2,7 +2,7 @@ package game.movement
 
 import game.dune_map._
 import game.dune_map.DuneMap._
-import game.sector.{Sector}
+import game.sector._
 import game.army._
 import game.armies.Armies._
 import game.region.Regions._
@@ -10,9 +10,15 @@ import game.region.Regions._
 import scalax.collection.Graph
 import scalax.collection.GraphPredef._, scalax.collection.GraphEdge._
 
-/** An object that groups functions responsible for moving forces on the planet.
+/** 
+  * An object that groups functions responsible for moving forces on the planet.
   */
 object Movement {
+
+  def isStormBlockingThisMove(sotrmSector: Sector)(sectorFrom: Sector, sectorTo: Sector): Boolean = {
+    val sectors = Sector.sectorsFromTo(sectorFrom,sectorTo)
+    sectors.contains(sotrmSector)
+  }
 
   private def doesAllowedPathExist(
       currentStorm: Sector
@@ -30,7 +36,8 @@ object Movement {
     }
   }
 
-  /** Returns true if it is a legal move.
+  /** 
+    * Returns true if it is a legal move.
     * Rules:
     * Army can move from one territory to one sector in one other territory.
     * Sectors have no effect on movement.
@@ -55,11 +62,10 @@ object Movement {
   ): Boolean = {
     val (territoryFrom, armiesFrom) = from
     val (territoryTo, sectorTo) = to
-    val pathExists = doesAllowedPathExist(currentStorm, armiesOnDune, hasOrnithopters, from, to)
     (isTerritoryOnThisSector(territoryTo,sectorTo)
     && hasSpaceToMoveTo(armiesOnDune,territoryTo)
     && hasThisArmy(armiesOnDune, territoryFrom, armiesFrom)
-    && pathExists
+    && doesAllowedPathExist(currentStorm, armiesOnDune, hasOrnithopters, from, to)
     )
   }
 }
