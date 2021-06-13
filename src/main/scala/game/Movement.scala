@@ -4,11 +4,12 @@ import game.dune_map._
 import game.dune_map.DuneMap._
 import game.sector._
 import game.army._
-import game.armies.Armies._
+import game.armies.{ArmiesOnDune, ArmySelection}
 import game.region.Regions._
 
 import scalax.collection.Graph
-import scalax.collection.GraphPredef._, scalax.collection.GraphEdge._
+import scalax.collection.GraphPredef._
+import scalax.collection.GraphEdge._
 
 /** 
   * An object that groups functions responsible for moving forces on the planet.
@@ -53,7 +54,7 @@ object Movement {
     * @param to Territory and sector to move into.
     * @return Is it a legal move?
     */
-  def isMovePossible(
+  def isMoveAllowed(
       currentStorm: Sector
     , armiesOnDune: ArmiesOnDune
     , hasOrnithopters: Boolean
@@ -63,8 +64,8 @@ object Movement {
     val (territoryFrom, armiesFrom) = from
     val (territoryTo, sectorTo) = to
     (isTerritoryOnThisSector(territoryTo,sectorTo)
-    && hasSpaceToMoveTo(armiesOnDune,territoryTo)
-    && hasThisArmy(armiesOnDune, territoryFrom, armiesFrom)
+    && ArmiesOnDune.hasSpaceToMoveTo(armiesOnDune,territoryTo)
+    && ArmiesOnDune.hasThisArmy(armiesOnDune, territoryFrom, ArmySelection(armiesFrom))
     && doesAllowedPathExist(currentStorm, armiesOnDune, hasOrnithopters, from, to)
     )
   }

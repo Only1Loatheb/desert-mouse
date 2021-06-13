@@ -17,3 +17,6 @@ project/plugins/project/
 project/.bloop/*
 
 .bsp
+
+# Code frmater
+.scalafmt.conf

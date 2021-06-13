@@ -1,6 +1,6 @@
 package game.army
 
-import util.nonneg.{NonNegInt}
+import util.nonneg.NonNegInt
 import game.faction._
 
 sealed trait Army{
@@ -95,7 +95,7 @@ final case class BeneGesseritArmy(
   override def troopsAbleToCollect: Int = fighters.toInt
 }
 
-object ArmyOps{
+object Army{
   def isSmallerOrEqualArmyOfTheSameFaction(shouldBeSmaller: Army)(other: Army) = {
     (shouldBeSmaller.faction == other.faction 
     && shouldBeSmaller.normalTroops <= other.normalTroops

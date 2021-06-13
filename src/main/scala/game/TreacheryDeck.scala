@@ -24,24 +24,27 @@ case object Karma extends TreacheryCard
 case object TruthTrance extends TreacheryCard
 case object CheapHero extends TreacheryCard
 
+final case class TreacheryDeck(cards: List[TreacheryCard])
+
 // 33 cards in original game
 object TreacheryDeck{
-  def shuffledTreacheryDeck: List[TreacheryCard] = {
-    val cards = (
-      Lasgun
-      :: FamilyAtomics
-      :: Harj
-      :: TleilaxuGhola
-      :: WeatherControl
-      :: List.fill(2)(Karma)
-      ++ List.fill(2)(TruthTrance)
-      ++ List.fill(3)(CheapHero)
-      ++ List.fill(5)(Worthless)
-      ++ List.fill(4)(Defense(Projectile))
-      ++ List.fill(4)(Defense(Poison))
-      ++ List.fill(4)(Weapon(Projectile))
-      ++ List.fill(4)(Weapon(Poison))
-      )
-    Random.shuffle(cards)
+  val cards = (
+    Lasgun
+    :: FamilyAtomics
+    :: Harj
+    :: TleilaxuGhola
+    :: WeatherControl
+    :: List.fill(2)(Karma)
+    ++ List.fill(2)(TruthTrance)
+    ++ List.fill(3)(CheapHero)
+    ++ List.fill(5)(Worthless)
+    ++ List.fill(4)(Defense(Projectile))
+    ++ List.fill(4)(Defense(Poison))
+    ++ List.fill(4)(Weapon(Projectile))
+    ++ List.fill(4)(Weapon(Poison))
+  )
+
+  def shuffledTreacheryDeck: TreacheryDeck = {
+    TreacheryDeck(Random.shuffle(cards))
   } 
 }

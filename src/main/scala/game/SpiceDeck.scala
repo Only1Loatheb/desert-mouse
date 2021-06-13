@@ -8,6 +8,8 @@ sealed trait SpiceCard{}
 final case class SpiceBlow(territory: Territory) extends SpiceCard
 case object ShaiHulud extends SpiceCard
 
+final case class SpiceDeck(cards: List[SpiceCard])
+
 // 21 cards in original game
 object SpiceDeck{
   val territoriesWithSpiceBlows = List(
@@ -31,7 +33,7 @@ object SpiceDeck{
     List.fill(6)(ShaiHulud) 
     ++ territoriesWithSpiceBlows.map(SpiceBlow)
   )
-  def shuffledSpiceDeck: List[SpiceCard] = {
-    Random.shuffle(cards)
+  def shuffledSpiceDeck: SpiceDeck = {
+    SpiceDeck(Random.shuffle(cards))
   }
 }

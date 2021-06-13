@@ -5,9 +5,12 @@ import game.dune_map.DuneMap.Territory
 import game.sector._
 import game.army._
 import game.faction._
-import game.armies.Armies._
+import game.armies.ArmiesOnDune
 
-object Spice{
+final case class SpiceOnDune(spice: Map[Territory,Int])
+final case class SpiceCollectedByFaction(collectedSpice: Map[Faction,Int])
+
+object SpiceOnDune{
   val spiceSector: PartialFunction[Territory, Sector] = _ match {
     case CielagoSouth => Sector1
     case CielagoNorth => Sector2
@@ -44,13 +47,13 @@ object Spice{
     case HabbanyaRidgeFlat => 10
   }
 
-  type SpiceOnDune = Map[Territory,Int]
-  type CollectedSpice = Map[Faction,Int]
+  type Spice = Map[Territory,Int]
+  type SpiceCollected = Map[Faction,Int]
   type CollectionResult = (Int,(Faction,Int))
 
   val normalCollectionRate = 2
   val withOrnithoptersCollectionRate = 3
-  val noSpiceOnDune: SpiceOnDune = Map()
+  val noSpiceOnDune = SpiceOnDune(Map())
 
   private def getCollectionRate(factionsWithOrnithopters: Set[Faction])(faction: Faction): Int = {
     if(factionsWithOrnithopters.contains(faction)) normalCollectionRate
@@ -85,34 +88,34 @@ object Spice{
     (territory1, spice1 + spice2)
   } 
 
-  private def getCollectedSpiceByFaction(leftAndCollectedSpice: Map[Territory,CollectionResult]): CollectedSpice = {
+  private def getCollectedSpiceByFaction(leftAndCollectedSpice: Map[Territory,CollectionResult]): SpiceCollected = {
     val collectedSpice = leftAndCollectedSpice.map({case (k,v)=>(k,v._2)})
     val collectedSpiceByFaction = collectedSpice.groupMapReduce({case (k,v)=>v._1})({case (k,v)=>v})(sumSpice)
     collectedSpiceByFaction.values.toMap.filterNot(_._2 == 0)
   }
 
   private def splitSpiceInTerritories(
-      spiceOnDune: SpiceOnDune
+      spice: Spice
     , territoryAndArmySet: Set[(Territory,Army)]
     , collectionRate: Faction => Int
-  ): (SpiceOnDune,CollectedSpice)  = {
+  ): (Spice,SpiceCollected)  = {
     val territoryAndArmyMap = territoryAndArmySet.toMap
-    val leftAndCollectedSpice = spiceOnDune.map(splitSpiceInTerritory(territoryAndArmyMap, collectionRate)(_))
+    val leftAndCollectedSpice = spice.map(splitSpiceInTerritory(territoryAndArmyMap, collectionRate)(_))
     val leftSpice = leftAndCollectedSpice.map({case (k,v)=>(k,v._1)}).filterNot(_._2 == 0)
     val collectedSpiceByFaction = getCollectedSpiceByFaction(leftAndCollectedSpice)
     (leftSpice, collectedSpiceByFaction)
   }
 
-  private def optionArmiesOnSpiceRegions(armiesOnDune: ArmiesOnDune)(territory: Territory): (Territory,Option[Army]) = {
-    val armies = armiesOnDune.getOrElse(territory,Map()).getOrElse(spiceSector(territory), List())
-    (territory, ArmyOps.filterNotAdvisors(armies).headOption)
+  private def armiesOnSpiceRegionsOption(armiesOnDune: ArmiesOnDune)(territory: Territory): (Territory,Option[Army]) = {
+    val armies = armiesOnDune.armies.getOrElse(territory,Map()).getOrElse(spiceSector(territory), List())
+    (territory, Army.filterNotAdvisors(armies).headOption)
   }
 
-  private def armiesOnSpiceRegions(armiesOnDune: ArmiesOnDune, spiceOnDune: SpiceOnDune, collectionRate: Faction => Int) = {
-    val territoriesWithSpice = spiceOnDune.keySet
-    val territoryAndArmyOptionSet = territoriesWithSpice.map(optionArmiesOnSpiceRegions(armiesOnDune)(_))
+  private def armiesOnSpiceRegions(armiesOnDune: ArmiesOnDune, spice: Spice, collectionRate: Faction => Int) = {
+    val territoriesWithSpice = spice.keySet
+    val territoryAndArmyOptionSet = territoriesWithSpice.map(armiesOnSpiceRegionsOption(armiesOnDune)(_))
     val territoryAndArmySet = territoryAndArmyOptionSet.collect({case (t,oA: Some[Army]) => (t,oA.value)})
-    splitSpiceInTerritories(spiceOnDune, territoryAndArmySet, collectionRate)
+    splitSpiceInTerritories(spice, territoryAndArmySet, collectionRate)
   }
   /**
     * Calculates amounts of spice left on Dune and amounts of spice collected by each player.
@@ -131,8 +134,9 @@ object Spice{
       armiesOnDune: ArmiesOnDune
     , spiceOnDune: SpiceOnDune
     , factionsWithOrnithopters: Set[Faction]
-  ): (SpiceOnDune, CollectedSpice) = {
+  ): (SpiceOnDune, SpiceCollectedByFaction) = {
     val collectionRate: Faction => Int = getCollectionRate(factionsWithOrnithopters)
-    armiesOnSpiceRegions(armiesOnDune, spiceOnDune, collectionRate)
+    val (spice, collectedSpice) = armiesOnSpiceRegions(armiesOnDune, spiceOnDune.spice, collectionRate)
+    (SpiceOnDune(spice), SpiceCollectedByFaction(collectedSpice))
   }
 }

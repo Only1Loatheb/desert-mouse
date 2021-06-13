@@ -1,8 +1,8 @@
 package game.dune_map
 
 import scalax.collection.Graph // or scalax.collection.mutable.Graph
-import scalax.collection.GraphPredef._, scalax.collection.GraphEdge._
-import game.sector._
+import scalax.collection.GraphPredef._
+import scalax.collection.GraphEdge._
 
 sealed trait DuneMapNode{}
 sealed trait Sand{}

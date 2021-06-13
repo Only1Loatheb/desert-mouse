@@ -152,7 +152,7 @@ object Regions {
   , WindPassNorth
   )
 
-  val polarRegion = List(PolarSink)
+  val polarTerritories = List(PolarSink)
 
   val duneTerritoriesBySector: TerritoriesBySector = List(
       sector0Territories 
@@ -173,6 +173,6 @@ object Regions {
     , sector15Territories 
     , sector16Territories 
     , sector17Territories
-    , polarRegion 
+    , polarTerritories 
     )
 }
