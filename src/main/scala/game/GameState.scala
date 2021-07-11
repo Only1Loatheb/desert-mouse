@@ -29,6 +29,8 @@ final case class GameState(
     stormSector: Sector,
     kwisatzHaderachCounter: KwisatzHaderachCounter,
     isShieldWallDestroyed: Boolean
+    // treachery cards
+    // cities controlled
 )
 
 object GameState {

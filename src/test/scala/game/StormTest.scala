@@ -39,7 +39,7 @@ class StormTest  extends FunSuite {
     assert(Storm.affectArmiesOnSectors(mapWithArmy,Set(sector)) === mapWithArmy)
   }
 
-  test("Storm.affectArmiesOnSectors.doesnotRemoveAdjucentArmy") {
+  test("Storm.affectArmiesOnSectors.doesNotRemoveAdjucentArmy") {
     val armySector = Sector0
     val stormSector = Sector1
     val territoryOnTwoSectors = Meridan

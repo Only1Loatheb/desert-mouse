@@ -11,34 +11,13 @@ import scalax.collection.Graph
 import scalax.collection.GraphPredef._
 import scalax.collection.GraphEdge._
 
-/** 
-  * An object that groups functions responsible for moving forces on the planet.
+/** An object that groups functions responsible for moving forces on the planet.
   */
 object Movement {
 
-  def isStormBlockingThisMove(sotrmSector: Sector)(sectorFrom: Sector, sectorTo: Sector): Boolean = {
-    val sectors = Sector.sectorsFromTo(sectorFrom,sectorTo)
-    sectors.contains(sotrmSector)
-  }
+  private val movementRangeWithOrnithopters: Int = 3
 
-  private def doesAllowedPathExist(
-      currentStorm: Sector
-    , armiesOnDune: ArmiesOnDune
-    , hasOrnithopters: Boolean
-    , from: (Territory, Map[Sector,Army])
-    , to: (Territory, Sector)
-  ): Boolean = {
-    val (territoryFrom, armiesFrom) = from
-    val (territoryTo, sectorTo) = to
-    if (hasOrnithopters) throw new java.util.NoSuchElementException() // if two players are in stronghold
-    else {
-      // TODO: storm can devide one territory
-      duneMap.find(territoryTo: DuneMap.Territory).isDefined
-    }
-  }
-
-  /** 
-    * Returns true if it is a legal move.
+  /** Returns true if it is a legal move.
     * Rules:
     * Army can move from one territory to one sector in one other territory.
     * Sectors have no effect on movement.
@@ -55,18 +34,72 @@ object Movement {
     * @return Is it a legal move?
     */
   def isMoveAllowed(
-      currentStorm: Sector
-    , armiesOnDune: ArmiesOnDune
-    , hasOrnithopters: Boolean
-    , from: (Territory, Map[Sector,Army])
-    , to: (Territory, Sector)
+      currentStorm: Sector,
+      armiesOnDune: ArmiesOnDune,
+      hasOrnithopters: Boolean,
+      from: (Territory, Map[Sector, Army]),
+      to: (Territory, Sector)
   ): Boolean = {
     val (territoryFrom, armiesFrom) = from
     val (territoryTo, sectorTo) = to
-    (isTerritoryOnThisSector(territoryTo,sectorTo)
-    && ArmiesOnDune.hasSpaceToMoveTo(armiesOnDune,territoryTo)
+    (isTerritoryOnThisSector(territoryTo, sectorTo)
+    && ArmiesOnDune.hasSpaceToMoveTo(armiesOnDune, territoryTo)
     && ArmiesOnDune.hasThisArmy(armiesOnDune, territoryFrom, ArmySelection(armiesFrom))
-    && doesAllowedPathExist(currentStorm, armiesOnDune, hasOrnithopters, from, to)
+    && doesAllowedPathExist(currentStorm, armiesOnDune, hasOrnithopters, from, to))
+  }
+
+  private def doesAllowedPathExist(
+      currentStorm: Sector,
+      armiesOnDune: ArmiesOnDune,
+      hasOrnithopters: Boolean,
+      from: (Territory, Map[Sector, Army]),
+      to: (Territory, Sector)
+  ): Boolean = {
+    val (territoryFrom, armiesFrom) = from
+    val (territoryTo, sectorTo) = to
+    val isStormBlocking: (Sector, Sector) => Boolean = isStormBlockingThisMove(
+      currentStorm
     )
+    if (hasOrnithopters) {
+      val territoryToNode = duneMap get territoryTo
+      getPathFromToInMoves(territoryFrom, territoryToNode, movementRangeWithOrnithopters)
+    } else {
+      val areTerritoriesAdjacent = duneMap contains (territoryFrom ~ territoryTo)
+      lazy val isAnyArmyBlockedByStorm = armiesFrom.exists(x => isStormBlocking(x._1, sectorTo))
+      areTerritoriesAdjacent && !isAnyArmyBlockedByStorm
+    }
+  }
+
+  private def isStormBlockingThisMove(
+      sotrmSector: Sector
+  )(sectorFrom: Sector, sectorTo: Sector): Boolean = {
+    val sectors = Sector.sectorsFromTo(sectorFrom, sectorTo)
+    sectors.contains(sotrmSector)
+  }
+
+  private def getPathFromToInMoves(
+      territoryFrom: Territory,
+      territoryTo: duneMap.NodeT,
+      moves: Int
+  ): Boolean = {
+    lazy val visited = (duneMap get territoryFrom).neighbors
+    if (moves == 0) false
+    else if (visited.contains(territoryTo)) true
+    else getPathFromToInMoves(Set(), visited, territoryTo, moves - 1)
+  }
+
+  private def getPathFromToInMoves(
+      oldVisited: Set[duneMap.NodeT],
+      newVisited: Set[duneMap.NodeT],
+      territoryTo: duneMap.NodeT,
+      moves: Int
+  ): Boolean = {
+    lazy val prevVisited = oldVisited union newVisited
+    lazy val nowVisited = newVisited
+      .flatMap(x => (duneMap get x).neighbors)
+      .diff(prevVisited)
+    if (moves == 0) false
+    else if (nowVisited contains territoryTo) true
+    else getPathFromToInMoves(prevVisited, nowVisited, territoryTo, moves - 1)
   }
 }

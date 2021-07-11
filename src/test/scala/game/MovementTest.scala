@@ -21,7 +21,7 @@ class MovementTest  extends FunSuite {
     assert(isMoveAllowed(
         stormSector
       , mapWithArmy
-      , false
+      , hasOrnithopters = false
       , (territoryFrom, Map(sectorFrom -> army))
       , (territoryTo, sectorTo)
       )
@@ -42,7 +42,7 @@ class MovementTest  extends FunSuite {
     assert(isMoveAllowed(
         stormSector
       , mapWithArmy
-      , false
+      , hasOrnithopters = false
       , (territoryFrom, Map(sectorFrom -> army))
       , (territoryTo, sectorTo)
       )
@@ -63,7 +63,7 @@ class MovementTest  extends FunSuite {
     assert(false == isMoveAllowed(
         stormSector
       , mapWithArmy
-      , false
+      , hasOrnithopters = false
       , (territoryFrom, Map(sectorFrom -> army))
       , (territoryTo, sectorTo)
       )
@@ -84,7 +84,7 @@ class MovementTest  extends FunSuite {
     assert(isMoveAllowed(
         stormSector
       , mapWithArmy
-      , false
+      , hasOrnithopters = false
       , (territoryFrom, Map(sectorFrom -> army))
       , (territoryTo, sectorTo)
       )
@@ -105,7 +105,85 @@ class MovementTest  extends FunSuite {
     assert(isMoveAllowed(
         stormSector
       , mapWithArmy
-      , false
+      , hasOrnithopters = false
+      , (territoryFrom, Map(sectorFrom -> army))
+      , (territoryTo, sectorTo)
+      )
+    )
+  }
+
+  test("Movement.isMoveAllowed.canNotMoveOneTerritoryWhenStormIsBlocking") {
+    val stormSector = Sector2
+    val territoryFrom = CielagoDepression
+    val sectorFrom = Sector1
+    val territoryTo = CielagoEast
+    val sectorTo = Sector3
+    val army = FremenArmy(2,2)
+    val mapWithArmy = ArmiesOnDune(Map(territoryFrom -> Map(sectorFrom -> List(army))))
+    assert(false == isMoveAllowed(
+        stormSector
+      , mapWithArmy
+      , hasOrnithopters = false
+      , (territoryFrom, Map(sectorFrom -> army))
+      , (territoryTo, sectorTo)
+      )
+    )
+  }
+
+  test("Movement.isMoveAllowed.canNotMoveTwoTerritoriesWithoutOrnithopters") {
+    val stormSector = Sector7
+    val territoryFrom = CielagoDepression
+    val sectorFrom = Sector1
+    val territoryTo = FalseWallSouth
+    val sectorTo = Sector3
+    val army = AtreidesArmy(2)
+    val mapWithArmy = ArmiesOnDune(Map(
+        territoryFrom -> Map(sectorFrom -> List(army))
+      ))
+    assert(false == isMoveAllowed(
+        stormSector
+      , mapWithArmy
+      , hasOrnithopters = false
+      , (territoryFrom, Map(sectorFrom -> army))
+      , (territoryTo, sectorTo)
+      )
+    )
+  }
+
+  test("Movement.isMoveAllowed.canMoveTwoTerritoriesWithoutOrnithopters") {
+    val stormSector = Sector7
+    val territoryFrom = CielagoDepression
+    val sectorFrom = Sector1
+    val territoryTo = FalseWallSouth
+    val sectorTo = Sector3
+    val army = AtreidesArmy(2)
+    val mapWithArmy = ArmiesOnDune(Map(
+        territoryFrom -> Map(sectorFrom -> List(army))
+      ))
+    assert(isMoveAllowed(
+        stormSector
+      , mapWithArmy
+      , hasOrnithopters = true
+      , (territoryFrom, Map(sectorFrom -> army))
+      , (territoryTo, sectorTo)
+      )
+    )
+  }
+
+  test("Movement.isMoveAllowed.canNotMoveWithOrnithoptersWhenStormIsBlocking") {
+    val stormSector = Sector2
+    val territoryFrom = CielagoDepression
+    val sectorFrom = Sector1
+    val territoryTo = FalseWallSouth
+    val sectorTo = Sector3
+    val army = AtreidesArmy(2)
+    val mapWithArmy = ArmiesOnDune(Map(
+        territoryFrom -> Map(sectorFrom -> List(army))
+      ))
+    assert(false == isMoveAllowed(
+        stormSector
+      , mapWithArmy
+      , hasOrnithopters = true
       , (territoryFrom, Map(sectorFrom -> army))
       , (territoryTo, sectorTo)
       )
