@@ -102,8 +102,9 @@ object Army{
     && shouldBeSmaller.specialTroops <= other.specialTroops
     )
   }
-  val filterNotAdvisors: Iterable[Army] => Iterable[Army] = _.filterNot({
+  
+  val isOnlyAdvisor: Army => Boolean = {
     case army: BeneGesseritArmy if(army.normalTroops == 0) => true
     case _ => false
-  })
+  }
 }

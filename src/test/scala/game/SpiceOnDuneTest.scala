@@ -74,7 +74,7 @@ class SpiceTest  extends FunSuite {
     val army1 = HarkonnenArmy(2)
     val army2 = HarkonnenArmy(2)
     val territory1 = OldGap
-    val territory2 = THE_GREAT_FLAT
+    val territory2 = TheGreatFlat
     val armies = ArmiesOnDune(Map(
         territory1 -> Map(SpiceOnDune.spiceSector(territory1) -> List(army1))
       , territory2 -> Map(SpiceOnDune.spiceSector(territory2) -> List(army2))
@@ -92,7 +92,7 @@ class SpiceTest  extends FunSuite {
     val army1 = HarkonnenArmy(2)
     val army2 = FremenArmy(2,0)
     val territory1 = OldGap
-    val territory2 = THE_GREAT_FLAT
+    val territory2 = TheGreatFlat
     val armies = ArmiesOnDune(Map(
         territory1 -> Map(SpiceOnDune.spiceSector(territory1) -> List(army1))
       , territory2 -> Map(SpiceOnDune.spiceSector(territory2) -> List(army2))
@@ -111,7 +111,7 @@ class SpiceTest  extends FunSuite {
     val army1 = HarkonnenArmy(2)
     val army2 = FremenArmy(2,0)
     val territory1 = OldGap
-    val territory2 = THE_GREAT_FLAT
+    val territory2 = TheGreatFlat
     val armies = ArmiesOnDune(Map(
         territory1 -> Map(SpiceOnDune.spiceSector(territory1) -> List(army1))
       , territory2 -> Map(SpiceOnDune.spiceSector(territory2) -> List(army2))

@@ -3,7 +3,7 @@ package game.spice
 import game.dune_map._
 import game.dune_map.DuneMap.Territory
 import game.sector._
-import game.army._
+import game.army.Army
 import game.faction._
 import game.armies.ArmiesOnDune
 
@@ -23,7 +23,7 @@ object SpiceOnDune{
     case HaggaBasin => Sector12
     case RockOutcroppings => Sector13
     case FuneralPlains => Sector14
-    case THE_GREAT_FLAT => Sector14
+    case TheGreatFlat => Sector14
     case HabbanyaErg => Sector15
     case WindPassNorth => Sector16
     case HabbanyaRidgeFlat => Sector17
@@ -41,7 +41,7 @@ object SpiceOnDune{
     case HaggaBasin => 6
     case RockOutcroppings => 6
     case FuneralPlains => 6
-    case THE_GREAT_FLAT => 10
+    case TheGreatFlat => 10
     case HabbanyaErg => 8
     case WindPassNorth => 6
     case HabbanyaRidgeFlat => 10
@@ -96,7 +96,7 @@ object SpiceOnDune{
 
   private def splitSpiceInTerritories(
       spice: Spice
-    , territoryAndArmySet: Set[(Territory,Army)]
+    , territoryAndArmySet: Set[(Territory, Army)]
     , collectionRate: Faction => Int
   ): (Spice,SpiceCollected)  = {
     val territoryAndArmyMap = territoryAndArmySet.toMap
@@ -108,7 +108,7 @@ object SpiceOnDune{
 
   private def armiesOnSpiceRegionsOption(armiesOnDune: ArmiesOnDune)(territory: Territory): (Territory,Option[Army]) = {
     val armies = armiesOnDune.armies.getOrElse(territory,Map()).getOrElse(spiceSector(territory), List())
-    (territory, Army.filterNotAdvisors(armies).headOption)
+    (territory, armies.filterNot(Army.isOnlyAdvisor).headOption)
   }
 
   private def armiesOnSpiceRegions(armiesOnDune: ArmiesOnDune, spice: Spice, collectionRate: Faction => Int) = {

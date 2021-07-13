@@ -3,7 +3,7 @@ package game.armies
 import game.dune_map._
 import game.dune_map.DuneMap._
 import game.sector._
-import game.army.Army
+import game.army.Army.isOnlyAdvisor
 import game.faction._
 import game.army._
 
@@ -27,15 +27,14 @@ object ArmiesOnDune {
     ArmiesOnDune(startingArmies.collect { case (k, v) if presentFactions.contains(k) => v })
   }
 
-  def hasSpaceToMoveTo(armiesOnDune: ArmiesOnDune, territory: Territory): Boolean = {
-    val armies = armiesOnDune.armies
+  def hasSpaceToMoveTo(armiesOnDune: ArmiesOnDune, thisFaction: Faction)(territory: Territory): Boolean = {
     territory match {
-      case city: City if (armies.isDefinedAt(territory)) => {
-        val armiesOnTerritory: Iterable[Army] = armies(territory).values.flatten
-        val armiesWihoutAdvisors = Army.filterNotAdvisors(armiesOnTerritory)
-        val armiesByFaction = armiesWihoutAdvisors.groupBy(_.faction)
-        armiesByFaction.size < maxArmiesOnCity
-      }
+      case city: City => 
+        armiesOnDune.armies.get(territory).map { armiesOnTerritory =>
+          val armiesByFaction = armiesOnTerritory.values.flatten.filterNot(isOnlyAdvisor).groupBy(_.faction)
+          if (armiesByFaction.contains(thisFaction)) true
+          else armiesByFaction.size < maxArmiesOnCity
+        }.getOrElse(true)
       case _ => true
     }
   }

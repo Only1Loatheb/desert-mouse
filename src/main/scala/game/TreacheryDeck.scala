@@ -2,11 +2,11 @@ package game.treachery_deck
 
 import scala.util.Random
 
-sealed trait TreacheryCard{}
-sealed trait WeaponCard{}
-sealed trait DefenseCard{}
+sealed trait TreacheryCard
+sealed trait WeaponCard
+sealed trait DefenseCard
 
-sealed trait TreacheryType{}
+sealed trait TreacheryType
 case object Projectile extends TreacheryType
 case object Poison extends TreacheryType
 

@@ -13,21 +13,21 @@ final case class SpiceDeck(cards: List[SpiceCard])
 // 21 cards in original game
 object SpiceDeck{
   val territoriesWithSpiceBlows = List(
-      BrokenLand
-    , CielagoNorth
-    , CielagoSouth
-    , FuneralPlains
-    , THE_GREAT_FLAT
-    , HabbanyaErg
-    , HabbanyaRidgeFlat
-    , HaggaBasin
-    , TheMinorErg
-    , OldGap
-    , RedChasm
-    , RockOutcroppings
-    , SihayaRidge
-    , SouthMesa
-    , WindPassNorth
+      CielagoSouth
+    , CielagoNorth 
+    , SouthMesa 
+    , RedChasm 
+    , TheMinorErg 
+    , SihayaRidge 
+    , OldGap 
+    , BrokenLand 
+    , HaggaBasin 
+    , RockOutcroppings 
+    , FuneralPlains 
+    , TheGreatFlat 
+    , HabbanyaErg 
+    , WindPassNorth 
+    , HabbanyaRidgeFlat 
     )
   val cards = (
     List.fill(6)(ShaiHulud) 

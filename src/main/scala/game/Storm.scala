@@ -1,5 +1,6 @@
 package game.storm
 
+import utils.Not.not
 import game.dune_map._
 import game.dune_map.DuneMap._
 import game.sector.{Sector, Sector0}
@@ -85,7 +86,7 @@ object Storm {
   ): SpiceOnDune = {
     SpiceOnDune(spiceOnDune.spice.collect({
       case (territory, spiceCount)
-          if (!stormSectors.contains(SpiceOnDune.spiceSector(territory))) =>
+          if (not(stormSectors.contains(SpiceOnDune.spiceSector(territory)))) =>
         (territory, spiceCount)
     }))
   }
