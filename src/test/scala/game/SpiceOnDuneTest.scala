@@ -1,14 +1,12 @@
 import org.scalatest.FunSuite
 
 import game.faction._
-import game.sector._
 import game.army._
 import game.spice.{SpiceOnDune, SpiceCollectedByFaction}
-import game.region.Regions._
-import game.spice_deck.SpiceDeck._
+import game.regions._
 import game.armies.ArmiesOnDune
 import game.dune_map._
-import game.dune_map.DuneMap._
+import game.spice_deck.territoriesWithSpiceBlows
 
 class SpiceTest  extends FunSuite {
   test("SpiceOnDune.collectSpice.spiceSectorsAreOnTheTerritory") {

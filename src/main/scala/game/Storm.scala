@@ -1,14 +1,12 @@
-package game.storm
+package game
 
 import utils.Not.not
 import game.dune_map._
-import game.dune_map.DuneMap._
 import game.sector.{Sector, Sector0}
 import game.army._
-import game.armies.ArmiesOnDune
-import game.armies.ArmiesOnDune.ArmiesOnTerritory
+import game.armies.{ArmiesOnDune, ArmiesOnTerritory}
 
-import game.region.Regions._
+import game.regions._
 import game.spice.SpiceOnDune
 
 /** Storm moves anticlockwise. (Sectors are also indexed anticlockwise)
@@ -16,7 +14,7 @@ import game.spice.SpiceOnDune
   * Half of the Fremen army can survive the storm (rounded up).
   * Storm destroys spice.
   */
-object Storm {
+object storm {
   val start: Sector = Sector0
 
   val stormTerritoriesBySector: TerritoriesBySector = {
@@ -75,7 +73,7 @@ object Storm {
 
     ArmiesOnDune(
       armiesOnDune.armies
-        .map(affectTerritory(stormRegions, stormSectors)(_))
+        .map(affectTerritory(stormRegions, stormSectors))
         .filterNot(_._2.isEmpty)
     )
   }

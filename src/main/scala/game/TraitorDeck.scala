@@ -1,29 +1,35 @@
-package game.traitor_deck
+package game
 
 import scala.util.Random
 
-import game.leaders.{Leader, Leaders}
+import game.leaders.{Leader, leadersByFaction}
 import game.faction.Faction
 
-final case class TraitorCard(leader: Leader)
+object traitor_deck {
 
-final case class TraitorCandidates(cards: Map[Faction, List[TraitorCard]])
+  type TraitorCandidates = List[TraitorCard]
 
-object TraitorDeck {
+  final case class TraitorCard(leader: Leader)
+
+  final case class AllTraitorCandidates(cards: Map[Faction, TraitorCandidates])
 
   private val traitorCandidatesForPlayer = 4
 
-  private def getTraitors(presentFactions: Set[Faction]): List[TraitorCard] = {
-    val possibleTraitors = Leaders.leadersByFaction.collect {
+  private def getTraitors(presentFactions: Set[Faction]): TraitorCandidates = {
+    val possibleTraitors = leadersByFaction.collect {
       case (k, v) if presentFactions.contains(k) => v
     }.flatten.toList
-    possibleTraitors.map(TraitorCard(_))
+    possibleTraitors.map(TraitorCard)
   }
 
-  def getTraitorCandidates(presentFactions: Set[Faction]): TraitorCandidates = {
+  def getTraitorCandidates(presentFactions: Set[Faction]): AllTraitorCandidates = {
     val traitors = getTraitors(presentFactions)
     val traitorsShuffled = Random.shuffle(traitors)
     val traitorsDealt = traitorsShuffled.grouped(traitorCandidatesForPlayer)
-    TraitorCandidates(presentFactions.toList.zip(traitorsDealt).toMap)
+    AllTraitorCandidates(presentFactions.toList.zip(traitorsDealt).toMap)
+  }
+  object TraitorDeck {
+
   }
 }
+

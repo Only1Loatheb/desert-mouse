@@ -1,22 +1,20 @@
-package game.movement
+package game
+
+import scala.annotation.tailrec
 
 import utils.Not.not
 import game.dune_map._
-import game.dune_map.DuneMap._
+import game.dune_map.LabelToGetSectorOnEdgeEndConversionImplicit._
+import game.dune_map.DuneMap.duneMap
 import game.sector._
 import game.army._
 import game.armies.{ArmiesOnDune, ArmySelection}
-import game.region.Regions.isTerritoryOnThisSector
+import game.regions.isTerritoryOnThisSector
 
-import scalax.collection.Graph
-import scalax.collection.GraphPredef._
-import scalax.collection.GraphEdge._
-
-import LabelToGetSectorOnEdgeEndConversionImplicit._
 
 /** An object that groups functions responsible for moving forces on the planet.
   */
-object Movement {
+object movement {
 
   private val movementRangeWithoutOrnithopters: Int = 1
   private val movementRangeWithOrnithopters: Int = 3
@@ -47,11 +45,11 @@ object Movement {
     val (territoryFrom, armiesFrom) = from
     val (territoryTo, sectorTarget) = to
     lazy val faction = armiesFrom.head._2.faction
-    lazy val hasSpaceToMoveTo: Territory => Boolean = ArmiesOnDune.hasSpaceToMoveTo(armiesOnDune, faction)
+    lazy val hasSpaceToMoveTo: Territory => Boolean = armiesOnDune.hasSpaceToMoveTo(faction)
     (isTerritoryOnThisSector(territoryTo, sectorTarget)
     && not(armiesFrom.isEmpty)
     && hasSpaceToMoveTo(territoryTo)
-    && ArmiesOnDune.hasThisArmy(armiesOnDune, territoryFrom, ArmySelection(armiesFrom))
+    && armiesOnDune.hasThisArmy(territoryFrom, ArmySelection(armiesFrom))
     && doesAllowedPathExist(stormSector, hasSpaceToMoveTo, hasOrnithopters, from, to))
   }
 
@@ -69,7 +67,7 @@ object Movement {
   private def isStormBlockingThisMove(
       stormSector: Sector
   )(sectorFrom: Sector, sectorTarget: Sector): Boolean = {
-    lazy val traveledSectors = Sector.sectorsFromTo(sectorFrom, sectorTarget)
+    lazy val traveledSectors = sectorFrom sectorsTo sectorTarget
     if (sectorFrom == stormSector || sectorTarget == stormSector) true
     else if (sectorFrom == sectorTarget) false
     else traveledSectors.contains(stormSector)
@@ -96,6 +94,7 @@ object Movement {
     else getPathFromToInMoves(stormSector, hasSpaceToMoveTo, Set((arbitraryNodeSector, nodeFrom)), visited.map(_._2), nodeTo, sectorTarget, moves - 1)
   }
 
+  @tailrec
   private def getPathFromToInMoves(
       stormSector: Sector,
       hasSpaceToMoveTo: Territory => Boolean,
@@ -109,8 +108,8 @@ object Movement {
     lazy val nowVisited = newVisited
       .flatMap{case (sectorFrom, node) => (duneMap get node).edges
         .flatMap(edge => getOtherSectorAndNode(sectorFrom, edge, node))
-        .diff(prevVisited)
         .filter(x => hasSpaceToMoveTo(x._2))
+        .diff(prevVisited)
         .map((sectorFrom, _))
         .filterNot(isBlockedEdge(stormSector))
       }

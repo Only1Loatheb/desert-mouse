@@ -1,7 +1,10 @@
-package game.kwisatz_haderach_counter
+package game
 
-final case class KwisatzHaderachCounter(forcesLost: Int) extends AnyVal
+object kwisatz_haderach_counter {
 
-object KwisatzHaderachCounter{
-  def apply(): KwisatzHaderachCounter = KwisatzHaderachCounter(0)
+  final case class KwisatzHaderachCounter(forcesLost: Int) extends AnyVal
+
+  object KwisatzHaderachCounter{
+    def apply(): KwisatzHaderachCounter = KwisatzHaderachCounter(0)
+  }
 }

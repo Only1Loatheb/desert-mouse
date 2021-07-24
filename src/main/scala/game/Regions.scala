@@ -1,12 +1,12 @@
-package game.region
+package game
 
 import game.dune_map._
-import game.dune_map.DuneMap.Territory
+import game.dune_map.Territory
 import game.sector._
 
 /** Region is a part of territory that lays on one sector
   */
-object Regions {
+object regions {
   type TerritoriesBySector = List[List[Territory]]
 
   val sector0Territories = List(

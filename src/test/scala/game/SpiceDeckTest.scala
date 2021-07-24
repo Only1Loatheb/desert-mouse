@@ -1,9 +1,9 @@
 import org.scalatest.FunSuite
 
-import game.spice_deck.{SpiceDeck}
+import game.spice_deck._
 
 class SpiceDeckTest extends FunSuite {
   test("SpiceDeck.shuffledSpiceDeck.length") {
-    assert(SpiceDeck.cards.length === 21)
+    assert(cards.length === 21)
   }
 }

@@ -4,16 +4,16 @@ import game.dune_map._
 import game.sector._
 import game.storm._
 import game.armies.ArmiesOnDune
-import game.region.Regions
+import game.regions.duneTerritoriesBySector
 import game.army._
 class StormTest  extends FunSuite {
   test("Storm.notAllSectorsAreAffected") {
-    assert(Storm.stormTerritoriesBySector != Regions.duneTerritoriesBySector)
+    assert(stormTerritoriesBySector != duneTerritoriesBySector)
   }
 
   test("Storm.affectArmiesOnSectors.preservesEmptyMap") {
     val emptyMap = ArmiesOnDune(Map())
-    assert(Storm.affectArmiesOnSectors(emptyMap,Set(Sector1)) === emptyMap)
+    assert(affectArmiesOnSectors(emptyMap,Set(Sector1)) === emptyMap)
   }
 
   test("Storm.affectArmiesOnSectors.removesUnits") {
@@ -21,7 +21,7 @@ class StormTest  extends FunSuite {
     val sector = Sector1
     val sandTerritory = Meridan
     val mapWithArmy = ArmiesOnDune(Map(sandTerritory -> Map(sector -> List(AtreidesArmy(1)))))
-    assert(Storm.affectArmiesOnSectors(mapWithArmy,Set(sector)) === emptyMap)
+    assert(affectArmiesOnSectors(mapWithArmy,Set(sector)) === emptyMap)
   }
 
   test("Storm.affectArmiesOnSectors.removesHalfOfFremenArmy") {
@@ -29,14 +29,14 @@ class StormTest  extends FunSuite {
     val sandTerritory = Meridan
     val mapWithArmy = ArmiesOnDune(Map(sandTerritory -> Map(sector -> List(FremenArmy(2,2)))))
     val mapWithHalfArmy = ArmiesOnDune(Map(sandTerritory -> Map(sector -> List(FremenArmy(1,1)))))
-    assert(Storm.affectArmiesOnSectors(mapWithArmy,Set(sector)) === mapWithHalfArmy)
+    assert(affectArmiesOnSectors(mapWithArmy,Set(sector)) === mapWithHalfArmy)
   }
 
   test("Storm.affectArmiesOnSectors.removesHalfOfFremenArmyRoundedUp") {
     val sector = Sector1
     val sandTerritory = Meridan
     val mapWithArmy = ArmiesOnDune(Map(sandTerritory -> Map(sector -> List(FremenArmy(1,1)))))
-    assert(Storm.affectArmiesOnSectors(mapWithArmy,Set(sector)) === mapWithArmy)
+    assert(affectArmiesOnSectors(mapWithArmy,Set(sector)) === mapWithArmy)
   }
 
   test("Storm.affectArmiesOnSectors.doesNotRemoveAdjucentArmy") {
@@ -44,7 +44,7 @@ class StormTest  extends FunSuite {
     val stormSector = Sector1
     val territoryOnTwoSectors = Meridan
     val mapWithArmy = ArmiesOnDune(Map(territoryOnTwoSectors -> Map(armySector -> List(BeneGesseritArmy(1,1)))))
-    assert(Storm.affectArmiesOnSectors(mapWithArmy,Set(stormSector)) === mapWithArmy)
+    assert(affectArmiesOnSectors(mapWithArmy,Set(stormSector)) === mapWithArmy)
   }
 
   test("Storm.affectArmiesOnSectors.canAffectMultipleSectors") {
@@ -55,6 +55,6 @@ class StormTest  extends FunSuite {
         army1Sector -> List(BeneGesseritArmy(1,1))
       , army2Sector -> List(BeneGesseritArmy(1,1))
       )))
-    assert(Storm.affectArmiesOnSectors(mapWithArmy,Set(army1Sector, army2Sector)) === ArmiesOnDune(Map()))
+    assert(affectArmiesOnSectors(mapWithArmy,Set(army1Sector, army2Sector)) === ArmiesOnDune(Map()))
   }
 }

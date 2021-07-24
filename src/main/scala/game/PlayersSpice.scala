@@ -1,10 +1,11 @@
-package game.players_spice
+package game
 
 import game.faction._
 
-final case class PlayersSpice(armies: Map[Faction,Int])
+object players_spice {
 
-object PlayersSpice {
+  final case class PlayersSpice(armies: Map[Faction,Int])
+
   val startingSpice: Map[Faction,Int] = Map(
     Fremen -> 3,
     Atreides -> 10,
@@ -13,8 +14,10 @@ object PlayersSpice {
     Guild -> 5,
     Emperor -> 10
   )
+  object PlayersSpice {
 
-  def apply(presentFactions: Set[Faction]): PlayersSpice = {
-    PlayersSpice(startingSpice.filter{case (k,_) => presentFactions.contains(k)})
+    def apply(presentFactions: Set[Faction]): PlayersSpice = {
+      PlayersSpice(startingSpice.filter{case (k,_) => presentFactions.contains(k)})
+    }
   }
 }

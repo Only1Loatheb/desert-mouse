@@ -1,12 +1,11 @@
 package utils
 
 import game.dune_map._
-import game.dune_map.DuneMap.Territory
 import game.sector._
 
 object TerritorySectors {
 
-  val aSectorsOnTerritory: Map[Territory, Sector] = Map(
+  val aSectorOnTerritory: Map[Territory, Sector] = Map(
     Meridan -> Sector0,
     CielagoSouth -> Sector1,
     CielagoEast -> Sector2,
