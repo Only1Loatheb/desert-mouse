@@ -1,4 +1,4 @@
-package game
+package game.state
 
 import scala.util.Random
 object treachery_deck {

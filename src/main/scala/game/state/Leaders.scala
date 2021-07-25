@@ -1,6 +1,6 @@
-package game
+package game.state
 
-import game.faction._
+import game.state.faction._
 
 object leaders {
   sealed trait Leader {
@@ -134,49 +134,49 @@ object leaders {
     def force = 1
   }
 
-  val leadersByFaction: Map[Faction, List[Leader]] = Map(
-    Atreides -> List(
+  val leadersByFaction: Faction => Set[Leader] = {
+    case Atreides => Set(
       DuncanIdaho,
       DrWellingtonYueh,
       GurneyHalleck,
       LadyJessica,
       ThufirHawat,
-    ),
-    BeneGesserit -> List(
+    )
+    case BeneGesserit => Set(
       Alia,
       MargotLadyFenring,
       PrincessIrulan,
       ReverendMotherRamallo,
       WannaMarcus,
-    ),
-    Emperor -> List(
+    )
+    case Emperor => Set(
       Bashar,
       Burseg,
       Caid,
       CaptainAramsham,
       CountHasimirFenring,
-    ),
-    Fremen -> List(
+    )
+    case Fremen => Set(
       Chani,
       Jamis,
       Otheym,
       ShadoutMapes,
       Stilgar,
-    ),
-    Guild -> List(
+    )
+    case Guild => Set(
       EsmarTuek,
       MasterBewt,
       Representative,
       SooSooSook,
       StabanTuek,
-    ),
-    Harkonnen -> List(
+    )
+    case Harkonnen => Set(
       CaptainIakinNefud,
       FeydRautha,
       BeastRabban,
       PiterDeVries,
       UmmanKudu,
     )
-  )
+  }
 
 }

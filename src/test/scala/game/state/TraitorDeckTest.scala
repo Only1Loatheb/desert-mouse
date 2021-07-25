@@ -1,7 +1,7 @@
 import org.scalatest.FunSuite
 
-import game.traitor_deck.getTraitorCandidates
-import game.faction._
+import game.state.traitor_deck.getTraitorCandidates
+import game.state.faction._
 
 class TraitorDeckTest extends FunSuite {
   test("TraitorDeckTest.getTraitorCards.allFactions") {

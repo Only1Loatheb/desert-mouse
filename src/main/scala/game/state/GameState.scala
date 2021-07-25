@@ -1,24 +1,28 @@
-package game
+package game.state
 
-import game.spice.SpiceOnDune
-import game.armies.ArmiesOnDune
-import game.treachery_deck.TreacheryDeck
-import game.spice_deck.SpiceDeck
-import game.tleilaxu_tanks.TleilaxuTanks
-import game.reserves.Reserves
-import game.players.Players
-import game.players_spice.PlayersSpice
-import game.traitors.{Traitors, AllTraitors}
-import game.traitor_deck.getTraitorCandidates
-import game.sector.Sector
-import game.storm
-import game.faction.Faction
-import game.kwisatz_haderach_counter.KwisatzHaderachCounter
+import game.state.turn_counter.TurnCounter
+import game.state.spice.SpiceOnDune
+import game.state.armies.ArmiesOnDune
+import game.state.treachery_deck.TreacheryDeck
+import game.state.spice_deck.SpiceDeck
+import game.state.tleilaxu_tanks.TleilaxuTanks
+import game.state.reserves.Reserves
+import game.state.players.Players
+import game.state.players_spice.PlayersSpice
+import game.state.traitors.{Traitors, AllTraitors}
+import game.state.traitor_deck.getTraitorCandidates
+import game.state.sector.{Sector, Sector0}
+import game.state.faction.Faction
+import game.state.kwisatz_haderach_counter.KwisatzHaderachCounter
 
 
-object state {
+object game_state {
+
+  val stormStart: Sector = Sector0
+
+  type PresentFactions = Set[Faction]
   final case class GameState(
-    turn: Int,
+    turn: TurnCounter,
     spiceOnDune: SpiceOnDune,
     armiesOnDune: ArmiesOnDune,
     treacheryDeck: TreacheryDeck,
@@ -36,7 +40,7 @@ object state {
   )
 
   final case class GameStateView(
-    turn: Int,
+    turn: TurnCounter,
     spiceOnDune: SpiceOnDune,
     armiesOnDune: ArmiesOnDune,
     tleilaxuTanks: TleilaxuTanks,
@@ -52,11 +56,10 @@ object state {
   )
 
   object GameState {
-    val pregameDecisionTurn = 0
 
-    def apply(presentFactions: Set[Faction]): GameState = {
+    def apply(presentFactions: PresentFactions, turns: Int): GameState = {
       GameState(
-        pregameDecisionTurn,
+        TurnCounter(turns),
         SpiceOnDune.noSpiceOnDune,
         ArmiesOnDune.init(presentFactions),
         TreacheryDeck.shuffledTreacheryDeck,
@@ -66,7 +69,7 @@ object state {
         Players(presentFactions),
         PlayersSpice(presentFactions),
         AllTraitors(getTraitorCandidates(presentFactions)),
-        storm.start,
+        stormStart,
         KwisatzHaderachCounter(),
         false
       )

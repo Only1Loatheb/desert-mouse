@@ -1,7 +1,7 @@
-package utils
+package game.utils
 
-import game.dune_map._
-import game.sector._
+import game.state.dune_map._
+import game.state.sector._
 
 object TerritorySectors {
 

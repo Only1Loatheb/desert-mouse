@@ -1,8 +1,8 @@
-package game
+package game.state
 
-import game.traitor_deck.AllTraitorCandidates
-import game.faction.Faction
-import game.leaders.Leader
+import game.state.traitor_deck.AllTraitorCandidates
+import game.state.faction.Faction
+import game.state.leaders.Leader
 
 
 object traitors {

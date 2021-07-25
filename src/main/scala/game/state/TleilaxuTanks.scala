@@ -1,8 +1,8 @@
-package game
+package game.state
 
-import game.army.Army
-import game.leaders.Leader
-import game.faction.Faction
+import game.state.army.Army
+import game.state.leaders.Leader
+import game.state.faction.Faction
 
 object tleilaxu_tanks {
   final case class TleilaxuTanks(armies: Map[Faction,Army], leaders: Map[Faction,Set[Leader]])

@@ -1,13 +1,13 @@
-package game
+package game.turn
 
-import utils.Not.not
-import game.dune_map._
-import game.sector.{Sector, Sector0}
-import game.army._
-import game.armies.{ArmiesOnDune, ArmiesOnTerritory}
-
-import game.regions._
-import game.spice.SpiceOnDune
+import game.utils.Not.not
+import game.state.dune_map._
+import game.state.sector.Sector
+import game.state.army._
+import game.state.armies.{ArmiesOnDune, ArmiesOnTerritory}
+import game.state.regions._
+import game.state.spice.SpiceOnDune
+import game.state.spice.SpiceOnDune.spiceSector
 
 /** Storm moves anticlockwise. (Sectors are also indexed anticlockwise)
   * Storm destroys armies in sand territories.
@@ -15,18 +15,17 @@ import game.spice.SpiceOnDune
   * Storm destroys spice.
   */
 object storm {
-  val start: Sector = Sector0
 
   val stormTerritoriesBySector: TerritoriesBySector = {
-    duneTerritoriesBySector.map(_.filter(_ match {
+    duneTerritoriesBySector.view.mapValues(_.filter {
       case territory: Sand if (territory != ImperialBasin) => true
       case _                                               => false
-    }))
+    }).toMap
   }
 
   def devideBy2AndRoundUp(int: Int): Int = {
     val quotient = int / 2
-    if (int % 2 == 1) quotient + 1 else quotient
+    if ((int & 1) == 1) quotient + 1 else quotient
   }
 
   private val affectArmy: PartialFunction[Army, Army] = {
@@ -41,13 +40,11 @@ object storm {
       armies: ArmiesOnTerritory,
       stormSectors: Set[Sector]
   ) = {
-    armies
-      .map({
+    armies.map {
         case (sector, armies) if (stormSectors.contains(sector)) =>
           (sector, armies.collect(affectArmy))
         case other => other
-      })
-      .filterNot(_._2.isEmpty)
+      }.filterNot(_._2.isEmpty)
   }
 
   private def affectTerritory(
@@ -67,9 +64,7 @@ object storm {
       armiesOnDune: ArmiesOnDune,
       stormSectors: Set[Sector]
   ): ArmiesOnDune = {
-    val stormRegions = stormSectors
-      .map(sector => stormTerritoriesBySector(sector.number))
-      .flatten
+    val stormRegions = stormSectors.map(stormTerritoriesBySector).flatten
 
     ArmiesOnDune(
       armiesOnDune.armies
@@ -82,10 +77,10 @@ object storm {
       spiceOnDune: SpiceOnDune,
       stormSectors: Set[Sector]
   ): SpiceOnDune = {
-    SpiceOnDune(spiceOnDune.spice.collect({
+    SpiceOnDune(spiceOnDune.spice.collect {
       case (territory, spiceCount)
-          if (not(stormSectors.contains(SpiceOnDune.spiceSector(territory)))) =>
+          if (not(stormSectors.contains(spiceSector(territory)))) =>
         (territory, spiceCount)
-    }))
+    })
   }
 }

@@ -1,7 +1,7 @@
-package game
+package game.state
 
-import utils.nonneg.NonNegInt
-import game.faction._
+import game.utils.nonneg.NonNegInt
+import game.state.faction._
 
 object army {
   sealed trait Army {
@@ -11,7 +11,7 @@ object army {
     def specialTroops: Int
     def troopsAbleToCollect: Int
 
-    val isOnlyAdvisor: Boolean = {
+    def isOnlyAdvisor: Boolean = {
       if (faction == BeneGesserit &&  normalTroops == 0) true
       else false
     }

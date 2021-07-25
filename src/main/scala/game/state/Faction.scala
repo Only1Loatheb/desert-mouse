@@ -1,4 +1,4 @@
-package game
+package game.state
 
 object faction {
   sealed trait Faction {}

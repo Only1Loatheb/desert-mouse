@@ -1,23 +1,28 @@
-package game
+package game.turn
 
 import scala.annotation.tailrec
 
-import utils.Not.not
-import game.dune_map._
-import game.dune_map.LabelToGetSectorOnEdgeEndConversionImplicit._
-import game.dune_map.DuneMap.duneMap
-import game.sector._
-import game.army._
-import game.armies.{ArmiesOnDune, ArmySelection}
-import game.regions.isTerritoryOnThisSector
+import game.utils.Not.not
+import game.state.dune_map._
+import game.state.dune_map.LabelToGetSectorOnEdgeEndConversionImplicit._
+import game.state.dune_map.DuneMap.duneMap
+import game.state.sector._
+import game.state.army._
+import game.state.armies.{ArmiesOnDune, ArmySelection}
+import game.state.regions.isTerritoryOnThisSector
+import game.state.faction.{Faction, Fremen}
 
 
 /** An object that groups functions responsible for moving forces on the planet.
   */
 object movement {
 
-  private val movementRangeWithoutOrnithopters: Int = 1
-  private val movementRangeWithOrnithopters: Int = 3
+  final case class MoveDescriptor(from: (Territory, Map[Sector, Army]), to: (Territory, Sector))
+
+  private final case class MovementRange(val range: Int) extends AnyVal
+  private val withOrnithoptersRange = MovementRange(3)
+  private val fremenRange = MovementRange(2)
+  private val baseRange = MovementRange(1)
 
   /** Returns true if it is a legal move.
     * Rules:
@@ -39,29 +44,23 @@ object movement {
       stormSector: Sector,
       armiesOnDune: ArmiesOnDune,
       hasOrnithopters: Boolean,
-      from: (Territory, Map[Sector, Army]),
-      to: (Territory, Sector)
+      moveDescriptor: MoveDescriptor
   ): Boolean = {
-    val (territoryFrom, armiesFrom) = from
-    val (territoryTo, sectorTarget) = to
+    val MoveDescriptor(from@(territoryFrom, armiesFrom), to@(territoryTo, sectorTarget)) = moveDescriptor
     lazy val faction = armiesFrom.head._2.faction
     lazy val hasSpaceToMoveTo: Territory => Boolean = armiesOnDune.hasSpaceToMoveTo(faction)
+    lazy val movementRange = getMovementRange(hasOrnithopters, faction).range
     (isTerritoryOnThisSector(territoryTo, sectorTarget)
     && not(armiesFrom.isEmpty)
     && hasSpaceToMoveTo(territoryTo)
     && armiesOnDune.hasThisArmy(territoryFrom, ArmySelection(armiesFrom))
-    && doesAllowedPathExist(stormSector, hasSpaceToMoveTo, hasOrnithopters, from, to))
+    && getPathFromToInMoves(stormSector, hasSpaceToMoveTo, from, to, movementRange))
   }
 
-  private def doesAllowedPathExist(
-      stormSector: Sector,
-      hasSpaceToMoveTo: Territory => Boolean,
-      hasOrnithopters: Boolean,
-      from: (Territory, Map[Sector, Army]),
-      to: (Territory, Sector),
-  ): Boolean = {
-    val movementRange = if (hasOrnithopters) movementRangeWithOrnithopters else movementRangeWithoutOrnithopters
-    getPathFromToInMoves(stormSector, hasSpaceToMoveTo, from, to, movementRange)
+  private val getMovementRange: (Boolean, Faction) => MovementRange = {
+    case (true, _) => withOrnithoptersRange
+    case (_, Fremen) => fremenRange
+    case _ => baseRange
   }
 
   private def isStormBlockingThisMove(
@@ -106,7 +105,7 @@ object movement {
   ): Boolean = {
     lazy val prevVisited = oldVisited union newVisited
     lazy val nowVisited = newVisited
-      .flatMap{case (sectorFrom, node) => (duneMap get node).edges
+      .flatMap { case (sectorFrom, node) => (duneMap get node).edges
         .flatMap(edge => getOtherSectorAndNode(sectorFrom, edge, node))
         .filter(x => hasSpaceToMoveTo(x._2))
         .diff(prevVisited)

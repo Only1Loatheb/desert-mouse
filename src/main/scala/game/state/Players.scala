@@ -1,9 +1,9 @@
-package game
+package game.state
 
 import scala.util.Random
 
-import game.faction.Faction
-import game.sector._
+import game.state.faction.Faction
+import game.state.sector._
 
 object players {
 

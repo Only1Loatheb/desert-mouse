@@ -1,8 +1,8 @@
-package game
+package game.state
 
 import scala.util.Random
-import game.dune_map._
-import game.dune_map.Territory
+import game.state.dune_map._
+import game.state.dune_map.Territory
 
 object spice_deck {
 

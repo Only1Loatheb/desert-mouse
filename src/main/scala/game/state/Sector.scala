@@ -1,34 +1,37 @@
-package game
+package game.state
 
 object sector {
 
-  private val numberOfSectors = 18
-
-  private val sectorsOrdered: LazyList[Sector] = (
-    Sector0
-      #:: Sector1
-      #:: Sector2
-      #:: Sector3
-      #:: Sector4
-      #:: Sector5
-      #:: Sector6
-      #:: Sector7
-      #:: Sector8
-      #:: Sector9
-      #:: Sector10
-      #:: Sector11
-      #:: Sector12
-      #:: Sector13
-      #:: Sector14
-      #:: Sector15
-      #:: Sector16
-      #:: Sector17
-      #:: sectorsOrdered
+  private val orderedSectors = Vector(
+    Sector0,
+    Sector1,
+    Sector2,
+    Sector3,
+    Sector4,
+    Sector5,
+    Sector6,
+    Sector7,
+    Sector8,
+    Sector9,
+    Sector10,
+    Sector11,
+    Sector12,
+    Sector13,
+    Sector14,
+    Sector15,
+    Sector16,
+    Sector17,
   )
+
+  private val numberOfSectors = orderedSectors.length
+
+  private val orderedSectorCycle: LazyList[Sector] = {
+    LazyList.from(orderedSectors) #::: orderedSectorCycle
+  }
 
   sealed trait Sector {
     def number: Int
-    def +(move: Int): Sector = sectorsOrdered(number + move)
+    def +(move: Int): Sector = orderedSectors((number + move) % numberOfSectors)
 
     /** Returns secotors that have to be visited during the travel
       *
@@ -39,17 +42,15 @@ object sector {
     def sectorsTo(sectorTo: Sector): Set[Sector] = {
       if (this == FakePolarSector || sectorTo == FakePolarSector) Set(this, sectorTo)
       else {
-        val (smaller, bigger) =
-          if (this.number > sectorTo.number) (sectorTo, this) else (this, sectorTo)
-        val isAnticlockwise =
-          (bigger.number - smaller.number) < (smaller.number + numberOfSectors - bigger.number)
+        val (smaller, bigger) = if (this.number > sectorTo.number) (sectorTo, this) else (this, sectorTo)
+        val isAnticlockwise = (bigger.number - smaller.number) < (smaller.number + numberOfSectors - bigger.number)
         val (from, to) = if (isAnticlockwise) (smaller, bigger) else (bigger, smaller)
-        sectorsOrdered.dropWhile(_ != from).takeWhile(_ != to).appended(to).toSet
+        orderedSectorCycle.dropWhile(_ != from).takeWhile(_ != to).appended(to).toSet
       }
     }
   }
   final case object FakePolarSector extends Sector {
-    override def number = 18
+    override def number = numberOfSectors
   }
 
   final case object Sector0 extends Sector {

@@ -1,6 +1,6 @@
-package game
+package game.state
 
-import game.faction._
+import game.state.faction._
 
 object players_spice {
 

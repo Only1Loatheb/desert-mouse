@@ -1,17 +1,17 @@
-package game
+package game.state
 
-import game.dune_map._
-import game.sector._
-import game.army.Army
-import game.faction._
-import game.armies.ArmiesOnDune
+import game.state.dune_map._
+import game.state.sector._
+import game.state.army.Army
+import game.state.faction._
+import game.state.armies.ArmiesOnDune
 
 object spice {
 
   final case class SpiceOnDune(spice: Map[Territory,Int])
   final case class SpiceCollectedByFaction(collectedSpice: Map[Faction,Int])
   object SpiceOnDune{
-    val spiceSector: PartialFunction[Territory, Sector] = _ match {
+    val spiceSector: PartialFunction[Territory, Sector] = {
       case CielagoSouth => Sector1
       case CielagoNorth => Sector2
       case SouthMesa => Sector4
@@ -29,7 +29,7 @@ object spice {
       case HabbanyaRidgeFlat => Sector17
     }
 
-    val initialSpiceAmount: PartialFunction[Territory, Int] = _ match {
+    val initialSpiceAmount: PartialFunction[Territory, Int] = {
       case CielagoSouth => 12
       case CielagoNorth => 8
       case SouthMesa => 10

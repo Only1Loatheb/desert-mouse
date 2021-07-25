@@ -1,10 +1,10 @@
 import org.scalatest.FunSuite
 
-import game.dune_map.{DuneMap, Territory}
-import game.dune_map.LabelToGetSectorOnEdgeEndConversionImplicit._
-import game.regions.isTerritoryOnThisSector
-import utils.TerritorySectors.aSectorOnTerritory
-import game.sector.FakePolarSector
+import game.state.dune_map.{DuneMap, Territory}
+import game.state.dune_map.LabelToGetSectorOnEdgeEndConversionImplicit._
+import game.state.regions.isTerritoryOnThisSector
+import game.state.sector.FakePolarSector
+import game.utils.TerritorySectors.aSectorOnTerritory
 
 class DuneMapTest extends FunSuite {
   test("DuneMap.edges.label.GetSectorOnEdgeEnd.isExhaustive") {

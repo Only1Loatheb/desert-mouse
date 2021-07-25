@@ -1,11 +1,10 @@
-package game
+package game.state
 
-import game.dune_map._
-import game.dune_map.DuneMap._
-import game.sector._
-import game.army.Army
-import game.faction._
-import game.army._
+import game.state.dune_map._
+import game.state.sector._
+import game.state.army.Army
+import game.state.faction._
+import game.state.army._
 
 
 
@@ -17,10 +16,10 @@ object armies {
   val maxArmiesOnCity = 2
 
   val startingArmies: Map[Faction, (Territory, Map[Sector, List[Army]])] = Map(
-    Atreides -> (Arrakeen, Map(Sector9 -> List(AtreidesArmy(10)))),
-    Harkonnen -> (Carthag, Map(Sector10 -> List(HarkonnenArmy(10)))),
-    BeneGesserit -> (PolarSink, Map(FakePolarSector -> List(BeneGesseritArmy(1, 0)))),
-    Guild -> (TueksSietch, Map(Sector4 -> List(GuildArmy(15))))
+    (Atreides, (Arrakeen, Map(Sector9 -> List(AtreidesArmy(10))))),
+    (Harkonnen, (Carthag, Map(Sector10 -> List(HarkonnenArmy(10))))),
+    (BeneGesserit, (PolarSink, Map(FakePolarSector -> List(BeneGesseritArmy(1, 0))))),
+    (Guild, (TueksSietch, Map(Sector4 -> List(GuildArmy(15))))),
   )
   object ArmiesOnDune {
     def init(presentFactions: Set[Faction]): ArmiesOnDune = {

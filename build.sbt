@@ -13,6 +13,7 @@ scalacOptions ++= Seq(
   "-unchecked",
   "-encoding", "UTF-8",
   "-Xlint",
+  "-Xfatal-warnings",
 )
 
 // You can use Scaladex, an index of all known published Scala libraries.

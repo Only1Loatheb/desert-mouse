@@ -1,14 +1,16 @@
 import org.scalatest.FunSuite
 
-import game.dune_map._
-import game.sector._
-import game.storm._
-import game.armies.ArmiesOnDune
-import game.regions.duneTerritoriesBySector
-import game.army._
+import game.state.dune_map._
+import game.state.sector._
+import game.state.armies.ArmiesOnDune
+import game.state.regions.duneTerritoriesBySector
+import game.state.army._
+
+import game.turn.storm._
+
 class StormTest  extends FunSuite {
   test("Storm.notAllSectorsAreAffected") {
-    assert(stormTerritoriesBySector != duneTerritoriesBySector)
+    assert(stormTerritoriesBySector !== duneTerritoriesBySector)
   }
 
   test("Storm.affectArmiesOnSectors.preservesEmptyMap") {

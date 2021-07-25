@@ -1,6 +1,6 @@
 import org.scalatest.FunSuite
 
-import game.sector._
+import game.state.sector._
 
 class SectorTest  extends FunSuite {
   test("Sector.sameSectorsAreEqual") {

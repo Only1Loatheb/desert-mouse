@@ -1,4 +1,4 @@
-package game
+package game.state
 
 object kwisatz_haderach_counter {
 
