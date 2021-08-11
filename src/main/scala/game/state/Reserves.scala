@@ -1,5 +1,8 @@
 package game.state
 
+import eu.timepit.refined.auto._
+
+import game.state.present_factions.PresentFactions
 import game.state.army._
 import game.state.faction._
 
@@ -15,7 +18,7 @@ object reserves {
       case Emperor      => EmperorArmy(15, 5)
     }
 
-    def apply(presentFactions: Set[Faction]): Reserves = {
+    def apply(presentFactions: PresentFactions): Reserves = {
       Reserves(
         presentFactions.map(faction => (faction, startingReserves(faction))).toMap
       )

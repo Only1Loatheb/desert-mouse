@@ -23,13 +23,13 @@ object sector {
     Sector17,
   )
 
-  private val numberOfSectors = orderedSectors.length
+  val numberOfSectors = orderedSectors.length
 
   private val orderedSectorCycle: LazyList[Sector] = {
     LazyList.from(orderedSectors) #::: orderedSectorCycle
   }
 
-  sealed trait Sector {
+  sealed trait Sector extends Serializable with Product {
     def number: Int
     def +(move: Int): Sector = orderedSectors((number + move) % numberOfSectors)
 

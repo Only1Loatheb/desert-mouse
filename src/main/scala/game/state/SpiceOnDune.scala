@@ -5,12 +5,47 @@ import game.state.sector._
 import game.state.army.Army
 import game.state.faction._
 import game.state.armies.ArmiesOnDune
+import game.state.spice.SpiceOnDune._
 
 object spice {
 
-  final case class SpiceOnDune(spice: Map[Territory,Int])
   final case class SpiceCollectedByFaction(collectedSpice: Map[Faction,Int])
-  object SpiceOnDune{
+
+  final case class SpiceOnDune(spice: Map[Territory,Int]) {
+    /**
+    * Calculates amounts of spice left on Dune and amounts of spice collected by each player.
+    * During collection faze of the game there is only one army per territory exception being Advisors.
+    * Faction that controlled Arrakeen or Carthag in previous turn have ornithopters.
+    * Ornithopters allow army to collect 3 spice per troop.
+    * Without ornithopters army collects 2 spice per troop.
+    * Advisors cannot collect spice.
+    *
+    * @param armiesOnDune
+    * @param spiceOnDune
+    * @param factionsWithOrnithopters
+    * @return Pair with Spice left on dune and amounts of spice collected by each player
+    */
+    def collectSpice(
+        armiesOnDune: ArmiesOnDune
+      , factionsWithOrnithopters: Set[Faction]
+    ): (SpiceOnDune, SpiceCollectedByFaction) = {
+      val collectionRate: Faction => Int = getCollectionRate(factionsWithOrnithopters)
+      val (newSpice, collectedSpice) = armiesOnSpiceRegions(armiesOnDune, spice, collectionRate)
+      (SpiceOnDune(newSpice), SpiceCollectedByFaction(collectedSpice))
+    }
+
+    def addSpice(territory: Territory): SpiceOnDune = {
+      val spiceToAdd = initialSpiceAmount(territory)
+      SpiceOnDune(spice.updatedWith(territory)(updateSpice(spiceToAdd)))
+    }
+  }
+
+  object SpiceOnDune {
+
+  private def updateSpice(spiceToAdd: Int)(existingSpice: Option[Int]): Option[Int] = {
+    Some(existingSpice.getOrElse(0) + spiceToAdd)
+  }
+
     val spiceSector: PartialFunction[Territory, Sector] = {
       case CielagoSouth => Sector1
       case CielagoNorth => Sector2
@@ -116,28 +151,6 @@ object spice {
       val territoryAndArmyOptionSet = territoriesWithSpice.map(armiesOnSpiceRegionsOption(armiesOnDune))
       val territoryAndArmySet = territoryAndArmyOptionSet.collect({case (t,oA: Some[Army]) => (t,oA.value)})
       splitSpiceInTerritories(spice, territoryAndArmySet, collectionRate)
-    }
-    /**
-      * Calculates amounts of spice left on Dune and amounts of spice collected by each player.
-      * During collection faze of the game there is only one army per territory exception being Advisors.
-      * Faction that controlled Arrakeen or Carthag in previous turn have ornithopters.
-      * Ornithopters allow army to collect 3 spice per troop.
-      * Without ornithopters army collects 2 spice per troop.
-      * Advisors cannot collect spice.
-      *
-      * @param armiesOnDune
-      * @param spiceOnDune
-      * @param factionsWithOrnithopters
-      * @return Pair with Spice left on dune and amounts of spice collected by each player
-      */
-    def collectSpice(
-        armiesOnDune: ArmiesOnDune
-      , spiceOnDune: SpiceOnDune
-      , factionsWithOrnithopters: Set[Faction]
-    ): (SpiceOnDune, SpiceCollectedByFaction) = {
-      val collectionRate: Faction => Int = getCollectionRate(factionsWithOrnithopters)
-      val (spice, collectedSpice) = armiesOnSpiceRegions(armiesOnDune, spiceOnDune.spice, collectionRate)
-      (SpiceOnDune(spice), SpiceCollectedByFaction(collectedSpice))
     }
   }
 }

@@ -1,5 +1,7 @@
 import org.scalatest.FunSuite
 
+import eu.timepit.refined.auto._
+
 import game.state.dune_map._
 import game.state.sector._
 import game.state.armies.ArmiesOnDune
@@ -8,7 +10,7 @@ import game.state.army._
 
 import game.turn.storm._
 
-class StormTest  extends FunSuite {
+class StormTest extends FunSuite {
   test("Storm.notAllSectorsAreAffected") {
     assert(stormTerritoriesBySector !== duneTerritoriesBySector)
   }

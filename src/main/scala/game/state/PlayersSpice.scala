@@ -1,12 +1,13 @@
 package game.state
 
 import game.state.faction._
+import game.state.present_factions.PresentFactions
 
 object players_spice {
 
-  final case class PlayersSpice(armies: Map[Faction,Int])
+  final case class PlayersSpice(armies: Map[Faction, Int])
 
-  val startingSpice: Map[Faction,Int] = Map(
+  val startingSpice: Map[Faction, Int] = Map(
     Fremen -> 3,
     Atreides -> 10,
     Harkonnen -> 10,
@@ -16,8 +17,8 @@ object players_spice {
   )
   object PlayersSpice {
 
-    def apply(presentFactions: Set[Faction]): PlayersSpice = {
-      PlayersSpice(startingSpice.filter{case (k,_) => presentFactions.contains(k)})
+    def apply(presentFactions: PresentFactions): PlayersSpice = {
+      PlayersSpice(startingSpice.filter { case (k, _) => presentFactions.value.contains(k) })
     }
   }
 }

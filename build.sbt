@@ -1,19 +1,29 @@
-
 scalaVersion := "2.13.4"
 
 name := "desert-mouse"
 version := "1.0"
 
-libraryDependencies += "org.scala-lang.modules" %% "scala-parser-combinators" % "1.1.2"
-libraryDependencies += "org.scala-graph" %% "graph-core" % "1.13.2"
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.8" % Test
+val scalatestV = "3.0.8"
+val scalaGraphV = "1.13.2"
+val scalaParserCombinatorsV = "1.1.2"
+val catsV = "2.6.1"
+val refinedV = "0.9.27"
+
+libraryDependencies ++= Seq(
+  "org.scala-lang.modules" %% "scala-parser-combinators" % scalaParserCombinatorsV,
+  "org.scala-graph" %% "graph-core" % scalaGraphV,
+  "org.typelevel" %% "cats-core" % catsV,
+  "eu.timepit" %% "refined" % refinedV,
+  "org.scalatest" %% "scalatest" % scalatestV % Test,
+)
 
 scalacOptions ++= Seq(
   "-deprecation",
   "-unchecked",
-  "-encoding", "UTF-8",
+  "-encoding",
+  "UTF-8",
   "-Xlint",
-  "-Xfatal-warnings",
+  "-Xfatal-warnings"
 )
 
 // You can use Scaladex, an index of all known published Scala libraries.

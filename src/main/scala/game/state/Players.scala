@@ -4,11 +4,13 @@ import scala.util.Random
 
 import game.state.faction.Faction
 import game.state.sector._
+import game.state.present_factions.PresentFactions
 
 object players {
 
-  final case class Player private (faction: Faction, position: Sector)
-  final case class Players(players: List[Player])
+  type PlayersOnCircles = Map[Sector, Faction]
+
+  final case class Players(playersOnCircles: PlayersOnCircles)
 
   val playerCircles: List[Sector] = List(
     Sector1,
@@ -20,10 +22,9 @@ object players {
   )
   object Players {
 
-    def apply(presentFactions: Set[Faction]): Players = {
-      val shuffledPlayerCircles = Random.shuffle(playerCircles)
+    def apply(presentFactions: PresentFactions): Players = {
       Players(
-        presentFactions.toList.zip(shuffledPlayerCircles).map(p => Player(p._1, p._2))
+        playerCircles.zip(Random.shuffle(presentFactions.value)).toMap
       )
     }
   }

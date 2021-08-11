@@ -1,17 +1,31 @@
 package game.state
 
 import scala.util.Random
+
 import game.state.dune_map._
 import game.state.dune_map.Territory
-
 object spice_deck {
 
-  sealed trait SpiceCard {}
+  sealed trait SpiceCard extends Serializable with Product
   final case class SpiceBlow(territory: Territory) extends SpiceCard
   case object ShaiHulud extends SpiceCard
 
-  final case class SpiceDeck(cards: List[SpiceCard])
+  final case class SpiceDeck(cards: List[SpiceCard]) {
 
+    def getTwoCards: (SpiceDeck, (SpiceCard, SpiceCard)) = cards match {
+      case Nil => {
+        val first :: second :: rest = shuffleCards: @unchecked
+        (SpiceDeck(rest), (first, second))
+      }
+      case head :: Nil => {
+        val first :: rest = shuffleCards: @unchecked
+        (SpiceDeck(rest), (head, first))
+      }
+      case head :: next :: rest => (SpiceDeck(rest), (head, next))
+    }
+  }
+
+  // 21 cards in original game
   val territoriesWithSpiceBlows = List(
     CielagoSouth,
     CielagoNorth,
@@ -35,11 +49,12 @@ object spice_deck {
       ++ territoriesWithSpiceBlows.map(SpiceBlow)
   )
   
-  // 21 cards in original game
+  private def shuffleCards = Random.shuffle(cards)
+
   object SpiceDeck {
 
     def shuffledSpiceDeck: SpiceDeck = {
-      SpiceDeck(Random.shuffle(cards))
+      SpiceDeck(shuffleCards)
     }
   }
 }

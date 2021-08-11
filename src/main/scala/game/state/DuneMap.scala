@@ -16,7 +16,7 @@ object dune_map {
   sealed trait Ice
   sealed trait City
 
-  type Territory = Product with DuneMapNode with Serializable
+  type Territory = DuneMapNode with Product with Serializable
   
   type DuneMapEdge = UnDiEdge[Territory]
   type GetSectorOnEdgeEnd = (Sector, Territory) => Set[Sector]

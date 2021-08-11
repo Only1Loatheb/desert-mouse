@@ -1,19 +1,16 @@
 package game.utils
-// http://erikerlandson.github.io/blog/2015/08/18/lightweight-non-negative-numerics-for-better-scala-type-signatures/
-// https://nrinaudo.github.io/scala-best-practices/tricky_behaviours/final_case_classes.html
+
+import eu.timepit.refined.types.numeric.NonNegInt
 object nonneg {
-  import scala.language.implicitConversions
-
-  class NonNegInt private (val value: Int) extends AnyVal
   
-  object NonNegInt {
-    def apply(v: Int) = {
-      require(v >= 0, "NonNegInt forbids negative integer values")
-      new NonNegInt(v)
-    }
+  implicit class NonNegIntImprovements(val nonNegInt: NonNegInt) {
     
-    implicit def toNonNegInt(v: Int) = NonNegInt(v)
-  }
+    def +(other: NonNegInt): NonNegInt = NonNegInt.unsafeFrom(nonNegInt.value + other.value)
 
-  implicit def toInt(nn: NonNegInt) = nn.value
+    def devideBy2RoundUp: NonNegInt = {
+      val int = nonNegInt.value
+      val quotient = int / 2
+      NonNegInt.unsafeFrom(if ((int & 1) == 1) quotient + 1 else quotient)
+    }
+  }
 }

@@ -1,7 +1,7 @@
 package game.state
 
 object faction {
-  sealed trait Faction {}
+  sealed trait Faction extends Serializable with Product
 
   case object Atreides extends Faction
   case object Harkonnen extends Faction

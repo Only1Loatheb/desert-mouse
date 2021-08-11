@@ -1,5 +1,6 @@
 package game.turn
 
+import game.utils.nonneg._
 import game.utils.Not.not
 import game.state.dune_map._
 import game.state.sector.Sector
@@ -23,17 +24,11 @@ object storm {
     }).toMap
   }
 
-  def devideBy2AndRoundUp(int: Int): Int = {
-    val quotient = int / 2
-    if ((int & 1) == 1) quotient + 1 else quotient
-  }
+
 
   private val affectArmy: PartialFunction[Army, Army] = {
     case FremenArmy(troops, fedaykins) =>
-      FremenArmy(
-        devideBy2AndRoundUp(troops.toInt),
-        devideBy2AndRoundUp(fedaykins.toInt)
-      )
+      FremenArmy(troops.devideBy2RoundUp, fedaykins.devideBy2RoundUp)
   }
 
   private def affectArmies(
@@ -79,7 +74,7 @@ object storm {
   ): SpiceOnDune = {
     SpiceOnDune(spiceOnDune.spice.collect {
       case (territory, spiceCount)
-          if (not(stormSectors.contains(spiceSector(territory)))) =>
+          if not(stormSectors.contains(spiceSector(territory))) =>
         (territory, spiceCount)
     })
   }

@@ -3,7 +3,7 @@ package game.state
 import game.state.faction._
 
 object leaders {
-  sealed trait Leader {
+  sealed trait Leader extends Serializable with Product {
     def fraction: Faction
     def force: Int
   }

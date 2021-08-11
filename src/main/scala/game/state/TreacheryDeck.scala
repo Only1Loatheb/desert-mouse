@@ -3,7 +3,7 @@ package game.state
 import scala.util.Random
 object treachery_deck {
 
-  sealed trait TreacheryCard
+  sealed trait TreacheryCard extends Serializable with Product
   sealed trait WeaponCard
   sealed trait DefenseCard
 

@@ -2,7 +2,7 @@ import org.scalatest.FunSuite
 
 import game.state.sector._
 
-class SectorTest  extends FunSuite {
+class SectorTest extends FunSuite {
   test("Sector.sameSectorsAreEqual") {
     assert(Sector1 === Sector1)
   }

@@ -1,5 +1,7 @@
 import org.scalatest.FunSuite
 
+import eu.timepit.refined.auto._
+
 import game.state.dune_map._
 import game.state.sector._
 import game.state.armies.ArmiesOnDune
