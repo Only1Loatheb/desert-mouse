@@ -16,6 +16,7 @@ import game.state.sector.{Sector, Sector0}
 import game.state.kwisatz_haderach_counter.KwisatzHaderachCounter
 import game.state.turn_state.TurnState
 import game.state.present_factions.PresentFactions
+import game.state.cities_controlled.CitiesControlled
 
 object table_state {
 
@@ -38,7 +39,7 @@ object table_state {
     isShieldWallDestroyed: Boolean,
     turnState: TurnState,
     // treachery cards
-    // cities controlled
+    citiesControlled: CitiesControlled,
   )
 
   final case class TableStateView(
@@ -55,7 +56,7 @@ object table_state {
     isShieldWallDestroyed: Boolean,
     turnState: TurnState,
     // treachery cards
-    // cities controlled
+    citiesControlled: CitiesControlled,
   )
 
   object TableState {
@@ -75,8 +76,9 @@ object table_state {
         AllTraitors(getTraitorCandidates(presentFactions)),
         stormStart,
         KwisatzHaderachCounter(),
-        false,
+        isShieldWallDestroyed = false,
         TurnState(),
+        CitiesControlled(presentFactions),
       )
     }
   }

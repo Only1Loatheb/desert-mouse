@@ -5,12 +5,10 @@ version := "1.0"
 
 val scalatestV = "3.0.8"
 val scalaGraphV = "1.13.2"
-val scalaParserCombinatorsV = "1.1.2"
 val catsV = "2.6.1"
 val refinedV = "0.9.27"
 
 libraryDependencies ++= Seq(
-  "org.scala-lang.modules" %% "scala-parser-combinators" % scalaParserCombinatorsV,
   "org.scala-graph" %% "graph-core" % scalaGraphV,
   "org.typelevel" %% "cats-core" % catsV,
   "eu.timepit" %% "refined" % refinedV,

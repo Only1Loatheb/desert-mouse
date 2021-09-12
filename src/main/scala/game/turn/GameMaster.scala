@@ -26,12 +26,12 @@ object game_master {
     //   val playersSpiceAfterRevival = playersSpiceAfterBidding
 
     //   // 6. Shipment and Movement Phase
-    //   /* Starting with the First Player and proceeding
-    //   * counterclockwise, each player in turn ships forces
-    //   * down to the planet or brings in forces from the
-    //   * southern hemisphere (Fremen) and then moves
-    //   * their forces on the game board.
-    //   */
+    /* Starting with the First Player and proceeding
+    * counterclockwise, each player in turn ships forces
+    * down to the planet or brings in forces from the
+    * southern hemisphere (Fremen) and then moves
+    * their forces on the game board.
+    */
     //   val playersSpiceAfterMovement = playersSpiceAfterRevival
       
     //   // 7. Battle Phase
@@ -44,11 +44,13 @@ object game_master {
     //   val (spiceOnDuneAfterHarvest, collectedSpice) = playersSpiceAfterMovement.collectSpice(armiesAfterBattle, factionsWithOrnithopters)
       
     //   // 9. Mentat Pause Phase
-    //   /* Factions either declare a winner (or winners) or
-    //   * take some time to evaluate their positions on the
-    //   * map and then move the Turn Counter to the next
-    //   * position on the Turn Track to begin the next turn.
-    //   */
+    /* Factions either declare a winner (or winners) or
+    * take some time to evaluate their positions on the
+    * map and then move the Turn Counter to the next
+    * position on the Turn Track to begin the next turn.
+    * 
+    * CitiesControlled are asigned
+    */
 
     //   ()
     // }
