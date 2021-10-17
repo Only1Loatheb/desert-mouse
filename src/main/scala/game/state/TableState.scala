@@ -17,6 +17,8 @@ import game.state.kwisatz_haderach_counter.KwisatzHaderachCounter
 import game.state.turn_state.TurnState
 import game.state.present_factions.PresentFactions
 import game.state.cities_controlled.CitiesControlled
+import game.state.traitors.SelectedTraitors
+import game.state.faction.Faction
 
 object table_state {
 
@@ -40,7 +42,28 @@ object table_state {
     turnState: TurnState,
     // treachery cards
     citiesControlled: CitiesControlled,
-  )
+  ) {
+    def view(faction: Faction) = { // todo use this in choam
+      new TableStateView(
+        turn,
+        spiceOnDune,
+        armiesOnDune,
+        tleilaxuTanks,
+        reserves,
+        players,
+        playersSpice.factionToSpice(faction),
+        traitors match {
+          case AllTraitors(traitors) => Left(traitors) 
+          case SelectedTraitors(traitors) => Right(traitors(faction))
+        },
+        stormSector,
+        kwisatzHaderachCounter,
+        isShieldWallDestroyed,
+        turnState,
+        citiesControlled
+      )
+    }
+  }
 
   final case class TableStateView(
     turn: TurnCounter,
@@ -50,7 +73,7 @@ object table_state {
     reserves: Reserves,
     players: Players,
     playerSpice: Int,
-    traitors: Traitors,
+    traitors: Either[traitor_deck.AllTraitorCandidates, Set[leaders.Leader]],
     stormSector: Sector,
     kwisatzHaderachCounter: KwisatzHaderachCounter,
     isShieldWallDestroyed: Boolean,

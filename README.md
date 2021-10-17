@@ -14,3 +14,8 @@ sbt
 test
 ~run
 ```
+
+## Development
+
+To read more about the project look into [ADR](./adr).
+Used [template](https://raw.githubusercontent.com/joelparkerhenderson/architecture-decision-record/main/templates/decision-record-template-by-michael-nygard/index.md).

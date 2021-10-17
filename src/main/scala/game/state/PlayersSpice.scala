@@ -5,7 +5,7 @@ import game.state.present_factions.PresentFactions
 
 object players_spice {
 
-  final case class PlayersSpice(armies: Map[Faction, Int])
+  final case class PlayersSpice(factionToSpice: Map[Faction, Int])
 
   val startingSpice: Map[Faction, Int] = Map(
     Fremen -> 3,
