@@ -1,14 +1,14 @@
 package game.state
 
 import game.state.faction.Faction
-import game.state.players.Players
+import game.state.players_circles.FactionCircles
 import game.state.sector.{Sector, numberOfSectors}
 
 object turn_state {
-  final case class TurnState(playersOrder: List[Faction]) {
+  final case class TurnState(factionInitiative: List[Faction]) {
     def tieWinner(x: Faction, y: Faction) = {
-      val xAggressorScore = playersOrder.indexOf(x)
-      val yAggressorScore = playersOrder.indexOf(y)
+      val xAggressorScore = factionInitiative.indexOf(x)
+      val yAggressorScore = factionInitiative.indexOf(y)
       if (xAggressorScore > yAggressorScore) x else y
     }
   }
@@ -21,7 +21,7 @@ object turn_state {
    * approaches is the First Player in the Bidding Phase,
    * Shipping Phase, and Movement Phase.
    */
-  def getPlayersOrder(stormSector: Sector, players: Players): List[Faction] = { // TODO test this 
+  def getPlayersOrder(stormSector: Sector, players: FactionCircles): List[Faction] = { // TODO test this 
     players.playersOnCircles.toList.sortBy { sectorAndFaction =>
       val sectorNumber = sectorAndFaction._1.number
       if ( sectorNumber <= stormSector.number) sectorNumber + numberOfSectors

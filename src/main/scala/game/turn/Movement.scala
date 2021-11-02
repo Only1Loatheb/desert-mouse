@@ -4,7 +4,6 @@ import scala.annotation.tailrec
 
 import game.utils.Not.not
 import game.state.dune_map._
-import game.state.dune_map.LabelToGetSectorOnEdgeEndConversionImplicit._
 import game.state.dune_map.DuneMap.duneMap
 import game.state.sector._
 import game.state.army._
@@ -81,32 +80,30 @@ object movement {
   ): Boolean = {
     val (territoryFrom, armiesFrom) = from
     val (territoryTo, sectorTarget) = to
-    val nodeTo = duneMap get territoryTo
-    val nodeFrom = duneMap get territoryFrom
     val arbitraryNodeSector = armiesFrom.head._1
-    lazy val visited = nodeFrom.edges.toSet
-      .flatMap(edge => getOtherSectorAndNode(arbitraryNodeSector, edge, nodeFrom))
+    lazy val visited = duneMap.getEdgeLabelsFrom(territoryFrom)
+      .flatMap(edge => getOtherSectorAndNode(arbitraryNodeSector, edge))
       .map((arbitraryNodeSector, _))
       .filterNot(isBlockedEdge(stormSector))
     lazy val isAnyArmyBlockedByStorm = armiesFrom.exists(x => isStormBlockingThisMove(stormSector)(x._1, sectorTarget))
-    if (nodeFrom.neighbors.contains(nodeTo) && not(isAnyArmyBlockedByStorm)) true
-    else getPathFromToInMoves(stormSector, hasSpaceToMoveTo, Set((arbitraryNodeSector, nodeFrom)), visited.map(_._2), nodeTo, sectorTarget, moves - 1)
+    if (duneMap.areNeighbors(territoryFrom, territoryTo) && not(isAnyArmyBlockedByStorm)) true
+    else getPathFromToInMoves(stormSector, hasSpaceToMoveTo, Set((arbitraryNodeSector, territoryFrom)), visited.map(_._2), territoryTo, sectorTarget, moves - 1)
   }
 
   @tailrec
   private def getPathFromToInMoves(
       stormSector: Sector,
       hasSpaceToMoveTo: Territory => Boolean,
-      oldVisited: Set[(Sector, duneMap.NodeT)],
-      newVisited: Set[(Sector, duneMap.NodeT)],
-      nodeTo: duneMap.NodeT,
+      oldVisited: Set[(Sector, Territory)],
+      newVisited: Set[(Sector, Territory)],
+      nodeTo: Territory,
       sectorTarget: Sector,
       moves: Int
   ): Boolean = {
     lazy val prevVisited = oldVisited union newVisited
     lazy val nowVisited = newVisited
-      .flatMap { case (sectorFrom, node) => (duneMap get node).edges
-        .flatMap(edge => getOtherSectorAndNode(sectorFrom, edge, node))
+      .flatMap { case (sectorFrom, node) => duneMap.getEdgeLabelsFrom(node)
+        .flatMap(edge => getOtherSectorAndNode(sectorFrom, edge))
         .filter(x => hasSpaceToMoveTo(x._2))
         .diff(prevVisited)
         .map((sectorFrom, _))
@@ -117,25 +114,24 @@ object movement {
     else getPathFromToInMoves(stormSector, hasSpaceToMoveTo, prevVisited, nowVisited.map(_._2), nodeTo, sectorTarget, moves - 1)
   }
 
-  private def getOtherSectorAndNode(sectorFrom: Sector, edge: duneMap.EdgeT, nodeFrom: duneMap.NodeT): Set[(Sector, duneMap.NodeT)] = {
-    val otherNode = edge.nodes.filter(_ != nodeFrom).head
-    val otherSector: GetSectorOnEdgeEnd = edge.label
-    val sectors = otherSector(sectorFrom, otherNode)
-    sectors.map((_ , otherNode))
+  private def getOtherSectorAndNode(sectorFrom: Sector, edge: (Territory, GetSectorOnEdgeEnd)): Set[(Sector, Territory)] = {
+    val (nodeTo, getOtherSector) = edge
+    val sectors = getOtherSector(sectorFrom)
+    sectors.map((_ , nodeTo))
   }
 
   private def isBlockedEdge(
       stormSector: Sector,
-  )(sectorAndEdge: (Sector, (Sector, duneMap.NodeT))): Boolean = {
+  )(sectorAndEdge: (Sector, (Sector, Territory))): Boolean = {
     val (sectorFrom, (sectorTo, _)) = sectorAndEdge
     isStormBlockingThisMove(stormSector)(sectorFrom, sectorTo)
   }
 
   private def isWayToTarget(
       stormSector: Sector,
-      nodeTo: duneMap.NodeT,
+      nodeTo: Territory,
       sectorTarget: Sector
-  )(sectorAndEdge: (Sector, (Sector, duneMap.NodeT))): Boolean = {
+  )(sectorAndEdge: (Sector, (Sector, Territory))): Boolean = {
     val (sectorFrom, (sectorTo, neighbor)) = sectorAndEdge
     if (neighbor == nodeTo) not(isStormBlockingThisMove(stormSector)(sectorFrom, sectorTo))
     else false

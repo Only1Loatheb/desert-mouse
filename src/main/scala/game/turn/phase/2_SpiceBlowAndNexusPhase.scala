@@ -11,7 +11,7 @@ object spice_blow_and_nexus_phase {
 
   val spiceBlowAndNexusPhase: Phase = gameState => {
     val tableState = gameState.tableState
-    val (newSpiceDeck, spiceCards) = tableState.spiceDeck.getTwoCards
+    val (newSpiceDeck, spiceCards) = tableState.spiceDeck.drawTwoCards
     val newSpiceOnDune = addSpiceFromCards(spiceCards, tableState.spiceOnDune, tableState.stormSector)
     val newTableState = tableState.copy(spiceOnDune = newSpiceOnDune, spiceDeck = newSpiceDeck)
     gameState.copy(tableState = newTableState)

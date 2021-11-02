@@ -3,9 +3,9 @@ package game.state
 import game.state.faction._
 import game.state.present_factions.PresentFactions
 
-object players_spice {
+object faction_spice {
 
-  final case class PlayersSpice(factionToSpice: Map[Faction, Int])
+  final case class FactionSpice(factionToSpice: Map[Faction, Int])
 
   val startingSpice: Map[Faction, Int] = Map(
     Fremen -> 3,
@@ -15,10 +15,10 @@ object players_spice {
     Guild -> 5,
     Emperor -> 10
   )
-  object PlayersSpice {
+  object FactionSpice {
 
-    def apply(presentFactions: PresentFactions): PlayersSpice = {
-      PlayersSpice(startingSpice.filter { case (k, _) => presentFactions.value.contains(k) })
+    def apply(presentFactions: PresentFactions): FactionSpice = {
+      FactionSpice(startingSpice.filter { case (k, _) => presentFactions.value.contains(k) })
     }
   }
 }

@@ -12,16 +12,15 @@ object spice_deck {
 
   final case class SpiceDeck(cards: List[SpiceCard]) {
 
-    def getTwoCards: (SpiceDeck, (SpiceCard, SpiceCard)) = cards match {
-      case Nil => {
+    def drawTwoCards: (SpiceDeck, (SpiceCard, SpiceCard)) = cards match {
+      case Nil =>
         val first :: second :: rest = shuffleCards: @unchecked
         (SpiceDeck(rest), (first, second))
-      }
-      case head :: Nil => {
+      case head :: Nil =>
         val first :: rest = shuffleCards: @unchecked
         (SpiceDeck(rest), (head, first))
-      }
-      case head :: next :: rest => (SpiceDeck(rest), (head, next))
+      case head :: next :: rest =>
+        (SpiceDeck(rest), (head, next))
     }
   }
 

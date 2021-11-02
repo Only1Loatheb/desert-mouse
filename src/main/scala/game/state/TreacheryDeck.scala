@@ -25,7 +25,14 @@ object treachery_deck {
   case object TruthTrance extends TreacheryCard
   case object CheapHero extends TreacheryCard
 
-  final case class TreacheryDeck(cards: List[TreacheryCard])
+  // todo implement Deck Typeclass
+  final case class TreacheryDeck(cards: List[TreacheryCard]) {
+    def drawCards(count: Int): (TreacheryDeck, List[TreacheryCard]) = {
+      val haveCards = cards.length >= count
+      if (haveCards) (TreacheryDeck(cards.drop(count)), cards.take(count))
+      else (TreacheryDeck(cards), List())
+    }
+  }
 
   object TreacheryDeck {
     // 33 cards in original game

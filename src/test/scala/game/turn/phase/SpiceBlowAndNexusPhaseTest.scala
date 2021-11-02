@@ -22,7 +22,7 @@ class SpiceBlowAndNexusPhaseTest extends FunSuite {
       newGameState.tableState.spiceDeck.cards.size + 2 == gameState.tableState.spiceDeck.cards.size
     )
     if (
-      gameState.tableState.spiceDeck.getTwoCards._2 match {
+      gameState.tableState.spiceDeck.drawTwoCards._2 match {
         case (ShaiHulud, ShaiHulud) => false
         case _                      => true
       }

@@ -1,29 +1,44 @@
 import org.scalatest.FunSuite
 
-import game.state.dune_map.{DuneMap, Territory}
-import game.state.dune_map.LabelToGetSectorOnEdgeEndConversionImplicit._
+import game.state.dune_map.Territory
+import game.state.dune_map.DuneMap.duneMap
 import game.state.regions.isTerritoryOnThisSector
 import game.state.sector.FakePolarSector
-import game.utils.TerritorySectors.aSectorOnTerritory
+import game.utils.TerritorySectors.sectorsOnTerritory
+import scala.reflect.runtime.{universe => ru}
 
 class DuneMapTest extends FunSuite {
+
   test("DuneMap.edges.label.GetSectorOnEdgeEnd.isExhaustive") {
+
+    // https://stackoverflow.com/questions/34534002/getting-subclasses-of-a-sealed-trait
+    val mapNodeType = ru.typeOf[Territory]
+    val mapNodeClass = mapNodeType.typeSymbol.asClass    
+    assert(mapNodeClass.isTrait) 
+    assert(mapNodeClass.isSealed) 
+    assert(mapNodeClass.knownDirectSubclasses.size == duneMap.graph.keySet.size) 
+
     assert(
-      DuneMap.duneMap.edges.map(edge => edge.nodes.map(edge.label(FakePolarSector, _))).nonEmpty
+      duneMap.graph.keySet.forall { node =>
+        duneMap
+          .getEdgeLabelsFrom(node)
+          .forall { edge => edge._2(FakePolarSector).nonEmpty}
+      }
     )
   }
 
   test("DuneMap.edges.label.GetSectorOnEdgeEnd.areOnTerritory") {
     assert(
-      DuneMap.duneMap.edges
-        .map(edge =>
-          edge.nodes.map((node: Territory) =>
-            if (isTerritoryOnThisSector(node, edge.label(aSectorOnTerritory(node), node).head)) true
-            else throw new IllegalStateException(s"node=[$node], edge=[$edge], sector=[${aSectorOnTerritory(node)}]")
-          )
-        )
-        .flatten
-        .reduce(_ && _)
+      duneMap.graph.keySet.forall { nodeFrom =>
+        duneMap.getEdgeLabelsFrom(nodeFrom).forall { case edge @ (nodeTo, getSectorOnEdgeEnd) =>
+          sectorsOnTerritory(nodeFrom).forall { sectorFrom =>
+            getSectorOnEdgeEnd(sectorFrom).forall { foundSector =>
+              if (isTerritoryOnThisSector(nodeTo, foundSector)) true
+              else throw new IllegalStateException(s"nodeFrom => ${nodeFrom} nodeTo => ${edge._1} sectorFrom => ${sectorFrom} foundSector => ${foundSector}")
+            }
+          }
+        }
+      }
     )
   }
 }

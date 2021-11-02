@@ -8,8 +8,8 @@ import game.state.spice_deck.SpiceDeck
 import game.state.storm_deck.StormDeck
 import game.state.tleilaxu_tanks.TleilaxuTanks
 import game.state.reserves.Reserves
-import game.state.players.Players
-import game.state.players_spice.PlayersSpice
+import game.state.players_circles.FactionCircles
+import game.state.faction_spice.FactionSpice
 import game.state.traitors.{Traitors, AllTraitors}
 import game.state.traitor_deck.getTraitorCandidates
 import game.state.sector.{Sector, Sector0}
@@ -17,6 +17,7 @@ import game.state.kwisatz_haderach_counter.KwisatzHaderachCounter
 import game.state.turn_state.TurnState
 import game.state.present_factions.PresentFactions
 import game.state.cities_controlled.CitiesControlled
+import game.state.treachery_cards.TreacheryCards
 import game.state.traitors.SelectedTraitors
 import game.state.faction.Faction
 
@@ -33,14 +34,14 @@ object table_state {
     stormDeck: StormDeck,
     tleilaxuTanks: TleilaxuTanks,
     reserves: Reserves,
-    players: Players,
-    playersSpice: PlayersSpice,
+    players: FactionCircles,
+    factionSpice: FactionSpice,
     traitors: Traitors,
     stormSector: Sector,
     kwisatzHaderachCounter: KwisatzHaderachCounter,
     isShieldWallDestroyed: Boolean,
     turnState: TurnState,
-    // treachery cards
+    treacheryCards: TreacheryCards,
     citiesControlled: CitiesControlled,
   ) {
     def view(faction: Faction) = { // todo use this in choam
@@ -51,7 +52,7 @@ object table_state {
         tleilaxuTanks,
         reserves,
         players,
-        playersSpice.factionToSpice(faction),
+        factionSpice.factionToSpice(faction),
         traitors match {
           case AllTraitors(traitors) => Left(traitors) 
           case SelectedTraitors(traitors) => Right(traitors(faction))
@@ -60,6 +61,7 @@ object table_state {
         kwisatzHaderachCounter,
         isShieldWallDestroyed,
         turnState,
+        treacheryCards.factionToCards(faction),
         citiesControlled
       )
     }
@@ -71,14 +73,14 @@ object table_state {
     armiesOnDune: ArmiesOnDune,
     tleilaxuTanks: TleilaxuTanks,
     reserves: Reserves,
-    players: Players,
+    players: FactionCircles,
     playerSpice: Int,
     traitors: Either[traitor_deck.AllTraitorCandidates, Set[leaders.Leader]],
     stormSector: Sector,
     kwisatzHaderachCounter: KwisatzHaderachCounter,
     isShieldWallDestroyed: Boolean,
     turnState: TurnState,
-    // treachery cards
+    treacheryCards: Set[treachery_deck.TreacheryCard],
     citiesControlled: CitiesControlled,
   )
 
@@ -94,13 +96,14 @@ object table_state {
         StormDeck.shuffledStormDeck,
         TleilaxuTanks.empty,
         Reserves(presentFactions),
-        Players(presentFactions),
-        PlayersSpice(presentFactions),
+        FactionCircles(presentFactions),
+        FactionSpice(presentFactions),
         AllTraitors(getTraitorCandidates(presentFactions)),
         stormStart,
         KwisatzHaderachCounter(),
         isShieldWallDestroyed = false,
         TurnState(),
+        TreacheryCards(presentFactions),
         CitiesControlled(presentFactions),
       )
     }

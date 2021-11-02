@@ -6,11 +6,11 @@ import game.state.faction.Faction
 import game.state.sector._
 import game.state.present_factions.PresentFactions
 
-object players {
+object players_circles {
 
   type PlayersOnCircles = Map[Sector, Faction]
 
-  final case class Players(playersOnCircles: PlayersOnCircles)
+  final case class FactionCircles(playersOnCircles: PlayersOnCircles)
 
   val playerCircles: List[Sector] = List(
     Sector1,
@@ -20,10 +20,10 @@ object players {
     Sector13,
     Sector16,
   )
-  object Players {
+  object FactionCircles {
 
-    def apply(presentFactions: PresentFactions): Players = {
-      Players(
+    def apply(presentFactions: PresentFactions): FactionCircles = {
+      FactionCircles(
         playerCircles.zip(Random.shuffle(presentFactions.value)).toMap
       )
     }

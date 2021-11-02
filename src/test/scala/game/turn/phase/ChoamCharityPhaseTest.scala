@@ -12,7 +12,7 @@ import game.bot_interface.base
 import game.state.{army, dune_map, sector, table_state, leaders, traitor_deck}
 import game.turn.movement
 import game.turn.phase.choam_charity_phase.choamCharityPhase
-import game.state.players_spice.PlayersSpice
+import game.state.faction_spice.FactionSpice
 
 
 class ChoamCharityPhaseTest extends FunSuite {
@@ -21,7 +21,7 @@ class ChoamCharityPhaseTest extends FunSuite {
       (refineV[MinSize[2]](Set(Atreides, Harkonnen))).toOption.get
 
     val tableStateWithNoSpice = TableState(presentFactions, 10)
-      .copy(playersSpice = PlayersSpice(Map(
+      .copy(factionSpice = FactionSpice(Map(
         Atreides -> 0,
         Harkonnen -> 0
       )))
@@ -30,8 +30,8 @@ class ChoamCharityPhaseTest extends FunSuite {
       Map(Atreides -> claimBot, Harkonnen -> refuseBot))
     val newGameState = choamCharityPhase(gameState)
     assert(newGameState.copy(tableState = tableStateWithNoSpice) == gameState)
-    assert(newGameState.tableState.playersSpice.factionToSpice(Atreides) === 2)
-    assert(newGameState.tableState.playersSpice.factionToSpice(Harkonnen) === 0)
+    assert(newGameState.tableState.factionSpice.factionToSpice(Atreides) === 2)
+    assert(newGameState.tableState.factionSpice.factionToSpice(Harkonnen) === 0)
   }
 
   val claimBot = new base.BotInterface {

@@ -5,6 +5,7 @@ import game.state.table_state.TableState
 import game.turn.phase.phase.Phase
 import game.turn.phase.storm_phase.stormPhase
 import game.turn.phase.spice_blow_and_nexus_phase.spiceBlowAndNexusPhase
+import game.turn.phase.choam_charity_phase.choamCharityPhase
 
 object game_master {
 
@@ -12,18 +13,15 @@ object game_master {
 
     def play(): Phase = stormPhase
       .andThen(spiceBlowAndNexusPhase)
+      .andThen(choamCharityPhase)
   }
-
-    //   // 3. CHOAM Charity Phase
-    //   val playersSpiceAfterCharity = spiceOnDuneAfterSpiceBlow // Players with 0 or 1 spice may claim CHOAM Charity.
-      
     //   // 4. Bidding Phase
     //   //Players bid spice to acquire Treachery Cards.
-    //   val playersSpiceAfterBidding = playersSpiceAfterCharity
+    //   val factionSpiceAfterBidding = factionSpiceAfterCharity
 
     //   // 5. Revival Phase
     //   // All players are allowed to reclaim forces and leaders from the Tleilaxu Tanks.
-    //   val playersSpiceAfterRevival = playersSpiceAfterBidding
+    //   val factionSpiceAfterRevival = factionSpiceAfterBidding
 
     //   // 6. Shipment and Movement Phase
     /* Starting with the First Player and proceeding
@@ -32,7 +30,7 @@ object game_master {
     * southern hemisphere (Fremen) and then moves
     * their forces on the game board.
     */
-    //   val playersSpiceAfterMovement = playersSpiceAfterRevival
+    //   val factionSpiceAfterMovement = factionSpiceAfterRevival
       
     //   // 7. Battle Phase
     //   // Players must resolve battles in every territory that is occupied by forces from two or more factions.
@@ -41,7 +39,7 @@ object game_master {
     //   // 8. Spice Harvest Phase
     //   // Forces in territories that contain spice may collect the spice.
     //   val factionsWithOrnithopters = ??? // tableState.factionsWithOrnithopters
-    //   val (spiceOnDuneAfterHarvest, collectedSpice) = playersSpiceAfterMovement.collectSpice(armiesAfterBattle, factionsWithOrnithopters)
+    //   val (spiceOnDuneAfterHarvest, collectedSpice) = factionSpiceAfterMovement.collectSpice(armiesAfterBattle, factionsWithOrnithopters)
       
     //   // 9. Mentat Pause Phase
     /* Factions either declare a winner (or winners) or

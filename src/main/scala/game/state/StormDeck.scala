@@ -8,9 +8,9 @@ object storm_deck {
 
   final case class StormDeck(cards: List[StormCard]) {
 
-    def getCard: (StormDeck, StormCard) = cards match {
+    def drawCard: (StormDeck, StormCard) = cards match {
       case Nil => {
-        val first :: second :: rest = shuffleCards: @unchecked
+        val first :: rest = shuffleCards: @unchecked
         (StormDeck(rest), first)
       }
       case head :: rest => (StormDeck(rest), head)
