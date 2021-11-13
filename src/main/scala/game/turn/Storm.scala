@@ -1,6 +1,6 @@
 package game.turn
 
-import game.utils.nonneg._
+import game.utils.non_neg_int._
 import game.utils.Not.not
 import game.state.dune_map._
 import game.state.sector.Sector

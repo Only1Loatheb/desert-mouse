@@ -2,7 +2,7 @@ package game.state
 
 import eu.timepit.refined.types.numeric.NonNegInt
 
-import game.utils.nonneg._
+import game.utils.non_neg_int._
 import game.state.faction._
 
 object army {

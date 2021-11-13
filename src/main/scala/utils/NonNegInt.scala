@@ -1,7 +1,7 @@
 package game.utils
 
 import eu.timepit.refined.types.numeric.NonNegInt
-object nonneg {
+object non_neg_int {
   
   implicit class NonNegIntImprovements(val nonNegInt: NonNegInt) {
     
