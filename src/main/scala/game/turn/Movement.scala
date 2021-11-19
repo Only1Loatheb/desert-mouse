@@ -1,7 +1,6 @@
 package game.turn
 
-import scala.annotation.tailrec
-
+import scala.annotation.{nowarn, tailrec}
 import game.utils.Not.not
 import game.state.dune_map._
 import game.state.dune_map.DuneMap.duneMap
@@ -127,6 +126,7 @@ object movement {
     isStormBlockingThisMove(stormSector)(sectorFrom, sectorTo)
   }
 
+  @nowarn
   private def isWayToTarget(
       stormSector: Sector,
       nodeTo: Territory,

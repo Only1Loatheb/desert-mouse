@@ -7,6 +7,8 @@ import game.state.treachery_deck.TreacheryCard
 import game.state.faction_spice.FactionSpice
 import game.state.treachery_cards.TreacheryCards
 
+import scala.annotation.nowarn
+
 object bidding_phase {
 
   /**
@@ -41,6 +43,7 @@ object bidding_phase {
     gameState.copy(tableState = newTableState)
   }
 
+  @nowarn
   private def bidding(
     factionOrder: List[Faction],
     cards: List[TreacheryCard],

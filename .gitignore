@@ -3,6 +3,7 @@
 .vscode/*
 .metals/*
 .bloop/*
+.idea
 
 # sbt specific
 .cache/

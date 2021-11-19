@@ -125,7 +125,7 @@ object spice {
 
     private def getCollectedSpiceByFaction(leftAndCollectedSpice: Map[Territory,CollectionResult]): SpiceCollected = {
       val collectedSpice = leftAndCollectedSpice.map({case (k,v)=>(k,v._2)})
-      val collectedSpiceByFaction = collectedSpice.groupMapReduce({case (k,v)=>v._1})({case (k,v)=>v})(sumSpice)
+      val collectedSpiceByFaction = collectedSpice.groupMapReduce({case (_,v)=>v._1})({case (_,v)=>v})(sumSpice)
       collectedSpiceByFaction.values.toMap.filterNot(_._2 == 0)
     }
 

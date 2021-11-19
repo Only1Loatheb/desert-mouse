@@ -34,7 +34,7 @@ object armies {
   
     def hasSpaceToMoveTo(thisFaction: Faction)(territory: Territory): Boolean = {
       territory match {
-        case city: City => 
+        case _: City =>
           armies.get(territory).map { armiesOnTerritory =>
             val armiesByFaction = armiesOnTerritory.values.flatten.filterNot(_.isOnlyAdvisor).groupBy(_.faction)
             if (armiesByFaction.contains(thisFaction)) true
@@ -64,7 +64,7 @@ object armies {
           val armiesOnSector = armiesOnTerritory(sector)
           armiesOnSector.exists(_.isSmallerOrEqualArmyOfTheSameFaction(army))
         }
-        case other => false
+        case _ => false
       }
     }
 
