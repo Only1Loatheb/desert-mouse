@@ -9,7 +9,7 @@ import game.state.faction._
 import game.state.army._
 import game.state.present_factions._
 
-object armies {
+object armies_on_dune {
 
   final case class ArmySelection(army: Map[Sector, Army])
   type ArmiesOnTerritory = Map[Sector, List[Army]]
@@ -35,11 +35,11 @@ object armies {
     def hasSpaceToMoveTo(thisFaction: Faction)(territory: Territory): Boolean = {
       territory match {
         case _: City =>
-          armies.get(territory).map { armiesOnTerritory =>
+          armies.get(territory).forall { armiesOnTerritory =>
             val armiesByFaction = armiesOnTerritory.values.flatten.filterNot(_.isOnlyAdvisor).groupBy(_.faction)
             if (armiesByFaction.contains(thisFaction)) true
             else armiesByFaction.size < maxArmiesOnCity
-          }.getOrElse(true)
+          }
         case _ => true
       }
     }

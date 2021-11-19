@@ -4,7 +4,7 @@ import eu.timepit.refined.auto._
 
 import game.state.dune_map._
 import game.state.sector._
-import game.state.armies.ArmiesOnDune
+import game.state.armies_on_dune.ArmiesOnDune
 import game.state.regions.duneTerritoriesBySector
 import game.state.army._
 

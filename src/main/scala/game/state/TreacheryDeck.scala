@@ -36,7 +36,7 @@ object treachery_deck {
 
   object TreacheryDeck {
     // 33 cards in original game
-    val cards = (
+    val cards: List[TreacheryCard] = (
       Lasgun
       :: FamilyAtomics
       :: Harj

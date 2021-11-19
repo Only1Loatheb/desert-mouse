@@ -6,7 +6,7 @@ import game.state.dune_map._
 import game.state.dune_map.DuneMap.duneMap
 import game.state.sector._
 import game.state.army._
-import game.state.armies.{ArmiesOnDune, ArmySelection}
+import game.state.armies_on_dune.{ArmiesOnDune, ArmySelection}
 import game.state.regions.isTerritoryOnThisSector
 import game.state.faction.{Faction, Fremen}
 

@@ -11,10 +11,11 @@ object treachery_cards {
 
   object TreacheryCards {
     def apply(presentFactions: PresentFactions): TreacheryCards = {
-      TreacheryCards( presentFactions.value
-        .map { (_, Set(): Set[TreacheryCard])} 
-        .toMap
-        )
+      TreacheryCards(
+        presentFactions.value
+          .map { (_, Set(): Set[TreacheryCard])}
+          .toMap
+      )
     }
   }
 }

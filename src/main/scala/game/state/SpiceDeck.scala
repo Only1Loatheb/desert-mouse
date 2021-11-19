@@ -4,6 +4,7 @@ import scala.util.Random
 
 import game.state.dune_map._
 import game.state.dune_map.Territory
+
 object spice_deck {
 
   sealed trait SpiceCard extends Serializable with Product
@@ -43,7 +44,7 @@ object spice_deck {
     HabbanyaRidgeFlat
   )
 
-  val cards = (
+  val cards: List[SpiceCard] = (
     List.fill(6)(ShaiHulud)
       ++ territoriesWithSpiceBlows.map(SpiceBlow)
   )

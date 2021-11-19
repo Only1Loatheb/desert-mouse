@@ -3,7 +3,7 @@ package game.turn.phase
 import game.state.table_state.TableState
 import game.state.spice.SpiceOnDune
 import game.state.sector.Sector
-import game.state.armies
+import game.state.armies_on_dune
 import game.state.storm_deck.StormDeck
 import game.state.turn_state.getPlayersOrder
 
@@ -44,7 +44,7 @@ object storm_phase {
   private def affectWithStorm(
       tableState: TableState,
       newStormSector: Sector
-  ): (SpiceOnDune, armies.ArmiesOnDune) = {
+  ): (SpiceOnDune, armies_on_dune.ArmiesOnDune) = {
     val stormSectors = tableState.stormSector.sectorsTo(newStormSector)
     val spiceOnDuneAfterStorm = affectSpiceOnSectors(tableState.spiceOnDune, stormSectors)
     val newArmiesOnDune = affectArmiesOnSectors(tableState.armiesOnDune, stormSectors)

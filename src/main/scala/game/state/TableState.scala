@@ -2,7 +2,7 @@ package game.state
 
 import game.state.turn_counter.TurnCounter
 import game.state.spice.SpiceOnDune
-import game.state.armies.ArmiesOnDune
+import game.state.armies_on_dune.ArmiesOnDune
 import game.state.treachery_deck.TreacheryDeck
 import game.state.spice_deck.SpiceDeck
 import game.state.storm_deck.StormDeck
@@ -45,7 +45,7 @@ object table_state {
     citiesControlled: CitiesControlled,
   ) {
     def view(faction: Faction) = { // todo use this in choam
-      new TableStateView(
+      TableStateView(
         turn,
         spiceOnDune,
         armiesOnDune,

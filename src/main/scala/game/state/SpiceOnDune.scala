@@ -4,7 +4,7 @@ import game.state.dune_map._
 import game.state.sector._
 import game.state.army.Army
 import game.state.faction._
-import game.state.armies.ArmiesOnDune
+import game.state.armies_on_dune.ArmiesOnDune
 import game.state.spice.SpiceOnDune._
 
 object spice {
@@ -21,7 +21,6 @@ object spice {
     * Advisors cannot collect spice.
     *
     * @param armiesOnDune
-    * @param spiceOnDune
     * @param factionsWithOrnithopters
     * @return Pair with Spice left on dune and amounts of spice collected by each player
     */
@@ -88,7 +87,7 @@ object spice {
 
     val normalCollectionRate = 2
     val withOrnithoptersCollectionRate = 3
-    val noSpiceOnDune = SpiceOnDune(Map())
+    val noSpiceOnDune: SpiceOnDune = SpiceOnDune(Map())
 
     private def getCollectionRate(factionsWithOrnithopters: Set[Faction])(faction: Faction): Int = {
       if(factionsWithOrnithopters.contains(faction)) normalCollectionRate

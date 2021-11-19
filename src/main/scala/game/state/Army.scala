@@ -30,7 +30,7 @@ object army {
   }
 
   final case class AtreidesArmy(
-      val troops: NonNegInt
+      troops: NonNegInt
   ) extends Army {
     override def faction: Faction = Atreides
     override def force: Int = troops.value
@@ -43,7 +43,7 @@ object army {
     }
   }
   final case class HarkonnenArmy(
-      val troops: NonNegInt
+      troops: NonNegInt
   ) extends Army {
     override def faction: Faction = Harkonnen
     override def force: Int = troops.value
@@ -57,8 +57,8 @@ object army {
   }
 
   final case class FremenArmy(
-      val troops: NonNegInt,
-      val fedaykins: NonNegInt
+      troops: NonNegInt,
+      fedaykins: NonNegInt
   ) extends Army {
     override def faction: Faction = Fremen
     override def force: Int = { troops.value + fedaykins.value + fedaykins.value }
@@ -73,8 +73,8 @@ object army {
   }
 
   final case class EmperorArmy(
-      val troops: NonNegInt,
-      val sardaukars: NonNegInt
+      troops: NonNegInt,
+      sardaukars: NonNegInt
   ) extends Army {
     override def faction: Faction = Emperor
     override def force: Int = { troops.value + sardaukars.value + sardaukars.value }
@@ -89,7 +89,7 @@ object army {
   }
 
   final case class GuildArmy(
-      val troops: NonNegInt
+      troops: NonNegInt
   ) extends Army {
     override def faction: Faction = Guild
     override def force: Int = troops.value
@@ -113,8 +113,8 @@ object army {
     * @param advisors
     */
   final case class BeneGesseritArmy(
-      val fighters: NonNegInt,
-      val advisors: NonNegInt
+      fighters: NonNegInt,
+      advisors: NonNegInt
   ) extends Army {
     override def faction: Faction = BeneGesserit
     override def force: Int = fighters.value

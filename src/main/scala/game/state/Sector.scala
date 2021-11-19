@@ -23,7 +23,7 @@ object sector {
     Sector17,
   )
 
-  val numberOfSectors = orderedSectors.length
+  val numberOfSectors: Int = orderedSectors.length
 
   private val orderedSectorCycle: LazyList[Sector] = {
     LazyList.from(orderedSectors) #::: orderedSectorCycle
@@ -33,11 +33,11 @@ object sector {
     def number: Int
     def +(move: Int): Sector = orderedSectors((number + move) % numberOfSectors)
 
-    /** Returns secotors that have to be visited during the travel
+    /** Returns sectors that have to be visited during the travel
       *
-      * @param sectorFrom movement starting sector
+      * @param this movement starting sector
       * @param sectorTo movement end sector
-      * @return Set of secotors visited that includes sectorFrom and sectorTo.
+      * @return Set of sectors visited that includes sectorFrom and sectorTo.
       */
     def sectorsTo(sectorTo: Sector): Set[Sector] = {
       if (this == FakePolarSector || sectorTo == FakePolarSector) Set(this, sectorTo)
@@ -49,22 +49,27 @@ object sector {
       }
     }
   }
+
   final case object FakePolarSector extends Sector {
-    override def number = numberOfSectors
+    override def number: Int = numberOfSectors
   }
 
   final case object Sector0 extends Sector {
     override def number = 0
   }
+
   final case object Sector1 extends Sector {
     override def number = 1
   }
+
   final case object Sector2 extends Sector {
     override def number = 2
   }
+
   final case object Sector3 extends Sector {
     override def number = 3
   }
+
   final case object Sector4 extends Sector {
     override def number = 4
   }
@@ -79,12 +84,15 @@ object sector {
   final case object Sector7 extends Sector {
     override def number = 7
   }
+
   final case object Sector8 extends Sector {
     override def number = 8
   }
+
   final case object Sector9 extends Sector {
     override def number = 9
   }
+
   final case object Sector10 extends Sector {
     override def number = 10
   }
