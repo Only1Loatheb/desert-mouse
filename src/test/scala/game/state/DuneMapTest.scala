@@ -4,7 +4,7 @@ import game.state.dune_map.Territory
 import game.state.dune_map.DuneMap.duneMap
 import game.state.regions.isTerritoryOnThisSector
 import game.state.sector.FakePolarSector
-import game.utils.TerritorySectors.sectorsOnTerritory
+import utils.TerritorySectors.sectorsOnTerritory
 import scala.reflect.runtime.{universe => ru}
 
 class DuneMapTest extends FunSuite {

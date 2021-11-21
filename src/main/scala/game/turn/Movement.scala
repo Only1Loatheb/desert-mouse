@@ -1,7 +1,7 @@
 package game.turn
 
 import scala.annotation.{nowarn, tailrec}
-import game.utils.Not.not
+import utils.Not.not
 import game.state.dune_map._
 import game.state.dune_map.DuneMap.duneMap
 import game.state.sector._

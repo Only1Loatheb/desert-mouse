@@ -1,14 +1,14 @@
 package game.turn
 
-import game.state.armies_on_dune.{ ArmiesOnDune, ArmiesOnTerritory }
-import game.state.army._
+import game.state.armies_on_dune.{ArmiesOnDune, ArmiesOnTerritory}
 import game.state.dune_map._
-import game.state.regions._
 import game.state.sector.Sector
+import utils.Not.not
+import utils.non_neg_int._
+import game.state.army._
+import game.state.regions._
 import game.state.spice.SpiceOnDune
 import game.state.spice.SpiceOnDune.spiceSector
-import game.utils.Not.not
-import game.utils.nonneg._
 
 /** Storm moves anticlockwise. (Sectors are also indexed anticlockwise) Storm destroys armies in sand territories. Half
   * of the Fremen army can survive the storm (rounded up). Storm destroys spice.
@@ -49,7 +49,7 @@ object storm {
       territoryAndArmies: (Territory, ArmiesOnTerritory)
   ): (Territory, ArmiesOnTerritory) = {
     territoryAndArmies match {
-      case (territory, armies) if (stormRegions.contains(territory)) =>
+      case (territory, armies) if stormRegions.contains(territory) =>
         (territory, affectArmies(armies, stormSectors))
       case other => other
     }
@@ -61,7 +61,7 @@ object storm {
   ) = {
     armies
       .map {
-        case (sector, armies) if (stormSectors.contains(sector)) =>
+        case (sector, armies) if stormSectors.contains(sector) =>
           (sector, armies.collect(affectArmy))
         case other => other
       }

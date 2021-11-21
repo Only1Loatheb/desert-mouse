@@ -1,4 +1,4 @@
-package game.utils
+package utils
 
 object Not{
   @inline

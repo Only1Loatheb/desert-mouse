@@ -1,4 +1,4 @@
-package game.utils
+package utils
 
 import game.state.dune_map._
 import game.state.sector._

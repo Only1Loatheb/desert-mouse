@@ -25,9 +25,7 @@ object sector {
 
   val numberOfSectors: Int = orderedSectors.length
 
-  private val orderedSectorCycle: LazyList[Sector] = {
-    LazyList.from(orderedSectors) #::: orderedSectorCycle
-  }
+  private val orderedSectorCycle: LazyList[Sector] = LazyList.continually(orderedSectors).flatten
 
   sealed trait Sector extends Serializable with Product {
     def number: Int
