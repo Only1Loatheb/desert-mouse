@@ -127,4 +127,19 @@ class SpiceTest extends FunSuite {
       === ((noSpiceOnDune, SpiceCollectedByFaction(Map())))
     )
   }
+
+  test("SpiceOnDune.collectSpice.factionsWithOrnithopters.canCollect3SpicePerUnit") {
+    val army1 = HarkonnenArmy(2)
+    val territory1 = OldGap
+    val armies = ArmiesOnDune(Map(
+        territory1 -> Map(spiceSector(territory1) -> List(army1))
+      ))
+    val spiceAmount = 10
+    val spice = SpiceOnDune(Map(territory1 -> spiceAmount))
+    val factionsWithOrnithopters: Set[Faction] = Set(Harkonnen)
+    assert(
+      spice.collectSpice(armies, factionsWithOrnithopters)
+      === ((SpiceOnDune(Map(territory1 -> 4)), SpiceCollectedByFaction(Map(Harkonnen -> 6))))
+    )
+  }
 }

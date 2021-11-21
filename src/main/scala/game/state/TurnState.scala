@@ -5,11 +5,14 @@ import game.state.players_circles.FactionCircles
 import game.state.sector.{Sector, numberOfSectors}
 
 object turn_state {
+  /**
+    * @param factionInitiative faction in head has greater initiative than any other faction in tail
+    */
   final case class TurnState(factionInitiative: List[Faction]) {
     def tieWinner(x: Faction, y: Faction): Faction = {
-      val xAggressorScore = factionInitiative.indexOf(x)
-      val yAggressorScore = factionInitiative.indexOf(y)
-      if (xAggressorScore > yAggressorScore) x else y
+      factionInitiative
+        .dropWhile(faction => faction != x && faction != y)
+        .head
     }
   }
 

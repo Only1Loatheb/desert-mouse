@@ -29,7 +29,7 @@ object storm_phase {
   }
 
   private def newStorm(tableState: TableState): (StormDeck, Sector) = {
-    if (tableState.turn.isStart) newStormFromPlayers()
+    if (tableState.turn.isPreGame) newStormFromPlayers()
     else newStormFromCards(tableState)
   }
 

@@ -18,8 +18,7 @@ object army {
     def +(otherArmy: Army): Army
 
     def isOnlyAdvisor: Boolean = {
-      if (faction == BeneGesserit && normalTroops == 0) true
-      else false
+      faction == BeneGesserit && normalTroops == 0
     }
 
     def isSmallerOrEqualArmyOfTheSameFaction(other: Army) = {

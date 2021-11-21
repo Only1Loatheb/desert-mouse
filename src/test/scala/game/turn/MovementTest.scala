@@ -28,6 +28,59 @@ class MovementTest extends FunSuite {
     )
   }
 
+  test("movement.isMoveAllowed.canMoveArmyFromOneTerritoryButTwoSectors") {
+    val stormSector = Sector10
+    val territoryFrom = FalseWallSouth
+    val sectorFrom0 = Sector3
+    val sectorFrom1 = Sector4
+    val territoryTo = PastyMesa
+    val sectorTo = Sector4
+    val army = FremenArmy(2, 2)
+    val mapWithArmy = ArmiesOnDune(Map(territoryFrom -> Map(sectorFrom0 -> List(army), sectorFrom1 -> List(army))))
+    assert(
+      isMoveAllowed(
+        stormSector,
+        mapWithArmy,
+        hasOrnithopters = false,
+        MoveDescriptor((territoryFrom, Map(sectorFrom0 -> army, sectorFrom1 -> army)), (territoryTo, sectorTo))
+      )
+    )
+  }
+
+  test("movement.isMoveAllowed.canNotMoveWhenDoesNotHaveArmy") {
+    val stormSector = Sector10
+    val territoryFrom = Meridan
+    val sectorFrom = Sector0
+    val territoryTo = CielagoWest
+    val sectorTo = Sector0
+    val army = FremenArmy(2, 2)
+    val mapWithArmy = ArmiesOnDune(Map())
+    assert(
+      false == isMoveAllowed(
+        stormSector,
+        mapWithArmy,
+        hasOrnithopters = false,
+        MoveDescriptor((territoryFrom, Map(sectorFrom -> army)), (territoryTo, sectorTo))
+      )
+    )
+  }
+
+    test("movement.isMoveAllowed.moveHasToSelectUnits") {
+    val stormSector = Sector10
+    val territoryFrom = Meridan
+    val territoryTo = CielagoWest
+    val sectorTo = Sector0
+    val mapWithArmy = ArmiesOnDune(Map())
+    assert(
+      false == isMoveAllowed(
+        stormSector,
+        mapWithArmy,
+        hasOrnithopters = false,
+        MoveDescriptor((territoryFrom, Map()), (territoryTo, sectorTo))
+      )
+    )
+  }
+
   test("movement.isMoveAllowed.canMoveWhenOneOtherArmyInCity") {
     val stormSector = Sector10
     val territoryFrom = OldGap
@@ -74,7 +127,53 @@ class MovementTest extends FunSuite {
     )
   }
 
+  test("movement.isMoveAllowed.canMoveWhenTwoOtherArmiesInCityButOneIsAdvisor") {
+    val stormSector = Sector10
+    val territoryFrom = OldGap
+    val sectorFrom = Sector9
+    val territoryTo = Arrakeen
+    val sectorTo = Sector9
+    val army = FremenArmy(2, 2)
+    val mapWithArmy = ArmiesOnDune(
+      Map(
+        territoryFrom -> Map(sectorFrom -> List(army)),
+        territoryTo -> Map(sectorTo -> List(EmperorArmy(2, 2), BeneGesseritArmy(0, 1)))
+      )
+    )
+    assert(
+      isMoveAllowed(
+        stormSector,
+        mapWithArmy,
+        hasOrnithopters = false,
+        MoveDescriptor((territoryFrom, Map(sectorFrom -> army)), (territoryTo, sectorTo))
+      )
+    )
+  }
+
   test("movement.isMoveAllowed.canMoveWhenTwoOtherArmiesInCityButOneIsAllay") {
+    val stormSector = Sector10
+    val territoryFrom = OldGap
+    val sectorFrom = Sector9
+    val territoryTo = Arrakeen
+    val sectorTo = Sector9
+    val army = FremenArmy(2, 2)
+    val mapWithArmy = ArmiesOnDune(
+      Map(
+        territoryFrom -> Map(sectorFrom -> List(army)),
+        territoryTo -> Map(sectorTo -> List(FremenArmy(2, 2), GuildArmy(1)))
+      )
+    )
+    assert(
+      isMoveAllowed(
+        stormSector,
+        mapWithArmy,
+        hasOrnithopters = false,
+        MoveDescriptor((territoryFrom, Map(sectorFrom -> army)), (territoryTo, sectorTo))
+      )
+    )
+  }
+  
+  test("movement.isMoveAllowed.canMoveToPolarSink") {
     val stormSector = Sector10
     val territoryFrom = BlightOfTheCliff
     val sectorFrom = Sector13
@@ -156,6 +255,25 @@ class MovementTest extends FunSuite {
         mapWithArmy,
         hasOrnithopters = false,
         MoveDescriptor((territoryFrom, Map(sectorFrom -> army)), (territoryTo, sectorTo))
+      )
+    )
+  }
+
+  test("movement.isMoveAllowed.canNotMoveWhenStormIsBlockingPartOfTheArmy") {
+    val stormSector = Sector3
+    val territoryFrom = FalseWallSouth
+    val sectorFrom0 = Sector3
+    val sectorFrom1 = Sector4
+    val territoryTo = PastyMesa
+    val sectorTo = Sector4
+    val army = FremenArmy(2, 2)
+    val mapWithArmy = ArmiesOnDune(Map(territoryFrom -> Map(sectorFrom0 -> List(army), sectorFrom1 -> List(army))))
+    assert(
+      false == isMoveAllowed(
+        stormSector,
+        mapWithArmy,
+        hasOrnithopters = false,
+        MoveDescriptor((territoryFrom, Map(sectorFrom0 -> army, sectorFrom1 -> army)), (territoryTo, sectorTo))
       )
     )
   }
@@ -247,4 +365,5 @@ class MovementTest extends FunSuite {
       )
     )
   }
+  
 }

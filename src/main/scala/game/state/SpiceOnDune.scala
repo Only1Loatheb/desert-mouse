@@ -7,6 +7,13 @@ import game.state.faction._
 import game.state.armies_on_dune.ArmiesOnDune
 import game.state.spice.SpiceOnDune._
 
+/**
+  * TODO
+  * refactor with import strawman.collection.decorators._ 
+  * Map
+  * zipByKey / join / zipByKeyWith
+  * mergeByKey / fullOuterJoin / mergeByKeyWith / leftOuterJoin / rightOuterJoin
+  */ 
 object spice {
 
   final case class SpiceCollectedByFaction(collectedSpice: Map[Faction,Int])
@@ -90,8 +97,8 @@ object spice {
     val noSpiceOnDune: SpiceOnDune = SpiceOnDune(Map())
 
     private def getCollectionRate(factionsWithOrnithopters: Set[Faction])(faction: Faction): Int = {
-      if(factionsWithOrnithopters.contains(faction)) normalCollectionRate
-      else withOrnithoptersCollectionRate
+      if (factionsWithOrnithopters.contains(faction)) withOrnithoptersCollectionRate
+      else normalCollectionRate
     }
 
     private def splitSpiceByArmy(spiceCount: Int, collectionRate: Faction => Int)(army: Army): CollectionResult = {
@@ -99,7 +106,7 @@ object spice {
       val troopsCount = army.troopsAbleToCollect
       val collectedSpice = (troopsCount * collectionRate(armyFaction)).min(spiceCount)
       val spiceLeft = spiceCount - collectedSpice
-      (spiceLeft,(armyFaction,collectedSpice))
+      (spiceLeft, (armyFaction, collectedSpice))
     }
 
     private def splitSpiceInTerritory(
@@ -140,8 +147,10 @@ object spice {
       (leftSpice, collectedSpiceByFaction)
     }
 
-    private def armiesOnSpiceRegionsOption(armiesOnDune: ArmiesOnDune)(territory: Territory): (Territory,Option[Army]) = {
-      val armies = armiesOnDune.armies.getOrElse(territory,Map()).getOrElse(spiceSector(territory), List())
+    private def armiesOnSpiceRegionsOption(armiesOnDune: ArmiesOnDune)(territory: Territory): (Territory, Option[Army]) = {
+      val armies = armiesOnDune.armies
+        .getOrElse(territory, Map())
+        .getOrElse(spiceSector(territory), List())
       (territory, armies.filterNot(_.isOnlyAdvisor).headOption)
     }
 
