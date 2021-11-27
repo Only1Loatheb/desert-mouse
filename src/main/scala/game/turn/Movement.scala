@@ -3,7 +3,7 @@ package game.turn
 import scala.annotation.{nowarn, tailrec}
 import utils.Not.not
 import game.state.dune_map._
-import game.state.dune_map.DuneMap.duneMap
+import game.state.dune_map.duneMap
 import game.state.sector._
 import game.state.army._
 import game.state.armies_on_dune.{ArmiesOnDune, ArmySelection}

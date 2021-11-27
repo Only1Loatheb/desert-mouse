@@ -6,7 +6,9 @@ import game.turn.phase.phase.Phase
 import game.turn.phase.storm_phase.stormPhase
 import game.turn.phase.spice_blow_and_nexus_phase.spiceBlowAndNexusPhase
 import game.turn.phase.choam_charity_phase.choamCharityPhase
-
+import game.turn.phase.bidding_phase.biddingPhase
+import game.turn.phase.spice_collection_phase.spiceCollectionPhase
+import game.turn.phase.mentat_pause_phase.mentatPausePhase
 object game_master {
 
   final case class GameMaster(tableState: TableState) {
@@ -14,6 +16,9 @@ object game_master {
     def play(): Phase = stormPhase
       .andThen(spiceBlowAndNexusPhase)
       .andThen(choamCharityPhase)
+      .andThen(biddingPhase)
+      .andThen(spiceCollectionPhase)
+      .andThen(mentatPausePhase)
   }
     //   // 4. Bidding Phase
     //   //Players bid spice to acquire Treachery Cards.
@@ -47,7 +52,7 @@ object game_master {
     * map and then move the Turn Counter to the next
     * position on the Turn Track to begin the next turn.
     * 
-    * CitiesControlled are asigned
+    * StrongholdsControlled are asigned
     */
 
     //   ()

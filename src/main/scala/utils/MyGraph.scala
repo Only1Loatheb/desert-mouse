@@ -16,6 +16,10 @@ object my_graph {
     def getEdgeLabelsFrom(x: NODE): Set[(NODE, EDGE_LABEL)] = {
       graph(x).toSet
     }
+
+    val getNodes: Set[NODE] = {
+      graph.keySet
+    }
   }
 
 

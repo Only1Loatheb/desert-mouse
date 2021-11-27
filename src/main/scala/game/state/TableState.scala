@@ -16,7 +16,7 @@ import game.state.sector.{Sector, Sector0}
 import game.state.kwisatz_haderach_counter.KwisatzHaderachCounter
 import game.state.turn_state.TurnState
 import game.state.present_factions.PresentFactions
-import game.state.cities_controlled.CitiesControlled
+import game.state.strongholds_controlled.StrongholdsControlled
 import game.state.treachery_cards.TreacheryCards
 import game.state.traitors.SelectedTraitors
 import game.state.faction.Faction
@@ -42,7 +42,7 @@ object table_state {
     isShieldWallDestroyed: Boolean,
     turnState: TurnState,
     treacheryCards: TreacheryCards,
-    citiesControlled: CitiesControlled,
+    strongholdsControlled: StrongholdsControlled,
   ) {
     def view(faction: Faction) = { // todo use this in choam
       TableStateView(
@@ -62,7 +62,7 @@ object table_state {
         isShieldWallDestroyed,
         turnState,
         treacheryCards.factionToCards(faction),
-        citiesControlled
+        strongholdsControlled
       )
     }
   }
@@ -81,7 +81,7 @@ object table_state {
     isShieldWallDestroyed: Boolean,
     turnState: TurnState,
     treacheryCards: Set[treachery_deck.TreacheryCard],
-    citiesControlled: CitiesControlled,
+    strongholdsControlled: StrongholdsControlled,
   )
 
   object TableState {
@@ -104,7 +104,7 @@ object table_state {
         isShieldWallDestroyed = false,
         TurnState(),
         TreacheryCards(presentFactions),
-        CitiesControlled(presentFactions),
+        StrongholdsControlled.init(presentFactions),
       )
     }
   }

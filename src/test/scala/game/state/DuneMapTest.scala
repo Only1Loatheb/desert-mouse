@@ -1,7 +1,7 @@
 import org.scalatest.FunSuite
 
 import game.state.dune_map.Territory
-import game.state.dune_map.DuneMap.duneMap
+import game.state.dune_map.duneMap
 import game.state.regions.isTerritoryOnThisSector
 import game.state.sector.FakePolarSector
 import utils.TerritorySectors.sectorsOnTerritory

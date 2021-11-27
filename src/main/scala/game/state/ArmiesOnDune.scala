@@ -14,7 +14,7 @@ object armies_on_dune {
   final case class ArmySelection(army: Map[Sector, Army])
   type ArmiesOnTerritory = Map[Sector, List[Army]]
 
-  val maxArmiesOnCity = 2
+  val maxArmiesOnStronghold = 2
 
   val startingArmies: Map[Faction, (Territory, Map[Sector, List[Army]])] = Map(
     (Atreides, (Arrakeen, Map(Sector9 -> List(AtreidesArmy(10))))),
@@ -34,11 +34,11 @@ object armies_on_dune {
   
     def hasSpaceToMoveTo(thisFaction: Faction)(territory: Territory): Boolean = {
       territory match {
-        case _: City =>
+        case _: Stronghold =>
           armies.get(territory).forall { armiesOnTerritory =>
             val armiesByFaction = armiesOnTerritory.values.flatten.filterNot(_.isOnlyAdvisor).groupBy(_.faction)
             if (armiesByFaction.contains(thisFaction)) true
-            else armiesByFaction.size < maxArmiesOnCity
+            else armiesByFaction.size < maxArmiesOnStronghold
           }
         case _ => true
       }

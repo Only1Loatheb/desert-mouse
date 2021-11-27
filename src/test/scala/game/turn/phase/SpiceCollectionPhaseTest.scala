@@ -1,15 +1,18 @@
+package game.turn.phase
+
 import org.scalatest.FunSuite
 
 import eu.timepit.refined.auto._
 
 import game.state.faction._
 import game.state.army._
-import game.state.spice.{SpiceOnDune, SpiceCollectedByFaction}
 import game.state.spice.SpiceOnDune._
 import game.state.regions._
 import game.state.armies_on_dune.ArmiesOnDune
 import game.state.dune_map._
 import game.state.spice_deck.territoriesWithSpiceBlows
+import game.state.spice._
+import game.turn.phase.spice_collection_phase._
 
 class SpiceTest extends FunSuite {
   test("SpiceOnDune.collectSpice.spiceSectorsAreOnTheTerritory") {
@@ -23,7 +26,7 @@ class SpiceTest extends FunSuite {
     val spice = SpiceOnDune.noSpiceOnDune
     val factionsWithOrnithopters: Set[Faction] = Set()
     assert(
-      spice.collectSpice(armies, factionsWithOrnithopters)
+      collectSpice(spice, armies, factionsWithOrnithopters)
       === ((noSpiceOnDune, SpiceCollectedByFaction(Map())))
     )
   }
@@ -38,7 +41,7 @@ class SpiceTest extends FunSuite {
     val spice = SpiceOnDune(Map(territory -> spiceAmount))
     val factionsWithOrnithopters: Set[Faction] = Set()
     assert(
-      spice.collectSpice(armies, factionsWithOrnithopters)
+      collectSpice(spice, armies, factionsWithOrnithopters)
       === ((spice, SpiceCollectedByFaction(Map())))
     )
   }
@@ -53,7 +56,7 @@ class SpiceTest extends FunSuite {
     val spice = SpiceOnDune(Map(territory -> spiceAmount))
     val factionsWithOrnithopters: Set[Faction] = Set()
     assert(
-      spice.collectSpice(armies, factionsWithOrnithopters)
+      collectSpice(spice, armies, factionsWithOrnithopters)
       === ((noSpiceOnDune, SpiceCollectedByFaction(Map(army.faction -> spiceAmount))))
     )
   }
@@ -69,7 +72,7 @@ class SpiceTest extends FunSuite {
     val spice = SpiceOnDune(Map(territory -> spiceAmount))
     val factionsWithOrnithopters: Set[Faction] = Set()
     assert(
-      spice.collectSpice(armies, factionsWithOrnithopters)
+      collectSpice(spice, armies, factionsWithOrnithopters)
       === ((noSpiceOnDune, SpiceCollectedByFaction(Map(army.faction -> spiceAmount))))
     )
   }
@@ -87,7 +90,7 @@ class SpiceTest extends FunSuite {
     val spice = SpiceOnDune(Map(territory1 -> spiceAmount, territory2 -> spiceAmount))
     val factionsWithOrnithopters: Set[Faction] = Set()
     assert(
-      spice.collectSpice(armies, factionsWithOrnithopters)
+      collectSpice(spice, armies, factionsWithOrnithopters)
       === ((noSpiceOnDune, SpiceCollectedByFaction(Map(army1.faction -> (spiceAmount * 2)))))
     )
   }
@@ -105,7 +108,7 @@ class SpiceTest extends FunSuite {
     val spice = SpiceOnDune(Map(territory1 -> spiceAmount, territory2 -> spiceAmount))
     val factionsWithOrnithopters: Set[Faction] = Set()
     assert(
-      spice.collectSpice(armies, factionsWithOrnithopters)
+      collectSpice(spice, armies, factionsWithOrnithopters)
       === ((noSpiceOnDune, SpiceCollectedByFaction(Map(army1.faction -> spiceAmount,army2.faction -> spiceAmount))))
     )
   }
@@ -123,7 +126,7 @@ class SpiceTest extends FunSuite {
     val spice = SpiceOnDune.noSpiceOnDune
     val factionsWithOrnithopters: Set[Faction] = Set()
     assert(
-      spice.collectSpice(armies, factionsWithOrnithopters)
+      collectSpice(spice, armies, factionsWithOrnithopters)
       === ((noSpiceOnDune, SpiceCollectedByFaction(Map())))
     )
   }
@@ -138,7 +141,7 @@ class SpiceTest extends FunSuite {
     val spice = SpiceOnDune(Map(territory1 -> spiceAmount))
     val factionsWithOrnithopters: Set[Faction] = Set(Harkonnen)
     assert(
-      spice.collectSpice(armies, factionsWithOrnithopters)
+      collectSpice(spice, armies, factionsWithOrnithopters)
       === ((SpiceOnDune(Map(territory1 -> 4)), SpiceCollectedByFaction(Map(Harkonnen -> 6))))
     )
   }

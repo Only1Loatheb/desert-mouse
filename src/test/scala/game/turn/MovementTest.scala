@@ -81,7 +81,7 @@ class MovementTest extends FunSuite {
     )
   }
 
-  test("movement.isMoveAllowed.canMoveWhenOneOtherArmyInCity") {
+  test("movement.isMoveAllowed.canMoveWhenOneOtherArmyInStronghold") {
     val stormSector = Sector10
     val territoryFrom = OldGap
     val sectorFrom = Sector9
@@ -104,7 +104,7 @@ class MovementTest extends FunSuite {
     )
   }
 
-  test("movement.isMoveAllowed.canNotMoveWhenTwoOtherArmiesInCity") {
+  test("movement.isMoveAllowed.canNotMoveWhenTwoOtherArmiesInStronghold") {
     val stormSector = Sector10
     val territoryFrom = OldGap
     val sectorFrom = Sector9
@@ -127,7 +127,7 @@ class MovementTest extends FunSuite {
     )
   }
 
-  test("movement.isMoveAllowed.canMoveWhenTwoOtherArmiesInCityButOneIsAdvisor") {
+  test("movement.isMoveAllowed.canMoveWhenTwoOtherArmiesInStrongholdButOneIsAdvisor") {
     val stormSector = Sector10
     val territoryFrom = OldGap
     val sectorFrom = Sector9
@@ -150,7 +150,7 @@ class MovementTest extends FunSuite {
     )
   }
 
-  test("movement.isMoveAllowed.canMoveWhenTwoOtherArmiesInCityButOneIsAllay") {
+  test("movement.isMoveAllowed.canMoveWhenTwoOtherArmiesInStrongholdButOneIsAllay") {
     val stormSector = Sector10
     val territoryFrom = OldGap
     val sectorFrom = Sector9
