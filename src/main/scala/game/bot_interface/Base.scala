@@ -15,6 +15,8 @@ object base {
 
   type Bots = Map[Faction, BotInterface]
 
+  final case class BotDecision[VALUE](newBot: BotInterface, value: VALUE)
+
   trait BotInterface {
 
     def implementedFactions: Set[Faction]
@@ -25,7 +27,7 @@ object base {
      * Storm Marker is being moved from the Storm Start sector counterclockwise around the map.
      * Storm is moved number of sectors equal to sum of this two numbers.
      */
-    def firstStormMoveValue: Int
+    def firstStormMoveValue: BotDecision[Int]
 
 
     /**
@@ -35,21 +37,21 @@ object base {
      * @param traitorCandidates
      * @return traitors
      */
-    def chooseTraitors(presentFactions: PresentFactions, traitorCandidates: TraitorCandidates): TraitorCandidates
+    def chooseTraitors(presentFactions: PresentFactions, traitorCandidates: TraitorCandidates): BotDecision[TraitorCandidates]
 
-    def claimChoamCharity(gameStateView: TableStateView): Boolean
+    def claimChoamCharity(gameStateView: TableStateView): BotDecision[Boolean]
 
-    def proposeAlliance(gameStateView: TableStateView): Faction // add allience forming protocol
+    def proposeAlliance(gameStateView: TableStateView): BotDecision[Faction]
 
-    def bidTreacheryCard(gameStateView: TableStateView, otherBids: Map[Faction, Int]): Option[Int]
+    def bidTreacheryCard(gameStateView: TableStateView, otherBids: Map[Faction, Int]): BotDecision[Option[Int]]
 
-    def reviveArmy(gameStateView: TableStateView): Option[Army]
+    def reviveArmy(gameStateView: TableStateView): BotDecision[Option[Army]]
 
-    def reviveLeader(gameStateView: TableStateView): Option[Leader]
+    def reviveLeader(gameStateView: TableStateView): BotDecision[Option[Leader]]
 
-    def moveArmy(gameStateView: TableStateView): Option[MoveDescriptor]
+    def moveArmy(gameStateView: TableStateView): BotDecision[Option[MoveDescriptor]]
 
-    def shipArmy(gameStateView: TableStateView): Option[(Army, Territory, Sector)]
+    def shipArmy(gameStateView: TableStateView): BotDecision[Option[(Army, Territory, Sector)]]
 
   }
 }

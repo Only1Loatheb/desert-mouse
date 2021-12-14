@@ -20,6 +20,7 @@ object spice_collection_phase {
       tableState.armiesOnDune,
       tableState.strongholdsControlled.factionsWithOrnithopters
     )
+    
     val newFactionSpice = FactionSpice(
       tableState.factionSpice.factionToSpice
         .unionWith(_ + _)(spiceCollectedByFaction.collectedSpice)
@@ -29,6 +30,7 @@ object spice_collection_phase {
       spiceOnDune = newSpiceOnDune,
       factionSpice = newFactionSpice
     )
+
     gameState.copy(tableState = newTableState)
   }
 
@@ -112,9 +114,7 @@ object spice_collection_phase {
     val (territoryWithSpice, spiceCount) = territoryAndSpice
     val armyOnSpiceTerritory = territoryAndArmyMap.get(territoryWithSpice)
     val collectionResult = armyOnSpiceTerritory
-      .map(
-        splitSpiceByArmy(spiceCount, collectionRate)
-      )
+      .map(splitSpiceByArmy(spiceCount, collectionRate))
       .getOrElse((spiceCount, (Fremen, 0)))
     (territoryWithSpice, collectionResult)
   }
