@@ -3,12 +3,14 @@ package game.turn
 import game.state.table_state.TableState
 
 import game.turn.phase.phase.Phase
+import game.turn.phase.phase.GameState
 import game.turn.phase.storm_phase.stormPhase
 import game.turn.phase.spice_blow_and_nexus_phase.spiceBlowAndNexusPhase
 import game.turn.phase.choam_charity_phase.choamCharityPhase
 import game.turn.phase.bidding_phase.biddingPhase
 import game.turn.phase.spice_collection_phase.spiceCollectionPhase
 import game.turn.phase.mentat_pause_phase.mentatPausePhase
+import game.state.faction.Faction
 object game_master {
 
   final case class GameMaster(tableState: TableState) {
@@ -19,6 +21,16 @@ object game_master {
       .andThen(biddingPhase)
       .andThen(spiceCollectionPhase)
       .andThen(mentatPausePhase)
+  }
+
+  def isGameOver: GameState => Either[Faction, GameState] = gameState => {
+
+    gameState.tableState.strongholdsControlled.armies
+      .toList
+      .find(_._2.size >= 3) match {
+        case Some(winner) => Left(winner._1)
+        case None => Right(gameState)
+      }
   }
     //   // 4. Bidding Phase
     //   //Players bid spice to acquire Treachery Cards.

@@ -20,15 +20,13 @@ object mentat_pause_phase {
   private def getNewStrongholdsControlled(armiesOnDune: ArmiesOnDune): StrongholdsControlled = {
     val armies = armiesOnDune.armies
     val factionToOccupiedStrongholds = strongholds
-      .map { territory =>
-        val factionOption = armies
+      .flatMap { territory =>
+        armies
           .get(territory)
           .flatMap(_.get(strongholdSector(territory)))
           .flatMap(_.filter(_.isOnlyAdvisor).headOption.map(_.faction))
-      
-        (factionOption, territory)
+          .map((_, territory))
       }
-      .collect { case (Some(faction), territory) => (faction, territory) }
       .groupMapReduce(_._1)(factionAndTerritory => Set(factionAndTerritory._2))(_.union(_))
 
     StrongholdsControlled(factionToOccupiedStrongholds)

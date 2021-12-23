@@ -1,7 +1,7 @@
 package game.state
 
 import game.state.turn_counter.TurnCounter
-import game.state.spice.SpiceOnDune
+import game.state.spice.{SpiceOnDune, Spice}
 import game.state.armies_on_dune.ArmiesOnDune
 import game.state.treachery_deck.TreacheryDeck
 import game.state.spice_deck.SpiceDeck
@@ -74,7 +74,7 @@ object table_state {
     tleilaxuTanks: TleilaxuTanks,
     reserves: Reserves,
     players: FactionCircles,
-    playerSpice: Int,
+    playerSpice: Spice,
     traitors: Either[traitor_deck.AllTraitorCandidates, Set[leaders.Leader]],
     stormSector: Sector,
     kwisatzHaderachCounter: KwisatzHaderachCounter,

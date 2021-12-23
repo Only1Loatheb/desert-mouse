@@ -1,12 +1,22 @@
 package game.state
 
+import cats.implicits._
+
 import game.state.dune_map._
 import game.state.sector._
 import game.state.spice.SpiceOnDune._
 
 object spice {
 
-  final case class SpiceOnDune(spice: Map[Territory, Int]) {
+  final case class Spice(spice: Int) extends AnyVal {
+    def +(s: Spice): Spice = new Spice(spice + s.spice)
+    
+    def -(s: Spice): Spice = new Spice(spice - s.spice)
+
+    def <(s: Spice): Boolean = spice < s.spice
+  }
+
+  final case class SpiceOnDune(spice: Map[Territory, Spice]) {
 
     def addSpice(territory: Territory): SpiceOnDune = {
       val spiceToAdd = initialSpiceAmount(territory)
@@ -17,8 +27,10 @@ object spice {
   object SpiceOnDune {
     val noSpiceOnDune: SpiceOnDune = SpiceOnDune(Map())
     
-    private def updateSpice(spiceToAdd: Int)(existingSpice: Option[Int]): Option[Int] = {
-      Some(existingSpice.getOrElse(0) + spiceToAdd)
+    private def updateSpice(spiceToAdd: Spice)(existingSpice: Option[Spice]): Option[Spice] = {
+      existingSpice
+        .fold(spiceToAdd)(spice => spice + spiceToAdd)
+        .some
     }
 
     val spiceSector: PartialFunction[Territory, Sector] = {
@@ -39,22 +51,22 @@ object spice {
       case HabbanyaRidgeFlat => Sector17
     }
 
-    val initialSpiceAmount: PartialFunction[Territory, Int] = {
-      case CielagoSouth => 12
-      case CielagoNorth => 8
-      case SouthMesa => 10
-      case RedChasm => 8
-      case TheMinorErg => 8
-      case SihayaRidge => 6
-      case OldGap => 6
-      case BrokenLand => 8
-      case HaggaBasin => 6
-      case RockOutcroppings => 6
-      case FuneralPlains => 6
-      case TheGreatFlat => 10
-      case HabbanyaErg => 8
-      case WindPassNorth => 6
-      case HabbanyaRidgeFlat => 10
+    val initialSpiceAmount: PartialFunction[Territory, Spice] = {
+      case CielagoSouth => Spice(12)
+      case CielagoNorth => Spice(8)
+      case SouthMesa => Spice(10)
+      case RedChasm => Spice(8)
+      case TheMinorErg => Spice(8)
+      case SihayaRidge => Spice(6)
+      case OldGap => Spice(6)
+      case BrokenLand => Spice(8)
+      case HaggaBasin => Spice(6)
+      case RockOutcroppings => Spice(6)
+      case FuneralPlains => Spice(6)
+      case TheGreatFlat => Spice(10)
+      case HabbanyaErg => Spice(8)
+      case WindPassNorth => Spice(6)
+      case HabbanyaRidgeFlat => Spice(10)
     }
   }
 }

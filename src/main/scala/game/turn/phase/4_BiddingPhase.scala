@@ -4,13 +4,15 @@ import scala.annotation.tailrec
 import scala.annotation.nowarn
 import eu.timepit.refined.types.numeric.PosInt
 
-import game.turn.phase.phase.Phase
 import game.state.faction.Faction
-import game.state.faction
+import game.state.faction.Harkonnen
 import game.state.treachery_deck.TreacheryCard
 import game.state.faction_spice.FactionSpice
 import game.state.treachery_cards.TreacheryCards
+import game.state.spice.Spice
+import game.turn.phase.phase.Phase
 import game.bot_interface.base.Bots
+
 
 object bidding_phase {
 
@@ -48,10 +50,10 @@ object bidding_phase {
   private def bidding(
       factionOrder: List[Faction],
       drawnCards: List[TreacheryCard],
-      factionToSpice: Map[Faction, Int],
+      factionToSpice: Map[Faction, Spice],
       factionToCards: Map[Faction, Set[TreacheryCard]],
       bots: Bots
-  ): (Map[Faction, Int], Map[Faction, Set[TreacheryCard]], Bots) = {
+  ): (Map[Faction, Spice], Map[Faction, Set[TreacheryCard]], Bots) = {
 
     val factionOrderCycle: LazyList[Faction] = LazyList.continually(factionOrder).flatten
 
@@ -65,11 +67,11 @@ object bidding_phase {
   private def biddingNextCard(
       factionOrderCycle: LazyList[Faction]
   )(
-      factionToSpice: Map[Faction, Int],
+      factionToSpice: Map[Faction, Spice],
       factionToCards: Map[Faction, Set[TreacheryCard]],
       bots: Bots,
       drawnCard: TreacheryCard
-  ): (Map[Faction, Int], Map[Faction, Set[TreacheryCard]], Bots) = {
+  ): (Map[Faction, Spice], Map[Faction, Set[TreacheryCard]], Bots) = {
 
     biddingAskNext(
       factionOrderCycle,
@@ -84,10 +86,10 @@ object bidding_phase {
   private def biddingAskNext(
       factionOrderCycle: LazyList[Faction],
       drawnCard: TreacheryCard,
-      factionToSpice: Map[Faction, Int],
+      factionToSpice: Map[Faction, Spice],
       bots: Bots,
       consecutivePassCount: Int
-  ): (Map[Faction, Int], Map[Faction, Set[TreacheryCard]], Bots) = {
+  ): (Map[Faction, Spice], Map[Faction, Set[TreacheryCard]], Bots) = {
 
     biddingAskNext(
       factionOrderCycle,
@@ -99,9 +101,9 @@ object bidding_phase {
   }
 
   // move somewere else
-  private def factionCardsLimit: Faction => Int = {
-    case faction.Harkonnen => 8
-    case _                 => 4
+  private val factionCardsLimit: Faction => Int = {
+    case Harkonnen => 8
+    case _ => 4
   }
 
 

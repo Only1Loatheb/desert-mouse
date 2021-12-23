@@ -6,6 +6,7 @@ import game.state.faction.Faction
 import game.bot_interface.base.BotInterface
 import game.state.table_state.TableState
 import utils.map._
+import game.state.spice.Spice
 
 object choam_charity_phase {
 
@@ -26,10 +27,10 @@ object choam_charity_phase {
     gameState.copy(tableState = newTableState, bots = newFactionToBots)
   }
 
-  private val spiceLimit = 2
-  private val charitySpice = 2
+  private val spiceLimit = Spice(2)
+  private val charitySpice = Spice(2)
 
-  private def claimConditionaly(tableState: TableState): ((Faction, BotInterface)) => (Faction, (Int, BotInterface)) = {
+  private def claimConditionaly(tableState: TableState): ((Faction, BotInterface)) => (Faction, (Spice, BotInterface)) = {
     case (faction, bot) => {
       val spice = tableState.factionSpice.factionToSpice(faction)
       lazy val wantsToClaim = bot.claimChoamCharity(tableState.view(faction))
