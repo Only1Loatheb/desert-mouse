@@ -10,6 +10,7 @@ import game.state.armies_on_dune.ArmiesOnDune
 import game.state.spice.SpiceOnDune
 import game.state.spice.SpiceOnDune._
 import game.state.spice.Spice
+import game.state.sector.Sector
 
 object spice_collection_phase {
 
@@ -40,7 +41,6 @@ object spice_collection_phase {
   final case class FactionCollectedSpice(faction: Faction, collectedSpice: Spice) {
     def unapply = (faction, collectedSpice)
   }
-  final case class CollectionResult(spiceLeft: Spice, factionCollectedSpice: FactionCollectedSpice)
   type FactionCollectionRate = Faction => Spice
   final case class SpiceCollectedByFaction(collectedSpice: Map[Faction, Spice])
 
@@ -76,66 +76,68 @@ object spice_collection_phase {
       spice: TerritoryToSpice,
       collectionRate: FactionCollectionRate
   ) = {
-    val territoriesWithSpice = spice.keySet
-    val territoryAndArmyOptionSet =
-      territoriesWithSpice.map(armiesOnSpiceRegionsOption(armiesOnDune))
-    val territoryAndArmySet = territoryAndArmyOptionSet.collect({ case (t, oA: Some[Army]) =>
-      (t, oA.value)
-    })
-    splitSpiceInTerritories(spice, territoryAndArmySet, collectionRate)
+    val territoryAndArmyOnSpiceSectors = spice
+      .keySet
+      .flatMap(armiesOnSpiceRegionsOption(armiesOnDune.armies))
+
+    splitSpiceInTerritories(spice, territoryAndArmyOnSpiceSectors, collectionRate)
   }
 
   private def armiesOnSpiceRegionsOption(
-      armiesOnDune: ArmiesOnDune
-  )(territory: Territory): (Territory, Option[Army]) = {
-    val armies = armiesOnDune.armies
-      .getOrElse(territory, Map())
-      .getOrElse(spiceSector(territory), List())
-    (territory, armies.filterNot(_.isOnlyAdvisor).headOption)
+      armiesOnDune: Map[Territory, Map[Sector, List[Army]]]
+  )(territory: Territory): Option[(Territory, Army)] = {
+    armiesOnDune
+      .get(territory)
+      .flatMap(_.get(spiceSector(territory)))
+      .flatMap(_.filter(_.isOnlyAdvisor).headOption)
+      .map((territory, _))
+      // collect spice here
   }
 
-  private def splitSpiceInTerritories(
-      spice: TerritoryToSpice,
-      territoryAndArmySet: Set[(Territory, Army)],
-      collectionRate: FactionCollectionRate
-  ): (TerritoryToSpice, SpiceCollected) = {
-    val territoryAndArmyMap = territoryAndArmySet.toMap
-    val leftAndCollectedSpice =
-      spice.map(splitSpiceInTerritory(territoryAndArmyMap, collectionRate))
-    val leftSpice = leftAndCollectedSpice.map({ case (k, v) => (k, v.spiceLeft) }).filterNot(_._2 == Spice(0))
-    val collectedSpiceByFaction = getCollectedSpiceByFaction(leftAndCollectedSpice)
-    (leftSpice, collectedSpiceByFaction)
-  }
+  // private def splitSpiceInTerritories(
+  //     spice: TerritoryToSpice,
+  //     territoryAndArmyOnSpiceSectors: Set[(Territory, Army)],
+  //     collectionRate: FactionCollectionRate
+  // ): (TerritoryToSpice, SpiceCollected) = {
+  //   val territoryAndArmyMap = territoryAndArmyOnSpiceSectors.toMap
+  //   val territoryToCollectedSpice = spice
+  //     .map(splitSpiceInTerritory(territoryAndArmyMap, collectionRate))
 
-  private def splitSpiceInTerritory(
-      territoryAndArmyMap: Map[Territory, Army],
-      collectionRate: FactionCollectionRate
-  )(
-      territoryAndSpice: (Territory, Spice)
-  ): (Territory, CollectionResult) = {
-    val (territoryWithSpice, spiceCount) = territoryAndSpice
-    val armyOnSpiceTerritory = territoryAndArmyMap.get(territoryWithSpice)
-    val collectionResult = armyOnSpiceTerritory
-      .map(splitSpiceByArmy(spiceCount, collectionRate))
-      .getOrElse(CollectionResult(spiceCount, FactionCollectedSpice(Fremen, Spice(0))))
-    (territoryWithSpice, collectionResult)
-  }
+  //   val leftSpice: TerritoryToSpice = Map.empty 
+  //     // val leftSpice = territoryToCollectedSpice
+  //     //   .map { case (k, v) => (k, v.spiceLeft) }
+  //     //   .filterNot(_._2 == Spice(0))
+  //   val collectedSpiceByFaction = getCollectedSpiceByFaction(territoryToCollectedSpice)
 
-  private def splitSpiceByArmy(spiceCount: Spice, collectionRate: FactionCollectionRate)(
+  //   (leftSpice, collectedSpiceByFaction)
+  // }
+
+  // private def splitSpiceInTerritory(
+  //     territoryAndArmyMap: Map[Territory, Army],
+  //     collectionRate: FactionCollectionRate
+  // )(
+  //     territoryAndSpice: (Territory, Spice)
+  // ): (Territory, FactionCollectedSpice) = {
+  //   val (territoryWithSpice, spiceCount) = territoryAndSpice
+  //   val armyOnSpiceTerritory = territoryAndArmyMap.get(territoryWithSpice)
+  //   val collectionResult = armyOnSpiceTerritory.map(collectSpice(spiceCount, collectionRate))
+
+  //   (territoryWithSpice, collectionResult)
+  // }
+
+  private def collectSpice(spiceCount: Spice, collectionRate: FactionCollectionRate)(
       army: Army
-  ): CollectionResult = {
+  ): FactionCollectedSpice = {
     val armyFaction = army.faction
     val collectedSpice = Spice((army.troopsAbleToCollect * collectionRate(armyFaction).spice).min(spiceCount.spice))
-    val spiceLeft = spiceCount - collectedSpice
-    CollectionResult(spiceLeft, FactionCollectedSpice(armyFaction, collectedSpice))
+    FactionCollectedSpice(armyFaction, collectedSpice)
   }
 
   private def getCollectedSpiceByFaction(
-      leftAndCollectedSpice: Map[Territory, CollectionResult]
+      territoryToCollectedSpice: Map[Territory, FactionCollectedSpice]
   ): SpiceCollected = {
-    leftAndCollectedSpice
+    territoryToCollectedSpice
       .values
-      .map(_.factionCollectedSpice)
       .groupMapReduce(_.faction)(_.collectedSpice)(_ + _)
       .filterNot(_._2 == Spice(0))
   }
