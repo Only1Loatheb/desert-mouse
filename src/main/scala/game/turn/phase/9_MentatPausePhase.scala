@@ -24,7 +24,7 @@ object mentat_pause_phase {
         armies
           .get(territory)
           .flatMap(_.get(strongholdSector(territory)))
-          .flatMap(_.filter(_.isOnlyAdvisor).headOption.map(_.faction))
+          .flatMap(_.filterNot(_.isOnlyAdvisor).headOption.map(_.faction))
           .map((_, territory))
       }
       .groupMapReduce(_._1)(factionAndTerritory => Set(factionAndTerritory._2))(_.union(_))
