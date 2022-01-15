@@ -1,3 +1,5 @@
+package game.state
+
 import org.scalatest.FunSuite
 
 import game.state.spice_deck._

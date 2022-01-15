@@ -1,9 +1,8 @@
 package game.state
 
-import game.state.sector._
-
 import org.scalatest.FunSuite
 
+import game.state.sector._
 import game.state.faction._
 
 class TurnStateTest extends FunSuite {

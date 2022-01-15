@@ -17,7 +17,7 @@ object TerritorySectors {
   /**
     * Get a map of all territories to their sectors
     * generated with github copilot
-    * @param duneTerritoriesBySector
+    * @param sectorToTerritory
     * @return
     */
   private def getTerritoryToSector(sectorToTerritory: Map[Sector, Set[Territory]]): Map[Territory, Set[Sector]] = {

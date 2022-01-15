@@ -1,11 +1,12 @@
-import org.scalatest.FunSuite
+package game.state
 
-import game.state.dune_map.Territory
-import game.state.dune_map.duneMap
+import org.scalatest.FunSuite
+import scala.reflect.runtime.{universe => ru}
+
+import game.state.dune_map.{Territory, duneMap}
 import game.state.regions.isTerritoryOnThisSector
 import game.state.sector.FakePolarSector
 import utils.TerritorySectors.sectorsOnTerritory
-import scala.reflect.runtime.{universe => ru}
 
 class DuneMapTest extends FunSuite {
 

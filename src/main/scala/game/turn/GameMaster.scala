@@ -11,6 +11,7 @@ import game.turn.phase.bidding_phase.biddingPhase
 import game.turn.phase.spice_collection_phase.spiceCollectionPhase
 import game.turn.phase.mentat_pause_phase.mentatPausePhase
 import game.state.faction.Faction
+
 object game_master {
 
   final case class GameMaster(tableState: TableState) {

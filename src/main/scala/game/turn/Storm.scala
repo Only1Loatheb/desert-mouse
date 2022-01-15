@@ -26,7 +26,7 @@ object storm {
 
   private val affectArmy: PartialFunction[Army, Army] = {
     case FremenArmy(troops, fedaykins) =>
-      FremenArmy(troops.devideBy2RoundUp, fedaykins.devideBy2RoundUp)
+      FremenArmy(troops.divideBy2RoundUp, fedaykins.divideBy2RoundUp)
   }
 
   def affectArmiesOnSectors(

@@ -1,3 +1,5 @@
+package game.state
+
 import org.scalatest.FunSuite
 
 import game.state.treachery_deck.TreacheryDeck

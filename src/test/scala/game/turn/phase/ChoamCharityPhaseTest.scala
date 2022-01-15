@@ -1,5 +1,6 @@
-import org.scalatest.FunSuite
+package game.turn.phase
 
+import org.scalatest.FunSuite
 import eu.timepit.refined._
 import eu.timepit.refined.collection._
 

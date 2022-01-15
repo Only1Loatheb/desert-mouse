@@ -1,3 +1,5 @@
+package game.turn
+
 import org.scalatest.FunSuite
 
 import eu.timepit.refined.auto._

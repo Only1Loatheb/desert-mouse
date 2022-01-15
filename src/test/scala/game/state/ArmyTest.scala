@@ -1,6 +1,7 @@
-import org.scalatest.FunSuite
+package game.state
 
 import eu.timepit.refined.auto._
+import org.scalatest.FunSuite
 
 import game.state.army._
 

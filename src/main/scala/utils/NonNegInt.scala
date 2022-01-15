@@ -7,7 +7,7 @@ object non_neg_int {
     
     def +(other: NonNegInt): NonNegInt = NonNegInt.unsafeFrom(nonNegInt.value + other.value)
 
-    def devideBy2RoundUp: NonNegInt = {
+    def divideBy2RoundUp: NonNegInt = {
       val int = nonNegInt.value
       val quotient = int / 2
       NonNegInt.unsafeFrom(if ((int & 1) == 1) quotient + 1 else quotient)

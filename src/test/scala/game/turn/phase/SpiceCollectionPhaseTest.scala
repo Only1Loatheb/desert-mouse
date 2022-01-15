@@ -12,6 +12,7 @@ import game.state.armies_on_dune.ArmiesOnDune
 import game.state.dune_map._
 import game.state.spice_deck.territoriesWithSpiceBlows
 import game.state.spice._
+
 import game.turn.phase.spice_collection_phase._
 
 class SpiceCollectionPhaseTest extends FunSuite {
