@@ -3,10 +3,9 @@ package game.turn.phase
 import scala.annotation.tailrec
 import scala.annotation.nowarn
 import eu.timepit.refined.types.numeric.PosInt
-
 import game.state.faction.Faction
 import game.state.faction.Harkonnen
-import game.state.treachery_deck.TreacheryCard
+import game.state.treachery_deck.{DrawResult, TreacheryCard}
 import game.state.faction_spice.FactionSpice
 import game.state.treachery_cards.TreacheryCards
 import game.state.spice.Spice
@@ -25,7 +24,7 @@ object bidding_phase {
       cards.size < factionCardsLimit(faction)
     }.keySet
 
-    val (newTreacheryDeck, drawnCards) = gameState.tableState.treacheryDeck
+    val DrawResult(newTreacheryDeck, drawnCards) = gameState.tableState.treacheryDeck
       .drawCards(biddingFactions.size)
 
     val factionOrder = gameState.tableState.turnState.factionInitiative

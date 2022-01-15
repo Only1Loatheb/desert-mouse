@@ -17,7 +17,7 @@ object traitor_deck {
   private val traitorCandidatesForPlayer = 4
 
   private def getTraitors(presentFactions: Set[Faction]): TraitorCandidates = {
-    val possibleTraitors = presentFactions.map(leadersByFaction).flatten
+    val possibleTraitors = presentFactions.flatMap(leadersByFaction)
     possibleTraitors.map(TraitorCard).toList
   }
 

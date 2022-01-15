@@ -15,7 +15,7 @@ import game.turn.phase.phase.GameState
 class SpiceBlowAndNexusPhaseTest extends FunSuite {
   test("movement.isMoveAllowed.simpleMove") {
     val presentFactions: PresentFactions =
-      (refineV[MinSize[2]](Set(Atreides, Harkonnen))).toOption.get
+      refineV[MinSize[2]](Set(Atreides, Harkonnen)).toOption.get
     val gameState = GameState(TableState(presentFactions, 10), Map())
     val newGameState = spiceBlowAndNexusPhase(gameState)
     assert(newGameState != gameState)

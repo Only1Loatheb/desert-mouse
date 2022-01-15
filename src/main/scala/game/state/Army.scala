@@ -7,7 +7,8 @@ import game.state.faction._
 
 object army {
 
-  val addArmyOfDifferentTypeException = new IllegalStateException("A")
+  case object AddArmyOfDifferentTypeException extends IllegalStateException
+
   sealed trait Army extends Serializable with Product {
     def faction: Faction
     def force: Int
@@ -38,7 +39,7 @@ object army {
     override def troopsAbleToCollect: Int = troops.value
     override def +(otherArmy: Army): AtreidesArmy = otherArmy match {
       case AtreidesArmy(otherTroops) => AtreidesArmy(troops + otherTroops)
-      case _                         => throw addArmyOfDifferentTypeException
+      case _                         => throw AddArmyOfDifferentTypeException
     }
   }
   final case class HarkonnenArmy(
@@ -51,7 +52,7 @@ object army {
     override def troopsAbleToCollect: Int = troops.value
     override def +(otherArmy: Army): HarkonnenArmy = otherArmy match {
       case HarkonnenArmy(otherTroops) => HarkonnenArmy(troops + otherTroops)
-      case _                          => throw addArmyOfDifferentTypeException
+      case _                          => throw AddArmyOfDifferentTypeException
     }
   }
 
@@ -67,7 +68,7 @@ object army {
     override def +(otherArmy: Army): FremenArmy = otherArmy match {
       case FremenArmy(otherTroops, otherFedaykins) =>
         FremenArmy(troops + otherTroops, fedaykins + otherFedaykins)
-      case _ => throw addArmyOfDifferentTypeException
+      case _ => throw AddArmyOfDifferentTypeException
     }
   }
 
@@ -83,7 +84,7 @@ object army {
     override def +(otherArmy: Army): EmperorArmy = otherArmy match {
       case EmperorArmy(otherTroops, otherSardaukars) =>
         EmperorArmy(troops + otherTroops, sardaukars + otherSardaukars)
-      case _ => throw addArmyOfDifferentTypeException
+      case _ => throw AddArmyOfDifferentTypeException
     }
   }
 
@@ -97,7 +98,7 @@ object army {
     override def troopsAbleToCollect: Int = troops.value
     override def +(otherArmy: Army): GuildArmy = otherArmy match {
       case GuildArmy(otherTroops) => GuildArmy(troops + otherTroops)
-      case _                      => throw addArmyOfDifferentTypeException
+      case _                      => throw AddArmyOfDifferentTypeException
     }
   }
 
@@ -123,7 +124,7 @@ object army {
     override def +(otherArmy: Army): BeneGesseritArmy = otherArmy match {
       case BeneGesseritArmy(otherFighters, otherAdvisors) =>
         BeneGesseritArmy(fighters + otherFighters, advisors + otherAdvisors)
-      case _ => throw addArmyOfDifferentTypeException
+      case _ => throw AddArmyOfDifferentTypeException
     }
   }
 }

@@ -31,12 +31,11 @@ object choam_charity_phase {
   private val charitySpice = Spice(2)
 
   private def claimConditionaly(tableState: TableState): ((Faction, BotInterface)) => (Faction, (Spice, BotInterface)) = {
-    case (faction, bot) => {
+    case (faction, bot) =>
       val spice = tableState.factionSpice.factionToSpice(faction)
       lazy val wantsToClaim = bot.claimChoamCharity(tableState.view(faction))
       if (spice < spiceLimit && wantsToClaim.value) (faction, (charitySpice, wantsToClaim.newBot))
       else  (faction, (spice, bot))
-    }
   }
 
 }

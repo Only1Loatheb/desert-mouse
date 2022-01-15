@@ -25,18 +25,23 @@ object treachery_deck {
   case object TruthTrance extends TreacheryCard
   case object CheapHero extends TreacheryCard
 
+  final case class DrawResult(newTreacheryDeck: TreacheryDeck, drawnCards: List[TreacheryCard])
+
   // todo implement Deck Typeclass
   final case class TreacheryDeck(cards: List[TreacheryCard]) {
-    def drawCards(count: Int): (TreacheryDeck, List[TreacheryCard]) = {
-      val haveCards = cards.length >= count
-      if (haveCards) (TreacheryDeck(cards.drop(count)), cards.take(count))
-      else (TreacheryDeck(cards), List())
+    def drawCards(requestedCards: Int): DrawResult = {
+      val drawnCard = requestedCards.min(cards.length)
+
+      DrawResult(
+        newTreacheryDeck = TreacheryDeck(cards.drop(drawnCard)),
+        drawnCards = cards.take(drawnCard)
+      )
     }
   }
 
   object TreacheryDeck {
     // 33 cards in original game
-    val cards: List[TreacheryCard] = (
+    val allTreacheryCards: List[TreacheryCard] = (
       Lasgun
       :: FamilyAtomics
       :: Harj
@@ -53,7 +58,7 @@ object treachery_deck {
     )
 
     def shuffledTreacheryDeck: TreacheryDeck = {
-      TreacheryDeck(Random.shuffle(cards))
+      TreacheryDeck(Random.shuffle(allTreacheryCards))
     } 
   }
 }

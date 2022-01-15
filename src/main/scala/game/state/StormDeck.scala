@@ -17,9 +17,9 @@ object storm_deck {
     }
   }
 
-  val cards: List[StormCard] = (1 to 6).toList map StormCard
+  val allStormCards: List[StormCard] = (1 to 6).toList map StormCard
 
-  private val shuffleCards = Random.shuffle(cards)
+  private val shuffleCards = Random.shuffle(allStormCards)
 
   object StormDeck {
 

@@ -9,9 +9,9 @@ import game.state.spice.SpiceOnDune._
 object spice {
 
   final case class Spice(spice: Int) extends AnyVal {
-    def +(s: Spice): Spice = new Spice(spice + s.spice)
+    def +(s: Spice): Spice = Spice(spice + s.spice)
     
-    def -(s: Spice): Spice = new Spice(spice - s.spice)
+    def -(s: Spice): Spice = Spice(spice - s.spice)
 
     def <(s: Spice): Boolean = spice < s.spice
   }

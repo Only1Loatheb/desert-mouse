@@ -44,12 +44,12 @@ object spice_deck {
     HabbanyaRidgeFlat
   )
 
-  val cards: List[SpiceCard] = (
+  val allSpiceCards: List[SpiceCard] = (
     List.fill(6)(ShaiHulud)
       ++ territoriesWithSpiceBlows.map(SpiceBlow)
   )
-  
-  private def shuffleCards = Random.shuffle(cards)
+
+  private def shuffleCards = Random.shuffle(allSpiceCards)
 
   object SpiceDeck {
 
