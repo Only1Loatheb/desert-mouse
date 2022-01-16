@@ -8,7 +8,7 @@ import game.state.spice_deck.SpiceDeck
 import game.state.storm_deck.StormDeck
 import game.state.tleilaxu_tanks.TleilaxuTanks
 import game.state.reserves.Reserves
-import game.state.players_circles.FactionCircles
+import game.state.faction_circles.FactionCircles
 import game.state.faction_spice.FactionSpice
 import game.state.traitors.{Traitors, AllTraitors}
 import game.state.traitor_deck.getTraitorCandidates
@@ -34,7 +34,7 @@ object table_state {
     stormDeck: StormDeck,
     tleilaxuTanks: TleilaxuTanks,
     reserves: Reserves,
-    players: FactionCircles,
+    factionCircles: FactionCircles,
     factionSpice: FactionSpice,
     traitors: Traitors,
     stormSector: Sector,
@@ -44,30 +44,32 @@ object table_state {
     treacheryCards: TreacheryCards,
     strongholdsControlled: StrongholdsControlled,
   ) {
-    def view(faction: Faction) = { // todo use this in choam
+    def view(playedFaction: Faction): TableStateView = { // todo use this in choam
       TableStateView(
+        playedFaction,
         turn,
         spiceOnDune,
         armiesOnDune,
         tleilaxuTanks,
         reserves,
-        players,
-        factionSpice.factionToSpice(faction),
+        factionCircles,
+        factionSpice.factionToSpice(playedFaction),
         traitors match {
-          case AllTraitors(traitors) => Left(traitors) 
-          case SelectedTraitors(traitors) => Right(traitors(faction))
+          case AllTraitors(traitors) => Left(traitors)
+          case SelectedTraitors(traitors) => Right(traitors(playedFaction))
         },
         stormSector,
         kwisatzHaderachCounter,
         isShieldWallDestroyed,
         turnState,
-        treacheryCards.factionToCards(faction),
+        treacheryCards.factionToCards(playedFaction),
         strongholdsControlled
       )
     }
   }
 
   final case class TableStateView(
+    playedFaction: Faction,
     turn: TurnCounter,
     spiceOnDune: SpiceOnDune,
     armiesOnDune: ArmiesOnDune,

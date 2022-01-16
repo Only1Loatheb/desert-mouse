@@ -1,47 +1,81 @@
-// package game.turn.phase
+ package game.turn.phase
 
-// import scala.annotation.tailrec
-// import scala.annotation.nowarn
-// import eu.timepit.refined.types.numeric.PosInt
+ import game.player.player.{Player, PlayerDecision, RevivalDecision}
+ import game.state.army._
+ import game.state.faction.Faction
+ import game.state.faction_spice.FactionSpice
+ import game.state.reserves.Reserves
+ import game.state.spice.Spice
+ import game.state.table_state.TableState
+ import game.turn.phase.phase.Phase
+ import utils.map.MapImprovements
 
-// import game.turn.phase.phase.Phase
-// import game.state.faction.Faction
-// import game.state.faction
-// import game.state.treachery_deck.TreacheryCard
-// import game.state.faction_spice.FactionSpice
-// import game.state.treachery_cards.TreacheryCards
-// import game.bot_interface.base.Bots
-// import game.turn.phase.phase.Phase
-// import game.state.faction_spice
-// import game.state.faction.Faction
-// import game.bot_interface.base.BotInterface
-// import game.state.table_state.TableState
-// import game.bot_interface.base
-// import game.state.army.Army
 
-// object revival_phase {
+ object revival_phase {
 
-//   val revivalPhase: Phase = gameState => {
+   type PlayerRevivalDecision = PlayerDecision[RevivalDecision]
 
-//     val revivalDecisions = gameState.bots
-//       .map(getReviveArmyDecisions(gameState.tableState))
+   val revivalPhase: Phase = gameState => {
 
-//     val newFactionToSpice = revivalDecisions
-//       .map { case (faction, update) => faction -> update._1 }
+     val tableState = gameState.tableState
 
-//     val newFactionToBots = revivalDecisions
-//       .map { case (faction, update) => faction -> update._2 }
+     val revivalDecisions = gameState.players
+       .map(getReviveArmyDecisions(gameState.tableState))
 
-//     val newTableState = gameState.tableState
-//       .copy(factionSpice = faction_spice.FactionSpice(newFactionToSpice))
-//     gameState.copy(tableState = newTableState, bots = newFactionToBots)
-//   }
+     val reservesUpdate = revivalDecisions
+       .flatMap { case (faction, update: PlayerRevivalDecision) => update.decision.maybeArmy.map(faction -> _) }
 
-//   type RevivalDecision = base.BotDecision[Option[Army]]
+     val newReserves = Reserves(
+       tableState.reserves.armies.unionWith(_ + _)(reservesUpdate)
+     )
 
-//   @inline
-//   private final def getReviveArmyDecisions(tableState: TableState): ((Faction, BotInterface)) => (Faction, RevivalDecision) = {
-//     case (faction, bot) => (faction, bot.reviveArmy(tableState.view(faction)))
-//   }
+     val newFactionSpice = getNewFactionToSpice(tableState, revivalDecisions)
 
-// }
+     val newFactionToPlayers = revivalDecisions
+       .map { case (faction, update: PlayerRevivalDecision) => faction -> update.newPlayer }
+
+     val newTableState = gameState.tableState
+       .copy(factionSpice = newFactionSpice, reserves = newReserves)
+
+     gameState.copy(tableState = newTableState, players = newFactionToPlayers)
+   }
+
+   private def getNewFactionToSpice(tableState: TableState, revivalDecisions: Map[Faction, PlayerRevivalDecision]) = {
+
+     val factionToSpiceUpdate = revivalDecisions
+       .view.mapValues { revival =>
+         val decision = revival.decision
+         val leaderCost = decision.maybeLeader.map(_.force).fold(Spice(0))(Spice)
+         val armyCost = decision.maybeArmy.map(getArmyCost).getOrElse(Spice(0))
+         leaderCost + armyCost
+       }
+       .toMap
+       .filter(_._2 != Spice(0))
+
+     FactionSpice(
+       tableState.factionSpice.factionToSpice
+         .unionWith(_ - _)(factionToSpiceUpdate)
+     )
+   }
+
+   private val getArmyCost: Army => Spice = army => Spice (
+     (army.normalTroops + army.specialTroops - freeRevivalArmyCount(army))
+       .max(0)
+   )
+
+   private val freeRevivalArmyCount: Army => Int = {
+     case _: AtreidesArmy => 2
+     case _: HarkonnenArmy => 2
+     case _: FremenArmy => 3
+     case _: EmperorArmy => 1
+     case _: GuildArmy => 1
+     case _: BeneGesseritArmy => 1
+   }
+
+   // fixme check if decision is valid
+   @inline
+   private final def getReviveArmyDecisions(tableState: TableState): ((Faction, Player)) => (Faction, PlayerRevivalDecision) = {
+     case (faction, player) => (faction, player.reviveArmyAndLeader(tableState.view(faction)))
+   }
+
+ }

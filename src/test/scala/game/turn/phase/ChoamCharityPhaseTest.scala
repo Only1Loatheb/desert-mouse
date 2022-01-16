@@ -1,26 +1,25 @@
 package game.turn.phase
 
-import org.scalatest.FunSuite
 import eu.timepit.refined._
 import eu.timepit.refined.collection._
-
+import game.player.player
+import game.player.player.{RevivalDecision, ShipmentDestination}
 import game.state.faction._
+import game.state.faction_spice.FactionSpice
 import game.state.present_factions.PresentFactions
-import game.state.table_state.TableState
-import game.state.{army, dune_map, sector, table_state, leaders, traitor_deck}
 import game.state.spice.Spice
-
-import game.turn.phase.phase.GameState
-import game.bot_interface.base
+import game.state.table_state.TableState
+import game.state.{leaders, table_state, traitor_deck}
 import game.turn.movement
 import game.turn.phase.choam_charity_phase.choamCharityPhase
-import game.state.faction_spice.FactionSpice
+import game.turn.phase.phase.GameState
+import org.scalatest.FunSuite
 
 
 class ChoamCharityPhaseTest extends FunSuite {
   test("isItRealyClaimed") {
     val presentFactions: PresentFactions =
-      (refineV[MinSize[2]](Set(Atreides, Harkonnen))).toOption.get
+      refineV[MinSize[2]](Set(Atreides, Harkonnen)).toOption.get
 
     val tableStateWithNoSpice = TableState(presentFactions, 10)
       .copy(factionSpice = FactionSpice(Map(
@@ -36,52 +35,51 @@ class ChoamCharityPhaseTest extends FunSuite {
     assert(newGameState.tableState.factionSpice.factionToSpice(Harkonnen) === Spice(0))
   }
 
-  val claimBot = new base.BotInterface {
+  val claimBot = new player.Player {
 
     override def implementedFactions: Set[Faction] = Set(Atreides, Harkonnen)
 
-    override def firstStormMoveValue: base.BotDecision[Int] = ???
+    override def firstStormMoveValue: player.PlayerDecision[Int] = ???
 
-    override def chooseTraitors(presentFactions: PresentFactions, traitorCandidates: traitor_deck.TraitorCandidates): base.BotDecision[traitor_deck.TraitorCandidates] = ???
+    override def chooseTraitors(presentFactions: PresentFactions, traitorCandidates: traitor_deck.TraitorCandidates): player.PlayerDecision[traitor_deck.TraitorCandidates] = ???
 
-    override def claimChoamCharity(gameStateView: table_state.TableStateView): base.BotDecision[Boolean] = base.BotDecision(this, true)
+    override def claimChoamCharity(gameStateView: table_state.TableStateView): player.PlayerDecision[Boolean] = player.PlayerDecision(this, true)
 
-    override def proposeAlliance(gameStateView: table_state.TableStateView): base.BotDecision[Faction] = ???
+    override def proposeAlliance(gameStateView: table_state.TableStateView): player.PlayerDecision[Faction] = ???
 
-    override def bidTreacheryCard(gameStateView: table_state.TableStateView, otherBids: Map[Faction,Int]): base.BotDecision[Option[Int]] = ???
+    override def bidTreacheryCard(gameStateView: table_state.TableStateView, otherBids: Map[Faction,Int]): player.PlayerDecision[Option[Int]] = ???
 
-    override def reviveArmy(gameStateView: table_state.TableStateView): base.BotDecision[Option[army.Army]] = ???
+    override def reviveArmyAndLeader(gameStateView: table_state.TableStateView): player.PlayerDecision[RevivalDecision] = ???
 
-    override def reviveLeader(gameStateView: table_state.TableStateView): base.BotDecision[Option[leaders.Leader]] = ???
+    override def reviveLeader(gameStateView: table_state.TableStateView): player.PlayerDecision[Option[leaders.Leader]] = ???
 
-    override def moveArmy(gameStateView: table_state.TableStateView): base.BotDecision[Option[movement.MoveDescriptor]] = ???
+    override def moveArmy(gameStateView: table_state.TableStateView): player.PlayerDecision[Option[movement.MoveDescriptor]] = ???
 
-    override def shipArmy(gameStateView: table_state.TableStateView): base.BotDecision[Option[(army.Army, dune_map.Territory, sector.Sector)]] = ???
+    override def shipArmy(gameStateView: table_state.TableStateView): player.PlayerDecision[Option[ShipmentDestination]] = ???
 
 
   }
 
-    val refuseBot = new base.BotInterface {
+    val refuseBot = new player.Player {
 
       override def implementedFactions: Set[Faction] = Set(Atreides, Harkonnen)
 
-      override def firstStormMoveValue: base.BotDecision[Int] = ???
+      override def firstStormMoveValue: player.PlayerDecision[Int] = ???
 
-      override def chooseTraitors(presentFactions: PresentFactions, traitorCandidates: traitor_deck.TraitorCandidates): base.BotDecision[traitor_deck.TraitorCandidates] = ???
+      override def chooseTraitors(presentFactions: PresentFactions, traitorCandidates: traitor_deck.TraitorCandidates): player.PlayerDecision[traitor_deck.TraitorCandidates] = ???
 
-      override def claimChoamCharity(gameStateView: table_state.TableStateView): base.BotDecision[Boolean] = base.BotDecision(this, false)
+      override def claimChoamCharity(gameStateView: table_state.TableStateView): player.PlayerDecision[Boolean] = player.PlayerDecision(this, false)
 
-      override def proposeAlliance(gameStateView: table_state.TableStateView): base.BotDecision[Faction] = ???
+      override def proposeAlliance(gameStateView: table_state.TableStateView): player.PlayerDecision[Faction] = ???
 
-      override def bidTreacheryCard(gameStateView: table_state.TableStateView, otherBids: Map[Faction,Int]): base.BotDecision[Option[Int]] = ???
+      override def bidTreacheryCard(gameStateView: table_state.TableStateView, otherBids: Map[Faction,Int]): player.PlayerDecision[Option[Int]] = ???
 
-      override def reviveArmy(gameStateView: table_state.TableStateView): base.BotDecision[Option[army.Army]] = ???
+      override def reviveArmyAndLeader(gameStateView: table_state.TableStateView): player.PlayerDecision[RevivalDecision] = ???
 
-      override def reviveLeader(gameStateView: table_state.TableStateView): base.BotDecision[Option[leaders.Leader]] = ???
+      override def reviveLeader(gameStateView: table_state.TableStateView): player.PlayerDecision[Option[leaders.Leader]] = ???
 
-      override def moveArmy(gameStateView: table_state.TableStateView): base.BotDecision[Option[movement.MoveDescriptor]] = ???
+      override def moveArmy(gameStateView: table_state.TableStateView): player.PlayerDecision[Option[movement.MoveDescriptor]] = ???
 
-      override def shipArmy(gameStateView: table_state.TableStateView): base.BotDecision[Option[(army.Army, dune_map.Territory, sector.Sector)]] = ???
-
+      override def shipArmy(gameStateView: table_state.TableStateView): player.PlayerDecision[Option[ShipmentDestination]] = ???
   }
 }

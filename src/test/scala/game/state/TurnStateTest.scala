@@ -22,7 +22,7 @@ class TurnStateTest extends FunSuite {
 
   test("turn_state.getPlayersOrder.worksForAllCircles") {
     val stormSector = Sector10
-    val factionCircles = players_circles.FactionCircles(Map(
+    val factionCircles = faction_circles.FactionCircles(Map(
       Sector1 -> Harkonnen,
       Sector4 -> Fremen,
       Sector7 -> Atreides,
@@ -37,7 +37,7 @@ class TurnStateTest extends FunSuite {
 
     test("turn_state.getPlayersOrder.worksForTwoCircles") {
     val stormSector = Sector10
-    val factionCircles = players_circles.FactionCircles(Map(
+    val factionCircles = faction_circles.FactionCircles(Map(
       Sector1 -> Harkonnen,
       Sector4 -> Fremen,
     ))

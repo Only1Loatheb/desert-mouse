@@ -1,7 +1,7 @@
 package game.state
 
 import game.state.faction.Faction
-import game.state.players_circles.FactionCircles
+import game.state.faction_circles.FactionCircles
 import game.state.sector.{Sector, numberOfSectors}
 
 object turn_state {

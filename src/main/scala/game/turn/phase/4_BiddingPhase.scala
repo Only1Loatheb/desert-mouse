@@ -10,7 +10,7 @@ import game.state.faction_spice.FactionSpice
 import game.state.treachery_cards.TreacheryCards
 import game.state.spice.Spice
 import game.turn.phase.phase.Phase
-import game.bot_interface.base.Bots
+import game.player.player.Players
 
 
 object bidding_phase {
@@ -30,12 +30,12 @@ object bidding_phase {
     val factionOrder = gameState.tableState.turnState.factionInitiative
       .filter(biddingFactions.contains)
 
-    val (newFactionToSpice, newFactionTrecheryCards, newBots) = bidding(
+    val (newFactionToSpice, newFactionTrecheryCards, newPlayers) = bidding(
       factionOrder,
       drawnCards,
       gameState.tableState.factionSpice.factionToSpice,
       factionToCards,
-      gameState.bots
+      gameState.players
     )
 
     val newTableState = gameState.tableState.copy(
@@ -43,20 +43,20 @@ object bidding_phase {
       factionSpice = FactionSpice(newFactionToSpice),
       treacheryCards = TreacheryCards(newFactionTrecheryCards)
     )
-    gameState.copy(tableState = newTableState, bots = newBots)
+    gameState.copy(tableState = newTableState, players = newPlayers)
   }
 
   private def bidding(
-      factionOrder: List[Faction],
-      drawnCards: List[TreacheryCard],
-      factionToSpice: Map[Faction, Spice],
-      factionToCards: Map[Faction, Set[TreacheryCard]],
-      bots: Bots
-  ): (Map[Faction, Spice], Map[Faction, Set[TreacheryCard]], Bots) = {
+    factionOrder: List[Faction],
+    drawnCards: List[TreacheryCard],
+    factionToSpice: Map[Faction, Spice],
+    factionToCards: Map[Faction, Set[TreacheryCard]],
+    players: Players
+  ): (Map[Faction, Spice], Map[Faction, Set[TreacheryCard]], Players) = {
 
     val factionOrderCycle: LazyList[Faction] = LazyList.continually(factionOrder).flatten
 
-    drawnCards.foldLeft((factionToSpice, factionToCards, bots)) {
+    drawnCards.foldLeft((factionToSpice, factionToCards, players)) {
       case ((factionToSpice, factionToCards, bots), drawnCard) =>
         biddingNextCard(factionOrderCycle)(factionToSpice, factionToCards, bots, drawnCard)
     }
@@ -66,29 +66,29 @@ object bidding_phase {
   private def biddingNextCard(
       factionOrderCycle: LazyList[Faction]
   )(
-      factionToSpice: Map[Faction, Spice],
-      factionToCards: Map[Faction, Set[TreacheryCard]],
-      bots: Bots,
-      drawnCard: TreacheryCard
-  ): (Map[Faction, Spice], Map[Faction, Set[TreacheryCard]], Bots) = {
+     factionToSpice: Map[Faction, Spice],
+     factionToCards: Map[Faction, Set[TreacheryCard]],
+     players: Players,
+     drawnCard: TreacheryCard
+  ): (Map[Faction, Spice], Map[Faction, Set[TreacheryCard]], Players) = {
 
     biddingAskNext(
       factionOrderCycle,
       drawnCard,
       factionToSpice,
-      bots,
+      players,
       0
     )
   }
 
   @tailrec
   private def biddingAskNext(
-      factionOrderCycle: LazyList[Faction],
-      drawnCard: TreacheryCard,
-      factionToSpice: Map[Faction, Spice],
-      bots: Bots,
-      consecutivePassCount: Int
-  ): (Map[Faction, Spice], Map[Faction, Set[TreacheryCard]], Bots) = {
+                              factionOrderCycle: LazyList[Faction],
+                              drawnCard: TreacheryCard,
+                              factionToSpice: Map[Faction, Spice],
+                              bots: Players,
+                              consecutivePassCount: Int
+  ): (Map[Faction, Spice], Map[Faction, Set[TreacheryCard]], Players) = {
 
     biddingAskNext(
       factionOrderCycle,

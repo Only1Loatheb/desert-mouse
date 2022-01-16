@@ -36,13 +36,13 @@ object spice_collection_phase {
     gameState.copy(tableState = newTableState)
   }
 
-  type TerritoryToSpice = Map[Territory, Spice]
-  type SpiceCollected = Map[Faction, Spice]
-  final case class FactionCollectedSpice(faction: Faction, collectedSpice: Spice) {
+  private type TerritoryToSpice = Map[Territory, Spice]
+  private type SpiceCollected = Map[Faction, Spice]
+  private final case class FactionCollectedSpice(faction: Faction, collectedSpice: Spice) {
     def unapply = (faction, collectedSpice)
   }
-  type FactionCollectionRate = Faction => Spice
-  final case class SpiceCollectedByFaction(collectedSpice: Map[Faction, Spice])
+  private type FactionCollectionRate = Faction => Spice
+  private[phase] final case class SpiceCollectedByFaction(collectedSpice: Map[Faction, Spice])
 
   /** Calculates amounts of spice left on Dune and amounts of spice collected by each player. During
     * collection faze of the game there is only one army per territory exception being Advisors.
@@ -111,7 +111,7 @@ object spice_collection_phase {
     FactionCollectedSpice(armyFaction, collectedSpice)
   }
 
-  def getCollectedSpiceByFaction(
+  private def getCollectedSpiceByFaction(
       territoryToCollectedSpice: Map[Territory, FactionCollectedSpice]
   ): SpiceCollected = {
     territoryToCollectedSpice

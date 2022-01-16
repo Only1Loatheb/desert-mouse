@@ -2,6 +2,7 @@ package game.turn.phase
 
 import game.turn.phase.phase.Phase
 import game.state.armies_on_dune.ArmiesOnDune
+import game.state.faction.Faction
 import game.state.strongholds_controlled._
 
 object mentat_pause_phase {
@@ -16,6 +17,7 @@ object mentat_pause_phase {
     gameState.copy(tableState = newTableState)
   }
 
+  private final case class FactionControllingTerritory(faction: Faction, territory: StrongholdTerritory)
 
   private def getNewStrongholdsControlled(armiesOnDune: ArmiesOnDune): StrongholdsControlled = {
     val armies = armiesOnDune.armies
@@ -25,9 +27,9 @@ object mentat_pause_phase {
           .get(territory)
           .flatMap(_.get(strongholdSector(territory)))
           .flatMap(_.filterNot(_.isOnlyAdvisor).headOption.map(_.faction))
-          .map((_, territory))
+          .map(FactionControllingTerritory(_, territory))
       }
-      .groupMapReduce(_._1)(factionAndTerritory => Set(factionAndTerritory._2))(_.union(_))
+      .groupMapReduce(_.faction)(factionAndTerritory => Set(factionAndTerritory.territory))(_.union(_))
 
     StrongholdsControlled(factionToOccupiedStrongholds)
   }

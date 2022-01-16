@@ -16,7 +16,7 @@ object storm_phase {
     val tableState = gameState.tableState
     val (newStormDeck, newStormSector) = newStorm(tableState)
     val (newSpiceOnDune, newArmiesOnDune) = affectWithStorm(tableState, newStormSector)
-    val newPlayersOrder = getPlayersOrder(newStormSector, tableState.players)
+    val newPlayersOrder = getPlayersOrder(newStormSector, tableState.factionCircles)
     val newTurnState = tableState.turnState.copy(factionInitiative = newPlayersOrder)
     val newTableState = tableState.copy(
       stormSector = newStormSector,
