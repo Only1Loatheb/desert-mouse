@@ -1,8 +1,6 @@
 package game.turn
 
-import org.scalatest.FunSuite
-
-import eu.timepit.refined.auto._
+import org.scalatest.flatspec.AnyFlatSpec
 
 import game.state.dune_map._
 import game.state.sector._
@@ -11,8 +9,8 @@ import game.state.army._
 
 import game.turn.movement._
 
-class MovementTest extends FunSuite {
-  test("movement.isMoveAllowed.simpleMove") {
+class MovementTest extends AnyFlatSpec {
+  "movement.isMoveAllowed.simpleMove" should "" in {
     val stormSector = Sector10
     val territoryFrom = Meridan
     val sectorFrom = Sector0
@@ -30,7 +28,7 @@ class MovementTest extends FunSuite {
     )
   }
 
-  test("movement.isMoveAllowed.canMoveArmyFromOneTerritoryButTwoSectors") {
+  "movement.isMoveAllowed.canMoveArmyFromOneTerritoryButTwoSectors" should "" in {
     val stormSector = Sector10
     val territoryFrom = FalseWallSouth
     val sectorFrom0 = Sector3
@@ -49,7 +47,7 @@ class MovementTest extends FunSuite {
     )
   }
 
-  test("movement.isMoveAllowed.canNotMoveWhenDoesNotHaveArmy") {
+  "movement.isMoveAllowed.canNotMoveWhenDoesNotHaveArmy" should "" in {
     val stormSector = Sector10
     val territoryFrom = Meridan
     val sectorFrom = Sector0
@@ -67,7 +65,7 @@ class MovementTest extends FunSuite {
     )
   }
 
-    test("movement.isMoveAllowed.moveHasToSelectUnits") {
+    "movement.isMoveAllowed.moveHasToSelectUnits" should "" in {
     val stormSector = Sector10
     val territoryFrom = Meridan
     val territoryTo = CielagoWest
@@ -83,7 +81,7 @@ class MovementTest extends FunSuite {
     )
   }
 
-  test("movement.isMoveAllowed.canMoveWhenOneOtherArmyInStronghold") {
+  "movement.isMoveAllowed.canMoveWhenOneOtherArmyInStronghold" should "" in {
     val stormSector = Sector10
     val territoryFrom = OldGap
     val sectorFrom = Sector9
@@ -106,7 +104,7 @@ class MovementTest extends FunSuite {
     )
   }
 
-  test("movement.isMoveAllowed.canNotMoveWhenTwoOtherArmiesInStronghold") {
+  "movement.isMoveAllowed.canNotMoveWhenTwoOtherArmiesInStronghold" should "" in {
     val stormSector = Sector10
     val territoryFrom = OldGap
     val sectorFrom = Sector9
@@ -129,7 +127,7 @@ class MovementTest extends FunSuite {
     )
   }
 
-  test("movement.isMoveAllowed.canMoveWhenTwoOtherArmiesInStrongholdButOneIsAdvisor") {
+  "movement.isMoveAllowed.canMoveWhenTwoOtherArmiesInStrongholdButOneIsAdvisor" should "" in {
     val stormSector = Sector10
     val territoryFrom = OldGap
     val sectorFrom = Sector9
@@ -152,7 +150,7 @@ class MovementTest extends FunSuite {
     )
   }
 
-  test("movement.isMoveAllowed.canMoveWhenTwoOtherArmiesInStrongholdButOneIsAllay") {
+  "movement.isMoveAllowed.canMoveWhenTwoOtherArmiesInStrongholdButOneIsAllay" should "" in {
     val stormSector = Sector10
     val territoryFrom = OldGap
     val sectorFrom = Sector9
@@ -175,7 +173,7 @@ class MovementTest extends FunSuite {
     )
   }
   
-  test("movement.isMoveAllowed.canMoveToPolarSink") {
+  "movement.isMoveAllowed.canMoveToPolarSink" should "" in {
     val stormSector = Sector10
     val territoryFrom = BlightOfTheCliff
     val sectorFrom = Sector13
@@ -197,7 +195,7 @@ class MovementTest extends FunSuite {
     )
   }
 
-  test("movement.isMoveAllowed.advisorsCanNotBlock") {
+  "movement.isMoveAllowed.advisorsCanNotBlock" should "" in {
     val stormSector = Sector10
     val territoryFrom = OldGap
     val sectorFrom = Sector9
@@ -220,7 +218,7 @@ class MovementTest extends FunSuite {
     )
   }
 
-  test("movement.isMoveAllowed.canMoveWhenTwoOtherArmiesOnSand") {
+  "movement.isMoveAllowed.canMoveWhenTwoOtherArmiesOnSand" should "" in {
     val stormSector = Sector10
     val territoryFrom = Arrakeen
     val sectorFrom = Sector9
@@ -243,7 +241,7 @@ class MovementTest extends FunSuite {
     )
   }
 
-  test("movement.isMoveAllowed.canNotMoveOneTerritoryWhenStormIsBlocking") {
+  "movement.isMoveAllowed.canNotMoveOneTerritoryWhenStormIsBlocking" should "" in {
     val stormSector = Sector2
     val territoryFrom = CielagoDepression
     val sectorFrom = Sector1
@@ -261,7 +259,7 @@ class MovementTest extends FunSuite {
     )
   }
 
-  test("movement.isMoveAllowed.canNotMoveWhenStormIsBlockingPartOfTheArmy") {
+  "movement.isMoveAllowed.canNotMoveWhenStormIsBlockingPartOfTheArmy" should "" in {
     val stormSector = Sector3
     val territoryFrom = FalseWallSouth
     val sectorFrom0 = Sector3
@@ -280,7 +278,7 @@ class MovementTest extends FunSuite {
     )
   }
 
-  test("movement.isMoveAllowed.canNotMoveTwoTerritoriesWithoutOrnithopters") {
+  "movement.isMoveAllowed.canNotMoveTwoTerritoriesWithoutOrnithopters" should "" in {
     val stormSector = Sector7
     val territoryFrom = CielagoDepression
     val sectorFrom = Sector1
@@ -302,7 +300,7 @@ class MovementTest extends FunSuite {
     )
   }
 
-  test("movement.isMoveAllowed.canMoveTwoTerritoriesWithOrnithopters") {
+  "movement.isMoveAllowed.canMoveTwoTerritoriesWithOrnithopters" should "" in {
     val stormSector = Sector7
     val territoryFrom = CielagoDepression
     val sectorFrom = Sector1
@@ -324,7 +322,7 @@ class MovementTest extends FunSuite {
     )
   }
 
-  test("movement.isMoveAllowed.canMoveFromBlightOfTheCliffToPolarSinkWithOrnithopters") {
+  "movement.isMoveAllowed.canMoveFromBlightOfTheCliffToPolarSinkWithOrnithopters" should "" in {
     val stormSector = Sector7
     val territoryFrom = CielagoDepression
     val sectorFrom = Sector1
@@ -346,7 +344,7 @@ class MovementTest extends FunSuite {
     )
   }
 
-  test("movement.isMoveAllowed.canNotMoveWithOrnithoptersWhenStormIsBlocking") {
+  "movement.isMoveAllowed.canNotMoveWithOrnithoptersWhenStormIsBlocking" should "" in {
     val stormSector = Sector2
     val territoryFrom = CielagoSouth
     val sectorFrom = Sector1

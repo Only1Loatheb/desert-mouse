@@ -1,26 +1,26 @@
 package game.state
 
-import org.scalatest.FunSuite
+import org.scalatest.flatspec.AnyFlatSpec
 import game.state.treachery_deck.{DrawResult, TreacheryDeck}
 
-class TreacheryDeckTest extends FunSuite {
-  test("TreacheryDeck.cards.length") {
+class TreacheryDeckTest extends AnyFlatSpec {
+  "TreacheryDeck.cards.length" should "" in {
     assert(TreacheryDeck.allTreacheryCards.length === 33)
     assert(TreacheryDeck.shuffledTreacheryDeck.cards.length === 33)
   }
 
-  test("TreacheryDeck.cards.drawFromEmpty") {
+  "TreacheryDeck.cards.drawFromEmpty" should "" in {
     val emptyTreacheryDeck = TreacheryDeck(List.empty)
     assert(emptyTreacheryDeck.drawCards(1) === DrawResult(emptyTreacheryDeck, List.empty))
   }
 
-  test("TreacheryDeck.cards.requestMoreThenThereIs") {
+  "TreacheryDeck.cards.requestMoreThenThereIs" should "" in {
     val treacheryDeck = TreacheryDeck(TreacheryDeck.allTreacheryCards.take(5))
     val emptyTreacheryDeck = TreacheryDeck(List.empty)
     assert(treacheryDeck.drawCards(6) === DrawResult(emptyTreacheryDeck, treacheryDeck.cards))
   }
 
-  test("TreacheryDeck.cards.requestLessThenThereIs") {
+  "TreacheryDeck.cards.requestLessThenThereIs" should "" in {
     val treacheryDeck = TreacheryDeck(TreacheryDeck.allTreacheryCards.take(5))
     val requestedCards = 3
     assert(treacheryDeck.drawCards(requestedCards) ===

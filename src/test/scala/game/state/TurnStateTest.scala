@@ -1,26 +1,26 @@
 package game.state
 
-import org.scalatest.FunSuite
+import org.scalatest.flatspec.AnyFlatSpec
 
 import game.state.sector._
 import game.state.faction._
 
-class TurnStateTest extends FunSuite {
-  test("turn_state.tieWinner.isFirstArg") {
+class TurnStateTest extends AnyFlatSpec {
+  "turn_state.tieWinner.isFirstArg" should "" in {
     val factions = turn_state.TurnState(List(Harkonnen, Fremen, BeneGesserit))
     assert(
       factions.tieWinner(Harkonnen, Fremen) == Harkonnen
     )
   }
 
-  test("turn_state.tieWinner.isSndArg") {
+  "turn_state.tieWinner.isSndArg" should "" in {
     val factions = turn_state.TurnState(List(Harkonnen, Fremen, BeneGesserit))
     assert(
       factions.tieWinner(Fremen, Harkonnen) == Harkonnen
     )
   }
 
-  test("turn_state.getPlayersOrder.worksForAllCircles") {
+  "turn_state.getPlayersOrder.worksForAllCircles" should "" in {
     val stormSector = Sector10
     val factionCircles = faction_circles.FactionCircles(Map(
       Sector1 -> Harkonnen,
@@ -35,7 +35,7 @@ class TurnStateTest extends FunSuite {
     )
   }
 
-    test("turn_state.getPlayersOrder.worksForTwoCircles") {
+    "turn_state.getPlayersOrder.worksForTwoCircles" should "" in {
     val stormSector = Sector10
     val factionCircles = faction_circles.FactionCircles(Map(
       Sector1 -> Harkonnen,

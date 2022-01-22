@@ -1,7 +1,6 @@
 package game.turn.phase
 
-import org.scalatest.FunSuite
-import eu.timepit.refined.auto._
+import org.scalatest.flatspec.AnyFlatSpec
 
 import game.state.spice.Spice
 import game.state.faction._
@@ -15,14 +14,14 @@ import game.state.spice._
 
 import game.turn.phase.spice_collection_phase._
 
-class SpiceCollectionPhaseTest extends FunSuite {
-  test("SpiceOnDune.collectSpice.spiceSectorsAreOnTheTerritory") {
+class SpiceCollectionPhaseTest extends AnyFlatSpec {
+  "SpiceOnDune.collectSpice.spiceSectorsAreOnTheTerritory" should "" in {
     assert(territoriesWithSpiceBlows.forall( territory =>
       isTerritoryOnThisSector(territory, spiceSector(territory))
     ))
   }
 
-  test("SpiceOnDune.collectSpice.itWorksOnEmptyDune") {
+  "SpiceOnDune.collectSpice.itWorksOnEmptyDune" should "" in {
     val armies = ArmiesOnDune(Map())
     val spice = SpiceOnDune.noSpiceOnDune
     val factionsWithOrnithopters: Set[Faction] = Set()
@@ -32,7 +31,7 @@ class SpiceCollectionPhaseTest extends FunSuite {
     )
   }
 
-  test("SpiceOnDune.collectSpice.advisorsCannotCollectSpice") {
+  "SpiceOnDune.collectSpice.advisorsCannotCollectSpice" should "" in {
     val army = BeneGesseritArmy(0,2)
     val territory = OldGap
     val armies = ArmiesOnDune(Map(
@@ -46,7 +45,7 @@ class SpiceCollectionPhaseTest extends FunSuite {
     )
   }
 
-  test("SpiceOnDune.collectSpice.otherArmyCanCollectSpice") {
+  "SpiceOnDune.collectSpice.otherArmyCanCollectSpice" should "" in {
     val army = HarkonnenArmy(2)
     val territory = OldGap
     val armies = ArmiesOnDune(Map(
@@ -60,7 +59,7 @@ class SpiceCollectionPhaseTest extends FunSuite {
     )
   }
 
-  test("SpiceOnDune.collectSpice.otherArmyCanCollectSpiceIfAccompaniedByAdvisors") {
+  "SpiceOnDune.collectSpice.otherArmyCanCollectSpiceIfAccompaniedByAdvisors" should "" in {
     val army = HarkonnenArmy(2)
     val advisors = BeneGesseritArmy(0,2)
     val territory = OldGap
@@ -75,7 +74,7 @@ class SpiceCollectionPhaseTest extends FunSuite {
     )
   }
 
-  test("SpiceOnDune.collectSpice.multipleArmiesCanCollectSpice") {
+  "SpiceOnDune.collectSpice.multipleArmiesCanCollectSpice" should "" in {
     val army1 = HarkonnenArmy(2)
     val army2 = HarkonnenArmy(2)
     val territory1 = OldGap
@@ -92,7 +91,7 @@ class SpiceCollectionPhaseTest extends FunSuite {
     )
   }
 
-  test("SpiceOnDune.collectSpice.differentArmiesCanCollectSpice") {
+  "SpiceOnDune.collectSpice.differentArmiesCanCollectSpice" should "" in {
     val army1 = HarkonnenArmy(2)
     val army2 = FremenArmy(2,0)
     val territory1 = OldGap
@@ -110,7 +109,7 @@ class SpiceCollectionPhaseTest extends FunSuite {
   }
 
 
-  test("SpiceOnDune.collectSpice.nothingIsCollectedWhenThereIsNoSpice") {
+  "SpiceOnDune.collectSpice.nothingIsCollectedWhenThereIsNoSpice" should "" in {
     val army1 = HarkonnenArmy(2)
     val army2 = FremenArmy(2,0)
     val territory1 = OldGap
@@ -127,7 +126,7 @@ class SpiceCollectionPhaseTest extends FunSuite {
     )
   }
 
-  test("SpiceOnDune.collectSpice.spiceIsLeftIfThereIsNoArmyOnTheSector") {
+  "SpiceOnDune.collectSpice.spiceIsLeftIfThereIsNoArmyOnTheSector" should "" in {
     val army = HarkonnenArmy(2)
     val armyTerritory = OldGap
     val spiceTerritory = TheGreatFlat
@@ -142,7 +141,7 @@ class SpiceCollectionPhaseTest extends FunSuite {
     )
   }
 
-  test("SpiceOnDune.collectSpice.factionsWithOrnithopters.canCollect3SpicePerUnit") {
+  "SpiceOnDune.collectSpice.factionsWithOrnithopters.canCollect3SpicePerUnit" should "" in {
     val army1 = HarkonnenArmy(2)
     val territory1 = OldGap
     val armies = ArmiesOnDune(Map(

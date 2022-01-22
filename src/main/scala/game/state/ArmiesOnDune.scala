@@ -1,7 +1,5 @@
 package game.state
 
-import eu.timepit.refined.auto._
-
 import game.state.dune_map._
 import game.state.sector._
 import game.state.army.Army
@@ -24,7 +22,7 @@ object armies_on_dune {
   )
   object ArmiesOnDune {
     def init(presentFactions: PresentFactions): ArmiesOnDune = {
-      ArmiesOnDune(startingArmies.collect { case (k, v) if presentFactions.contains(k) => v })
+      ArmiesOnDune(startingArmies.collect { case (k, v) if presentFactions.value.contains(k) => v })
     }
   }
 

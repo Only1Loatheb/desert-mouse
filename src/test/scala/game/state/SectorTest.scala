@@ -1,47 +1,47 @@
 package game.state
 
-import org.scalatest.FunSuite
+import org.scalatest.flatspec.AnyFlatSpec
 
 import game.state.sector._
 
-class SectorTest extends FunSuite {
-  test("Sector.sameSectorsAreEqual") {
+class SectorTest extends AnyFlatSpec {
+  "Sector.sameSectorsAreEqual" should "" in {
     assert(Sector1 === Sector1)
   }
 
-  test("Sector.sectorsTo.isFakePolarSectorNextToOtherSector") {
+  "Sector.sectorsTo.isFakePolarSectorNextToOtherSector" should "" in {
     val otherSector = Sector0
     val polarSector = FakePolarSector
     assert(polarSector.sectorsTo(otherSector) == Set(polarSector, otherSector))
   }
 
-  test("Sector.sectorsTo.isOtherSectorNextToFakePolarSector") {
+  "Sector.sectorsTo.isOtherSectorNextToFakePolarSector" should "" in {
     val otherSector = Sector0
     val polarSector = FakePolarSector
     assert(otherSector.sectorsTo(polarSector) == Set(otherSector, polarSector))
   }
 
-  test("Sector.sectorsTo.isSector0NextToSector1") {
+  "Sector.sectorsTo.isSector0NextToSector1" should "" in {
     assert(Sector0.sectorsTo(Sector1) == Set(Sector0, Sector1))
   }
 
-  test("Sector.sectorsTo.isSector1NextToSector0") {
+  "Sector.sectorsTo.isSector1NextToSector0" should "" in {
     assert(Sector1.sectorsTo(Sector0) == Set(Sector0, Sector1))
   }
 
-  test("Sector.sectorsTo.isSector0NextToSector17") {
+  "Sector.sectorsTo.isSector0NextToSector17" should "" in {
     assert(Sector0.sectorsTo(Sector17) == Set(Sector0, Sector17))
   }
 
-  test("Sector.sectorsTo.isSector17NextToSector0") {
+  "Sector.sectorsTo.isSector17NextToSector0" should "" in {
     assert(Sector17.sectorsTo(Sector0) == Set(Sector0, Sector17))
   }
 
-  test("Sector.sectorsTo.threeSectorsSpan") {
+  "Sector.sectorsTo.threeSectorsSpan" should "" in {
     assert(Sector0.sectorsTo(Sector2) == Set(Sector0, Sector1, Sector2))
   }
 
-  test("Sector.sectorsTo.fromCielagoNorthToHargPass") {
+  "Sector.sectorsTo.fromCielagoNorthToHargPass" should "" in {
     assert(Sector0.sectorsTo(Sector4) == Set(
         Sector0
       , Sector1
@@ -51,7 +51,7 @@ class SectorTest extends FunSuite {
       ))
   }
 
-  test("Sector.sectorsTo.fromHargPassToFalseWallEast") {
+  "Sector.sectorsTo.fromHargPassToFalseWallEast" should "" in {
     assert(Sector3.sectorsTo(Sector8) == Set(
         Sector3
       , Sector4
@@ -62,7 +62,7 @@ class SectorTest extends FunSuite {
       ))
   }
 
-  test("Sector.sectorsTo.fromFalseWallEastToImperialBasin") {
+  "Sector.sectorsTo.fromFalseWallEastToImperialBasin" should "" in {
     assert(Sector4.sectorsTo(Sector10) == Set(
         Sector4
       , Sector5
@@ -74,7 +74,7 @@ class SectorTest extends FunSuite {
       ))
   }
 
-  test("Sector.sectorsTo.fromImperialBasinToArsunt") {
+  "Sector.sectorsTo.fromImperialBasinToArsunt" should "" in {
     assert(Sector8.sectorsTo(Sector11) == Set(
         Sector8
       , Sector9
@@ -83,7 +83,7 @@ class SectorTest extends FunSuite {
       ))
   }
 
-  test("Sector.sectorsTo.fromHaggaBasinToWindPass") {
+  "Sector.sectorsTo.fromHaggaBasinToWindPass" should "" in {
     assert(Sector12.sectorsTo(Sector16) == Set(
         Sector12
       , Sector13
@@ -93,7 +93,7 @@ class SectorTest extends FunSuite {
       ))
   }
 
-  test("Sector.sectorsTo.fromWindPassToWindPassNorth") {
+  "Sector.sectorsTo.fromWindPassToWindPassNorth" should "" in {
     assert(Sector13.sectorsTo(Sector17) == Set(
         Sector13
       , Sector14
@@ -103,7 +103,7 @@ class SectorTest extends FunSuite {
       ))
   }
 
-  test("Sector.sectorsTo.fromWindPassNorthToCielagoNorth") {
+  "Sector.sectorsTo.fromWindPassNorthToCielagoNorth" should "" in {
     assert(Sector16.sectorsTo(Sector2) == Set(
         Sector16
       , Sector17

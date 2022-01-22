@@ -2,7 +2,6 @@ package game.turn.phase
 
 import scala.annotation.tailrec
 import scala.annotation.nowarn
-import eu.timepit.refined.types.numeric.PosInt
 import game.state.faction.Faction
 import game.state.faction.Harkonnen
 import game.state.treachery_deck.{DrawResult, TreacheryCard}
@@ -109,7 +108,7 @@ object bidding_phase {
   sealed trait BidAction
   object BidAction {
     case object Pass extends BidAction
-    case class Bid(value: PosInt) extends BidAction
+    final case class Bid(value: Int) extends BidAction
   }
 
 }

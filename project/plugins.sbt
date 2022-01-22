@@ -1,3 +1,2 @@
-val stryker4sVersion = "0.14.1"
-
-addSbtPlugin("io.stryker-mutator" % "sbt-stryker4s" % stryker4sVersion)
+addSbtPlugin("io.stryker-mutator" % "sbt-stryker4s" % "0.14.1")
+addSbtPlugin("org.scala-native" % "sbt-scala-native" % "0.4.2")

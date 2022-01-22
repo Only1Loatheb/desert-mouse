@@ -1,12 +1,11 @@
 package game.state
 
-import eu.timepit.refined.auto._
-import org.scalatest.FunSuite
+import org.scalatest.flatspec.AnyFlatSpec
 import game.state.army._
 import utils.Not.not
 
-class ArmyTest extends FunSuite {
-  test("Army.+") {
+class ArmyTest extends AnyFlatSpec {
+  "Army.+" should "" in {
     val armies = List(
       FremenArmy(0, 0),
       AtreidesArmy(10),
@@ -23,19 +22,19 @@ class ArmyTest extends FunSuite {
     )
   }
 
-  test("Army.+.throws") {
+  "Army.+.throws" should "" in {
     assertThrows[AddArmyOfDifferentTypeException.type] {
       AtreidesArmy(10) + HarkonnenArmy(10)
     }
   }
 
-  test("Army.isOnlyAdvisor") {
+  "Army.isOnlyAdvisor" should "" in {
     assert(BeneGesseritArmy(0, 19).isOnlyAdvisor)
     assert(not(BeneGesseritArmy(1, 19).isOnlyAdvisor))
     assert(not(BeneGesseritArmy(3, 0).isOnlyAdvisor))
   }
 
-  test("Army.isSmallerOrEqualArmyOfTheSameFaction") {
+  "Army.isSmallerOrEqualArmyOfTheSameFaction" should "" in {
     assert(not(BeneGesseritArmy(0, 19).isSmallerOrEqualArmyOfTheSameFaction(HarkonnenArmy(10))))
     assert(EmperorArmy(1, 2).isSmallerOrEqualArmyOfTheSameFaction(EmperorArmy(3, 4)))
     assert(BeneGesseritArmy(1, 2).isSmallerOrEqualArmyOfTheSameFaction(BeneGesseritArmy(3, 4)))

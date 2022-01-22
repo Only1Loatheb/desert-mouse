@@ -1,9 +1,9 @@
 package game.state
 
-import org.scalatest.FunSuite
+import org.scalatest.flatspec.AnyFlatSpec
 
-class TurnCounterTest extends FunSuite {
-  test("turn_state.tieWinner.isFirstArg") {
+class TurnCounterTest extends AnyFlatSpec {
+  "turn_state.tieWinner.isFirstArg" should "" in {
     val turnCounter = turn_counter.TurnCounter(2)
     assert(turnCounter.isPreGame)
     assert(turnCounter.next.next.isLast)

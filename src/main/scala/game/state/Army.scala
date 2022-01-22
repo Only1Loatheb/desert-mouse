@@ -1,6 +1,5 @@
 package game.state
 
-import eu.timepit.refined.types.numeric.NonNegInt
 
 import utils.non_neg_int._
 import game.state.faction._

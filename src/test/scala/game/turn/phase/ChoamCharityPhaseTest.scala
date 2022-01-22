@@ -1,7 +1,5 @@
 package game.turn.phase
 
-import eu.timepit.refined._
-import eu.timepit.refined.collection._
 import game.player.player
 import game.player.player.{RevivalDecision, ShipmentDestination}
 import game.state.faction._
@@ -13,13 +11,12 @@ import game.state.{leaders, table_state, traitor_deck}
 import game.turn.movement
 import game.turn.phase.choam_charity_phase.choamCharityPhase
 import game.turn.phase.phase.GameState
-import org.scalatest.FunSuite
+import org.scalatest.flatspec.AnyFlatSpec
 
 
-class ChoamCharityPhaseTest extends FunSuite {
-  test("isItRealyClaimed") {
-    val presentFactions: PresentFactions =
-      refineV[MinSize[2]](Set(Atreides, Harkonnen)).toOption.get
+class ChoamCharityPhaseTest extends AnyFlatSpec {
+  "isItRealyClaimed" should "" in {
+    val presentFactions: PresentFactions = PresentFactions(Set(Atreides, Harkonnen))
 
     val tableStateWithNoSpice = TableState(presentFactions, 10)
       .copy(factionSpice = FactionSpice(Map(

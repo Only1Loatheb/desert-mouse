@@ -1,7 +1,5 @@
 package game.state
 
-import eu.timepit.refined.auto._
-
 import game.state.present_factions.PresentFactions
 import game.state.army._
 import game.state.faction._
@@ -20,7 +18,7 @@ object reserves {
 
     def apply(presentFactions: PresentFactions): Reserves = {
       Reserves(
-        presentFactions.map(faction => (faction, startingReserves(faction))).toMap
+        presentFactions.value.map(faction => (faction, startingReserves(faction))).toMap
       )
     }
   }

@@ -1,8 +1,6 @@
 package game.turn
 
-import org.scalatest.FunSuite
-
-import eu.timepit.refined.auto._
+import org.scalatest.flatspec.AnyFlatSpec
 
 import game.state.dune_map._
 import game.state.sector._
@@ -12,17 +10,17 @@ import game.state.army._
 
 import game.turn.storm._
 
-class StormTest extends FunSuite {
-  test("Storm.notAllSectorsAreAffected") {
+class StormTest extends AnyFlatSpec {
+  "Storm.notAllSectorsAreAffected" should "" in {
     assert(stormTerritoriesBySector !== duneTerritoriesBySector)
   }
 
-  test("Storm.affectArmiesOnSectors.preservesEmptyMap") {
+  "Storm.affectArmiesOnSectors.preservesEmptyMap" should "" in {
     val emptyMap = ArmiesOnDune(Map())
     assert(affectArmiesOnSectors(emptyMap,Set(Sector1)) === emptyMap)
   }
 
-  test("Storm.affectArmiesOnSectors.removesUnits") {
+  "Storm.affectArmiesOnSectors.removesUnits" should "" in {
     val emptyMap = ArmiesOnDune(Map())
     val sector = Sector1
     val sandTerritory = Meridan
@@ -30,7 +28,7 @@ class StormTest extends FunSuite {
     assert(affectArmiesOnSectors(mapWithArmy,Set(sector)) === emptyMap)
   }
 
-  test("Storm.affectArmiesOnSectors.removesHalfOfFremenArmy") {
+  "Storm.affectArmiesOnSectors.removesHalfOfFremenArmy" should "" in {
     val sector = Sector1
     val sandTerritory = Meridan
     val mapWithArmy = ArmiesOnDune(Map(sandTerritory -> Map(sector -> List(FremenArmy(2,2)))))
@@ -38,14 +36,14 @@ class StormTest extends FunSuite {
     assert(affectArmiesOnSectors(mapWithArmy,Set(sector)) === mapWithHalfArmy)
   }
 
-  test("Storm.affectArmiesOnSectors.removesHalfOfFremenArmyRoundedUp") {
+  "Storm.affectArmiesOnSectors.removesHalfOfFremenArmyRoundedUp" should "" in {
     val sector = Sector1
     val sandTerritory = Meridan
     val mapWithArmy = ArmiesOnDune(Map(sandTerritory -> Map(sector -> List(FremenArmy(1,1)))))
     assert(affectArmiesOnSectors(mapWithArmy,Set(sector)) === mapWithArmy)
   }
 
-  test("Storm.affectArmiesOnSectors.doesNotRemoveAdjucentArmy") {
+  "Storm.affectArmiesOnSectors.doesNotRemoveAdjucentArmy" should "" in {
     val armySector = Sector0
     val stormSector = Sector1
     val territoryOnTwoSectors = Meridan
@@ -53,7 +51,7 @@ class StormTest extends FunSuite {
     assert(affectArmiesOnSectors(mapWithArmy,Set(stormSector)) === mapWithArmy)
   }
 
-  test("Storm.affectArmiesOnSectors.canAffectMultipleSectors") {
+  "Storm.affectArmiesOnSectors.canAffectMultipleSectors" should "" in {
     val army1Sector = Sector0
     val army2Sector = Sector1
     val territoryOnTwoSectors = Meridan

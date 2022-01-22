@@ -1,11 +1,11 @@
 package game.state
 
-import org.scalatest.FunSuite
+import org.scalatest.flatspec.AnyFlatSpec
 
 import game.state.spice_deck._
 
-class SpiceDeckTest extends FunSuite {
-  test("SpiceDeck.shuffledSpiceDeck.length") {
+class SpiceDeckTest extends AnyFlatSpec {
+  "SpiceDeck.shuffledSpiceDeck.length" should "" in{
     assert(allSpiceCards.length === 21)
   }
 }
