@@ -2,18 +2,20 @@ package game.state
 
 object turn_counter {
 
-  val pregameDecisionTurn = 0
+  val pregameDecisionTurn = Turn(0)
 
-  final case class TurnCounter private(current: Int, last: Int) {
+  final case class Turn(turn: Int) extends AnyVal
+
+  final case class TurnCounter(current: Turn, last: Turn) {
     
     def isPreGame: Boolean = current == pregameDecisionTurn
     
-    def next: TurnCounter = TurnCounter(current + 1, last)
+    def next: TurnCounter = TurnCounter(Turn(current.turn + 1), last)
     
     def isLast: Boolean = current == last
   }
 
   object TurnCounter {
-    def apply(last: Int = 10): TurnCounter = TurnCounter(pregameDecisionTurn, last)
+    def apply(last: Int = 10): TurnCounter = TurnCounter(pregameDecisionTurn, Turn(last))
   }
 }
