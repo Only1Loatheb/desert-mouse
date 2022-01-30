@@ -12,7 +12,7 @@ import game.turn.phase.phase.Phase
 
 object storm_phase {
 
-  val stormPhase: Phase = gameState => {
+  val _1_stormPhase: Phase = gameState => {
     val tableState = gameState.tableState
     val (newStormDeck, newStormSector) = newStorm(tableState)
     val (newSpiceOnDune, newArmiesOnDune) = affectWithStorm(tableState, newStormSector)

@@ -11,11 +11,15 @@ import game.turn.phase.phase.Phase
 import utils.map.MapImprovements
 
 
-object revival_phase {
+object battle_phase { // TODO
+
+  //   // 7. Battle Phase
+  //   // Players must resolve battles in every territory that is occupied by forces from two or more factions.
+  //   val armiesAfterBattle = ???
 
   type PlayerRevivalDecision = PlayerDecision[RevivalDecision]
 
-  val _5_revivalPhase: Phase = gameState => {
+  val _7_battlePhase: Phase = gameState => {
 
     val tableState = gameState.tableState
 

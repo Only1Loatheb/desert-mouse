@@ -7,14 +7,14 @@ import game.state.present_factions.PresentFactions
 import game.state.table_state.TableState
 import game.state.spice_deck.ShaiHulud
 
-import game.turn.phase.spice_blow_and_nexus_phase.spiceBlowAndNexusPhase
+import game.turn.phase.spice_blow_and_nexus_phase._2_spiceBlowAndNexusPhase
 import game.turn.phase.phase.GameState
 
 class SpiceBlowAndNexusPhaseTest extends AnyFlatSpec {
   "movement.isMoveAllowed.simpleMove" should "" in {
     val presentFactions: PresentFactions = PresentFactions(Set(Atreides, Harkonnen))  
     val gameState = GameState(TableState(presentFactions, 10), Map())
-    val newGameState = spiceBlowAndNexusPhase(gameState)
+    val newGameState = _2_spiceBlowAndNexusPhase(gameState)
     assert(newGameState != gameState)
     assert(
       newGameState.tableState.spiceDeck.cards.size + 2 == gameState.tableState.spiceDeck.cards.size

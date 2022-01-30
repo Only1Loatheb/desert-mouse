@@ -9,7 +9,7 @@ import game.state.spice.Spice
 import game.state.table_state.TableState
 import game.state.{leaders, table_state, traitor_deck}
 import game.turn.movement
-import game.turn.phase.choam_charity_phase.choamCharityPhase
+import game.turn.phase.choam_charity_phase._3_choamCharityPhase
 import game.turn.phase.phase.GameState
 import org.scalatest.flatspec.AnyFlatSpec
 
@@ -26,7 +26,7 @@ class ChoamCharityPhaseTest extends AnyFlatSpec {
     val gameState = GameState(
       tableStateWithNoSpice,
       Map(Atreides -> claimBot, Harkonnen -> refuseBot))
-    val newGameState = choamCharityPhase(gameState)
+    val newGameState = _3_choamCharityPhase(gameState)
     assert(newGameState.copy(tableState = tableStateWithNoSpice) == gameState)
     assert(newGameState.tableState.factionSpice.factionToSpice(Atreides) === Spice(2))
     assert(newGameState.tableState.factionSpice.factionToSpice(Harkonnen) === Spice(0))

@@ -14,7 +14,7 @@ import game.state.sector.Sector
 
 object spice_collection_phase {
 
-  val spiceCollectionPhase: Phase = gameState => {
+  val _8_spiceCollectionPhase: Phase = gameState => {
     val tableState = gameState.tableState
 
     val (newSpiceOnDune, spiceCollectedByFaction) = collectSpice(

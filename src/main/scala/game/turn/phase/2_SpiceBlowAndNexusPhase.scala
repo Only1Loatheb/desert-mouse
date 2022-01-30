@@ -9,7 +9,7 @@ import game.turn.phase.phase.Phase
 
 object spice_blow_and_nexus_phase {
 
-  val spiceBlowAndNexusPhase: Phase = gameState => {
+  val _2_spiceBlowAndNexusPhase: Phase = gameState => {
     val tableState = gameState.tableState
     val (newSpiceDeck, spiceCards) = tableState.spiceDeck.drawTwoCards
     val newSpiceOnDune = addSpiceFromCards(spiceCards, tableState.spiceOnDune, tableState.stormSector)
