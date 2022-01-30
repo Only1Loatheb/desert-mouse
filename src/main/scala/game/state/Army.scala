@@ -1,6 +1,5 @@
 package game.state
 
-
 import utils.non_neg_int._
 import game.state.faction._
 

@@ -21,8 +21,8 @@ lazy val compilerOptions = Seq(
 
 lazy val dependencies = Seq(
   libraryDependencies ++= Seq(
-    "org.typelevel" %%% "cats-core" % catsV,
-    "org.scalatest" %%% "scalatest" % scalatestV % Test,
+    "org.typelevel" %% "cats-core" % catsV,
+    "org.scalatest" %% "scalatest" % scalatestV % Test,
   )
 )
 
@@ -30,13 +30,3 @@ lazy val root = (project in file("."))
   .settings(name := "desert-mouse")
   .settings(compilerOptions)
   .settings(dependencies)
-
-nativeLinkStubs := true
-
-enablePlugins(ScalaNativePlugin)
-
-// You can use Scaladex, an index of all known published Scala libraries.
-
-// And following completely optional runtime library dependencies: (for additional features)
-// Boehm GC 7.6.0 (optional)
-// zlib 1.2.8 or newer (optional)

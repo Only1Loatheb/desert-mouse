@@ -15,15 +15,15 @@ object strongholds_controlled {
   val strongholdsWithOrnithopters: Set[StrongholdTerritory] = strongholds
     .filter { case _: HasOrnithopters => true; case _ => false }
     
-  final case class StrongholdsControlled(armies: Map[Faction, Set[StrongholdTerritory]]) {
+  final case class StrongholdsControlled(factionToControlledStrongholds: Map[Faction, Set[StrongholdTerritory]]) {
 
     def factionsWithOrnithopters: Set[Faction] = {
-      armies
+      factionToControlledStrongholds
         .filter { case (_, controlled) => controlled.intersect(strongholdsWithOrnithopters).nonEmpty }
         .keySet
     }
 
-    def factionsWithMostStrongholds: Seq[(Faction, Int)] = armies
+    def factionsWithMostStrongholds: Seq[(Faction, Int)] = factionToControlledStrongholds
       .toSeq
       .map { case (faction, controlled) => (faction, controlled.size) }
       .sortBy { case (_, controlled) => controlled }(Ordering[Int].reverse)

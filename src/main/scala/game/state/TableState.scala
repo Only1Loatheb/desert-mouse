@@ -14,7 +14,7 @@ import game.state.traitors.{Traitors, AllTraitors}
 import game.state.traitor_deck.getTraitorCandidates
 import game.state.sector.{Sector, Sector0}
 import game.state.kwisatz_haderach_counter.KwisatzHaderachCounter
-import game.state.turn_counter.Turn
+import game.state.turn_counter.TurnNumber
 import game.state.turn_state.TurnState
 import game.state.present_factions.PresentFactions
 import game.state.strongholds_controlled.StrongholdsControlled
@@ -44,7 +44,7 @@ object table_state {
     turnState: TurnState,
     treacheryCards: TreacheryCards,
     strongholdsControlled: StrongholdsControlled,
-    beneGesseritGues: Option[(Faction, Turn)]
+    beneGesseritGues: Option[(Faction, TurnNumber)]
   ) {
     def view(playedFaction: Faction): TableStateView = { // todo use this in choam
       TableStateView(

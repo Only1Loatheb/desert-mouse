@@ -2,113 +2,143 @@ package game.turn
 
 import utils.Not._
 
-import game.state.table_state.TableState
 import game.state.faction.Faction
-import game.state.turn_counter.Turn
+import game.state.turn_counter.TurnNumber
 import game.state.faction.{BeneGesserit, Guild, Fremen, Harkonnen, Atreides, Emperor}
 import game.state.dune_map.{HabbanyaRidgeSietch, SietchTabr}
 import game.state.strongholds_controlled.StrongholdTerritory
 
 import game.turn.phase.phase.Phase
 import game.turn.phase.phase.GameState
-import game.turn.phase.storm_phase.stormPhase
-import game.turn.phase.spice_blow_and_nexus_phase.spiceBlowAndNexusPhase
-import game.turn.phase.choam_charity_phase.choamCharityPhase
-import game.turn.phase.revival_phase.revivalPhase
-import game.turn.phase.bidding_phase.biddingPhase
-import game.turn.phase.spice_collection_phase.spiceCollectionPhase
-import game.turn.phase.mentat_pause_phase.mentatPausePhase
+import game.turn.phase.storm_phase._1_stormPhase
+import game.turn.phase.spice_blow_and_nexus_phase._2_spiceBlowAndNexusPhase
+import game.turn.phase.choam_charity_phase._3_choamCharityPhase
+import game.turn.phase.bidding_phase._4_biddingPhase
+import game.turn.phase.revival_phase._5_revivalPhase
+import game.turn.phase.shipment_and_movement_phase._6_shipmentAndMovementPhase
+import game.turn.phase.battle_phase._7_battlePhase
+import game.turn.phase.spice_collection_phase._8_spiceCollectionPhase
+import game.turn.phase.mentat_pause_phase._9_mentatPausePhase
 
 object game_master {
 
-  final case class GameMaster(tableState: TableState) {
+  type Turn = GameState => Either[Set[Faction], GameState]
 
-    def play(): Phase = stormPhase
-      .andThen(spiceBlowAndNexusPhase)
-      .andThen(choamCharityPhase)
-      .andThen(biddingPhase)
-      .andThen(revivalPhase)
-      .andThen(spiceCollectionPhase)
-      .andThen(mentatPausePhase)
+  val playGame: Turn = play(allPhases)
+
+  private[turn]
+  def play(playTurn: Phase): Turn = gameState => {
+    val newTableState = gameState.tableState.copy(turn = gameState.tableState.turn.next)
+    val newGameState = gameState.copy(tableState = newTableState)
+    shouldContinueGame(newGameState)
+      .flatMap(playTurn.andThen(play(playTurn)))
   }
 
-      //   // 4. Bidding Phase
-    //   //Players bid spice to acquire Treachery Cards.
-    //   val factionSpiceAfterBidding = factionSpiceAfterCharity
+  private def allPhases: Phase = _1_stormPhase
+    .andThen(_2_spiceBlowAndNexusPhase)
+    .andThen(_3_choamCharityPhase)
+    .andThen(_4_biddingPhase)
+    .andThen(_5_revivalPhase)
+    .andThen(_6_shipmentAndMovementPhase)
+    .andThen(_7_battlePhase)
+    .andThen(_8_spiceCollectionPhase)
+    .andThen(_9_mentatPausePhase)
 
-    //   // 6. Shipment and Movement Phase
-    /* Starting with the First Player and proceeding
-    * counterclockwise, each player in turn ships forces
-    * down to the planet or brings in forces from the
-    * southern hemisphere (Fremen) and then moves
-    * their forces on the game board.
-    */
-    //   val factionSpiceAfterMovement = factionSpiceAfterRevival
-      
-    //   // 7. Battle Phase
-    //   // Players must resolve battles in every territory that is occupied by forces from two or more factions.
-    //   val armiesAfterBattle = ???
-
-
-  def isGameOver: GameState => Either[Set[Faction], GameState] = gameState => {
-    maybeWinnerControllingStrongholds(gameState)
+  private def shouldContinueGame: GameState => Either[Set[Faction], GameState] = gameState => {
+    val maybeEndOfTurnWinner = getWinnerControllingStrongholds(gameState)
       .map(factionControlling => winnerBeneGesseritGuess(gameState, factionControlling))
-      .orElse(maybeWinnerFremen(gameState))
-      .orElse(maybeWinnerGuild(gameState))
-      .map(faction => Set(faction))
-      .orElse(maybeMiscellaneousWinners(gameState))
-      .toLeft(gameState)
+    if (gameState.tableState.turn.isLast.not)
+      maybeEndOfTurnWinner
+        .map(faction => Set(faction))
+        .toLeft(gameState)
+    else Left(endOfTheGameWinner(gameState, maybeEndOfTurnWinner))
   }
 
-  private def maybeWinnerControllingStrongholds(gameState: GameState): Option[Faction] = {
-    gameState.tableState.strongholdsControlled.armies
-      .toList
+  private def getWinnerControllingStrongholds(
+      gameState: GameState
+  ): Option[Faction] = {
+    gameState.tableState.strongholdsControlled.factionToControlledStrongholds.toList
       .find(_._2.size >= 3)
       .map(_._1)
   }
 
-  private def winnerBeneGesseritGuess(gameState: GameState, factionControlling: Faction): Faction = {
+  private def winnerBeneGesseritGuess(
+      gameState: GameState,
+      factionControlling: Faction
+  ): Faction = {
     gameState.tableState.beneGesseritGues
-      .fold(factionControlling){guess: (Faction, Turn) => 
-        if (guess._1 == factionControlling && guess._2 == gameState.tableState.turn.current) BeneGesserit else factionControlling
+      .fold(factionControlling) { guess: (Faction, TurnNumber) =>
+        if (guess._1 == factionControlling && guess._2 == gameState.tableState.turn.current) BeneGesserit
+        else factionControlling
       }
   }
-  
-  private def maybeWinnerGuild(gameState: GameState): Option[Faction] = {
-    Option.when(gameState.tableState.turn.isLast)(Guild)
+
+  private def endOfTheGameWinner(
+      gameState: GameState,
+      maybeEndOfTurnWinner: Option[Faction]
+  ): Set[Faction] = {
+    maybeEndOfTurnWinner
+      .orElse(maybeWinnerFremen(gameState))
+      .orElse(maybeWinnerGuild(gameState))
+      .map(faction => Set(faction))
+      .getOrElse(miscellaneousWinners(gameState))
   }
 
+  private def maybeWinnerGuild(gameState: GameState): Option[Faction] = {
+    Option.when(gameState.tableState.factionCircles.isFactionPresent(Guild))(Guild)
+  }
 
-  val requiredTerritoriesForFremen = List[StrongholdTerritory](SietchTabr, HabbanyaRidgeSietch)
+  val requiredStrongholdsForFremen =
+    List[StrongholdTerritory](SietchTabr, HabbanyaRidgeSietch)
 
-  val factionsBannedFromSietchTabrByFremen = List[Faction](Harkonnen, Atreides, Emperor)
+  val factionsBannedFromSietchTabrByFremen =
+    List[Faction](Harkonnen, Atreides, Emperor)
 
   private def maybeWinnerFremen(gameState: GameState): Option[Faction] = {
-    val factionToControlledStrongholds = gameState.tableState.strongholdsControlled.armies
-    val strongholdsControlledToFaction = factionToControlledStrongholds
-      .flatMap{ case (faction, strongholds) => strongholds.map((_, faction)).toMap }
-    val isLastTurn = gameState.tableState.turn.isLast
-    lazy val areRequiredTerritoriesOk = requiredTerritoriesForFremen.forall(isOkForFremen(strongholdsControlledToFaction))
-    lazy val isTuekSietchOk = strongholdsControlledToFaction.get(SietchTabr).forall(faction => factionsBannedFromSietchTabrByFremen.contains(faction).not)
-    Option.when(isLastTurn && areRequiredTerritoriesOk && isTuekSietchOk)(Fremen)
+    val isFremenPresent = gameState.tableState.factionCircles.isFactionPresent(Fremen)
+
+    val factionToControlledStrongholds =
+      gameState.tableState.strongholdsControlled.factionToControlledStrongholds
+
+    lazy val strongholdsControlledToFaction = factionToControlledStrongholds
+      .flatMap { case (faction, strongholds) =>
+        strongholds.map((_, faction)).toMap
+      }
+
+    lazy val areRequiredStrongholdsOk = requiredStrongholdsForFremen
+      .forall(isStrongholdOkForFremen(strongholdsControlledToFaction))
+
+    lazy val isTuekSietchOk = strongholdsControlledToFaction
+      .get(SietchTabr)
+      .forall(faction => factionsBannedFromSietchTabrByFremen.contains(faction).not)
+
+    Option.when(isFremenPresent && areRequiredStrongholdsOk && isTuekSietchOk)(Fremen)
   }
 
-  private def isOkForFremen(strongholdsControlledToFaction: Map[StrongholdTerritory, Faction])(territory: StrongholdTerritory): Boolean = {
+  private def isStrongholdOkForFremen(
+      strongholdsControlledToFaction: Map[StrongholdTerritory, Faction]
+  )(territory: StrongholdTerritory): Boolean = {
     strongholdsControlledToFaction
       .get(territory)
       .fold(true)(faction => faction == Fremen)
   }
 
-  private def maybeMiscellaneousWinners(gameState: GameState): Option[Set[Faction]]  = {
-    lazy val a = gameState.tableState.strongholdsControlled.armies
-      
-    lazy val b = a.maxBy(_._2.size) 
-    
-    lazy val c = a.filter(_._2.size == b._2.size).map(_._1).toSet
+  private def miscellaneousWinners(
+      gameState: GameState
+  ): Set[Faction] = {
+    lazy val factionToControlledStrongholds = gameState.tableState.strongholdsControlled.factionToControlledStrongholds
+
+    lazy val maxControlledStrongholdsCount = factionToControlledStrongholds
+      .maxBy(_._2.size)
+      ._2.size
+
+    lazy val factionWithMaxControlledStrongholds = factionToControlledStrongholds
+      .filter(_._2.size == maxControlledStrongholdsCount)
+      .map(_._1)
 
     Option
-      .when(gameState.tableState.turn.isLast && gameState.tableState.factionCircles.isFactionPresent(Fremen))(Set(Fremen: Faction))
-      .orElse(Option.when(gameState.tableState.turn.isLast)(c))
+      .when(gameState.tableState.factionCircles.isFactionPresent(Fremen))(Set(Fremen: Faction))
+      .getOrElse(factionWithMaxControlledStrongholds.toSet)
   }
 
 }

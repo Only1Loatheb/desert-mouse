@@ -7,7 +7,7 @@ import game.state.strongholds_controlled._
 
 object mentat_pause_phase {
 
-  val mentatPausePhase: Phase = gameState => {
+  val _9_mentatPausePhase: Phase = gameState => {
     val tableState = gameState.tableState
 
     val newStrongholdsControlled = getNewStrongholdsControlled(tableState.armiesOnDune)

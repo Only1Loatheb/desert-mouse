@@ -17,7 +17,7 @@ object bidding_phase {
   /** Before bidding starts, all players must declare how many Treachery Cards they hold. The hand
     * limit is 4. Players with 4 cards must pass during bidding
     */
-  val biddingPhase: Phase = gameState => {
+  val _4_biddingPhase: Phase = gameState => {
     val factionToCards = gameState.tableState.treacheryCards.factionToCards
     val biddingFactions = factionToCards.filter { case (faction, cards) =>
       cards.size < factionCardsLimit(faction)

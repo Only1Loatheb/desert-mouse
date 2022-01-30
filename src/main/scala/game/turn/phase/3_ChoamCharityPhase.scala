@@ -10,7 +10,7 @@ import game.state.spice.Spice
 
 object choam_charity_phase {
 
-  val choamCharityPhase: Phase = gameState => {
+  val _3_choamCharityPhase: Phase = gameState => {
 
     val updateSpice = gameState.players
       .map(claimConditionaly(gameState.tableState))

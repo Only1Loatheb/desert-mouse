@@ -11,11 +11,20 @@ import game.turn.phase.phase.Phase
 import utils.map.MapImprovements
 
 
-object revival_phase {
+object shipment_and_movement_phase { // TODO
 
   type PlayerRevivalDecision = PlayerDecision[RevivalDecision]
 
-  val _5_revivalPhase: Phase = gameState => {
+    //   // 6. Shipment and Movement Phase
+  /* Starting with the First Player and proceeding
+   * counterclockwise, each player in turn ships forces
+   * down to the planet or brings in forces from the
+   * southern hemisphere (Fremen) and then moves
+   * their forces on the game board.
+   */
+  //   val factionSpiceAfterMovement = factionSpiceAfterRevival
+
+  val _6_shipmentAndMovementPhase: Phase = gameState => {
 
     val tableState = gameState.tableState
 
