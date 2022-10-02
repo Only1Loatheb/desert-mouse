@@ -1,0 +1,23 @@
+package server.turn
+
+import org.scalatest.flatspec.AnyFlatSpec
+import game.state.present_factions.PresentFactions
+import game.state.faction.{Atreides, Harkonnen}
+import game.turn.phase.phase.Phase
+import game.state.table_state.TableState
+import game.turn.phase.phase.GameState
+import server.state.faction
+
+class GameMasterTest extends AnyFlatSpec {
+  "game_master.play with one turn game and empty phase" should "return winners" in {
+
+    val presentFactions: PresentFactions = PresentFactions(Set(faction.Atreides, faction.Harkonnen))
+
+    val tableState = GameState(TableState(presentFactions, 1), null)
+
+    val emptyPhase: Phase = identity
+
+    assert(game_master.play(emptyPhase)(tableState) == Left(Set(faction.Harkonnen, faction.Atreides)))
+  }
+
+}
