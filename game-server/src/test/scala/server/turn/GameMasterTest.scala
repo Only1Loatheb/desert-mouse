@@ -1,12 +1,10 @@
 package server.turn
 
-import org.scalatest.flatspec.AnyFlatSpec
+import game.state.faction
 import game.state.present_factions.PresentFactions
-import game.state.faction.{Atreides, Harkonnen}
-import game.turn.phase.phase.Phase
-import game.state.table_state.TableState
-import game.turn.phase.phase.GameState
-import server.state.faction
+import org.scalatest.flatspec.AnyFlatSpec
+import server.state.table_state.TableState
+import server.turn.phase.phase.{GameState, Phase}
 
 class GameMasterTest extends AnyFlatSpec {
   "game_master.play with one turn game and empty phase" should "return winners" in {

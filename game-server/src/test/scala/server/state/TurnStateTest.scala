@@ -4,45 +4,46 @@ import game.state
 import org.scalatest.flatspec.AnyFlatSpec
 import game.state.sector._
 import game.state.faction._
+import server.state.turn_state.{TurnStateOps, getPlayersOrder}
 
 class TurnStateTest extends AnyFlatSpec {
   "turn_state.tieWinner.isFirstArg" should "" in {
-    val factions = state.turn_state.TurnState(List(faction.Harkonnen, faction.Fremen, faction.BeneGesserit))
+    val factions = state.turn_state.TurnState(List(Harkonnen, Fremen, BeneGesserit))
     assert(
-      factions.tieWinner(faction.Harkonnen, faction.Fremen) == faction.Harkonnen
+      factions.tieWinner(Harkonnen, Fremen) == Harkonnen
     )
   }
 
   "turn_state.tieWinner.isSndArg" should "" in {
-    val factions = state.turn_state.TurnState(List(faction.Harkonnen, faction.Fremen, faction.BeneGesserit))
+    val factions = state.turn_state.TurnState(List(Harkonnen, Fremen, BeneGesserit))
     assert(
-      factions.tieWinner(faction.Fremen, faction.Harkonnen) == faction.Harkonnen
+      factions.tieWinner(Fremen, Harkonnen) == Harkonnen
     )
   }
 
   "turn_state.getPlayersOrder.worksForAllCircles" should "" in {
     val stormSector = Sector10
     val factionCircles = state.faction_circles.FactionCircles(Map(
-      Sector1 -> faction.Harkonnen,
-      Sector4 -> faction.Fremen,
-      Sector7 -> faction.Atreides,
-      Sector10 -> faction.Emperor,
-      Sector13 -> faction.BeneGesserit,
-      Sector16 -> faction.Guild,
+      Sector1 -> Harkonnen,
+      Sector4 -> Fremen,
+      Sector7 -> Atreides,
+      Sector10 -> Emperor,
+      Sector13 -> BeneGesserit,
+      Sector16 -> Guild,
     ))
     assert(
-      state.turn_state.getPlayersOrder(stormSector, factionCircles) == List(faction.BeneGesserit, faction.Guild, faction.Harkonnen, faction.Fremen, faction.Atreides, faction.Emperor)
+      getPlayersOrder(stormSector, factionCircles) == List(BeneGesserit, Guild, Harkonnen, Fremen, Atreides, Emperor)
     )
   }
 
     "turn_state.getPlayersOrder.worksForTwoCircles" should "" in {
     val stormSector = Sector10
     val factionCircles = state.faction_circles.FactionCircles(Map(
-      Sector1 -> faction.Harkonnen,
-      Sector4 -> faction.Fremen,
+      Sector1 -> Harkonnen,
+      Sector4 -> Fremen,
     ))
     assert(
-      state.turn_state.getPlayersOrder(stormSector, factionCircles) == List(faction.Harkonnen, faction.Fremen)
+      getPlayersOrder(stormSector, factionCircles) == List(Harkonnen, Fremen)
     )
   }
 

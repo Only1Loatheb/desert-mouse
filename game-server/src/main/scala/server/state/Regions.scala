@@ -1,7 +1,6 @@
 package server.state
 
 import game.state.dune_map._
-import game.state.dune_map.Territory
 import game.state.sector._
 
 /** Region is a part of territory that lays on one sector

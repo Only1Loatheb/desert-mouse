@@ -1,19 +1,24 @@
 package server.turn
 
 import org.scalatest.flatspec.AnyFlatSpec
-import game.state.dune_map._
 import game.state.sector._
 import game.state.armies_on_dune.ArmiesOnDune
 import game.state.army._
+import game.state.dune_map._
+import game.state.non_neg_int.NonNegInt
 import game.turn.movement._
-import server.state.dune_map
+import server.turn.movement.isMoveAllowed
+import utils.Not.not
 
 class MovementTest extends AnyFlatSpec {
+
+  implicit val nonNegIntImplicitConversion: Int => NonNegInt = NonNegInt(_).get
+
   "movement.isMoveAllowed.simpleMove" should "" in {
     val stormSector = Sector10
-    val territoryFrom = dune_map.Meridan
+    val territoryFrom = Meridan
     val sectorFrom = Sector0
-    val territoryTo = dune_map.CielagoWest
+    val territoryTo = CielagoWest
     val sectorTo = Sector0
     val army = FremenArmy(2, 2)
     val mapWithArmy = ArmiesOnDune(Map(territoryFrom -> Map(sectorFrom -> List(army))))
@@ -29,10 +34,10 @@ class MovementTest extends AnyFlatSpec {
 
   "movement.isMoveAllowed.canMoveArmyFromOneTerritoryButTwoSectors" should "" in {
     val stormSector = Sector10
-    val territoryFrom = dune_map.FalseWallSouth
+    val territoryFrom = FalseWallSouth
     val sectorFrom0 = Sector3
     val sectorFrom1 = Sector4
-    val territoryTo = dune_map.PastyMesa
+    val territoryTo = PastyMesa
     val sectorTo = Sector4
     val army = FremenArmy(2, 2)
     val mapWithArmy = ArmiesOnDune(Map(territoryFrom -> Map(sectorFrom0 -> List(army), sectorFrom1 -> List(army))))
@@ -48,43 +53,43 @@ class MovementTest extends AnyFlatSpec {
 
   "movement.isMoveAllowed.canNotMoveWhenDoesNotHaveArmy" should "" in {
     val stormSector = Sector10
-    val territoryFrom = dune_map.Meridan
+    val territoryFrom = Meridan
     val sectorFrom = Sector0
-    val territoryTo = dune_map.CielagoWest
+    val territoryTo = CielagoWest
     val sectorTo = Sector0
     val army = FremenArmy(2, 2)
     val mapWithArmy = ArmiesOnDune(Map())
     assert(
-      false == isMoveAllowed(
+      not(isMoveAllowed(
         stormSector,
         mapWithArmy,
         hasOrnithopters = false,
         MoveDescriptor((territoryFrom, Map(sectorFrom -> army)), (territoryTo, sectorTo))
-      )
+      ))
     )
   }
 
     "movement.isMoveAllowed.moveHasToSelectUnits" should "" in {
     val stormSector = Sector10
-    val territoryFrom = dune_map.Meridan
-    val territoryTo = dune_map.CielagoWest
+    val territoryFrom = Meridan
+    val territoryTo = CielagoWest
     val sectorTo = Sector0
     val mapWithArmy = ArmiesOnDune(Map())
     assert(
-      false == isMoveAllowed(
+      not(isMoveAllowed(
         stormSector,
         mapWithArmy,
         hasOrnithopters = false,
         MoveDescriptor((territoryFrom, Map()), (territoryTo, sectorTo))
-      )
+      ))
     )
   }
 
   "movement.isMoveAllowed.canMoveWhenOneOtherArmyInStronghold" should "" in {
     val stormSector = Sector10
-    val territoryFrom = dune_map.OldGap
+    val territoryFrom = OldGap
     val sectorFrom = Sector9
-    val territoryTo = dune_map.Arrakeen
+    val territoryTo = Arrakeen
     val sectorTo = Sector9
     val army = FremenArmy(2, 2)
     val mapWithArmy = ArmiesOnDune(
@@ -105,9 +110,9 @@ class MovementTest extends AnyFlatSpec {
 
   "movement.isMoveAllowed.canNotMoveWhenTwoOtherArmiesInStronghold" should "" in {
     val stormSector = Sector10
-    val territoryFrom = dune_map.OldGap
+    val territoryFrom = OldGap
     val sectorFrom = Sector9
-    val territoryTo = dune_map.Arrakeen
+    val territoryTo = Arrakeen
     val sectorTo = Sector9
     val army = FremenArmy(2, 2)
     val mapWithArmy = ArmiesOnDune(
@@ -117,20 +122,20 @@ class MovementTest extends AnyFlatSpec {
       )
     )
     assert(
-      false == isMoveAllowed(
+      not(isMoveAllowed(
         stormSector,
         mapWithArmy,
         hasOrnithopters = false,
         MoveDescriptor((territoryFrom, Map(sectorFrom -> army)), (territoryTo, sectorTo))
-      )
+      ))
     )
   }
 
   "movement.isMoveAllowed.canMoveWhenTwoOtherArmiesInStrongholdButOneIsAdvisor" should "" in {
     val stormSector = Sector10
-    val territoryFrom = dune_map.OldGap
+    val territoryFrom = OldGap
     val sectorFrom = Sector9
-    val territoryTo = dune_map.Arrakeen
+    val territoryTo = Arrakeen
     val sectorTo = Sector9
     val army = FremenArmy(2, 2)
     val mapWithArmy = ArmiesOnDune(
@@ -151,9 +156,9 @@ class MovementTest extends AnyFlatSpec {
 
   "movement.isMoveAllowed.canMoveWhenTwoOtherArmiesInStrongholdButOneIsAllay" should "" in {
     val stormSector = Sector10
-    val territoryFrom = dune_map.OldGap
+    val territoryFrom = OldGap
     val sectorFrom = Sector9
-    val territoryTo = dune_map.Arrakeen
+    val territoryTo = Arrakeen
     val sectorTo = Sector9
     val army = FremenArmy(2, 2)
     val mapWithArmy = ArmiesOnDune(
@@ -174,9 +179,9 @@ class MovementTest extends AnyFlatSpec {
   
   "movement.isMoveAllowed.canMoveToPolarSink" should "" in {
     val stormSector = Sector10
-    val territoryFrom = dune_map.BlightOfTheCliff
+    val territoryFrom = BlightOfTheCliff
     val sectorFrom = Sector13
-    val territoryTo = dune_map.PolarSink
+    val territoryTo = PolarSink
     val sectorTo = FakePolarSector
     val army = FremenArmy(2, 2)
     val mapWithArmy = ArmiesOnDune(
@@ -196,9 +201,9 @@ class MovementTest extends AnyFlatSpec {
 
   "movement.isMoveAllowed.advisorsCanNotBlock" should "" in {
     val stormSector = Sector10
-    val territoryFrom = dune_map.OldGap
+    val territoryFrom = OldGap
     val sectorFrom = Sector9
-    val territoryTo = dune_map.Arrakeen
+    val territoryTo = Arrakeen
     val sectorTo = Sector9
     val army = FremenArmy(2, 2)
     val mapWithArmy = ArmiesOnDune(
@@ -219,9 +224,9 @@ class MovementTest extends AnyFlatSpec {
 
   "movement.isMoveAllowed.canMoveWhenTwoOtherArmiesOnSand" should "" in {
     val stormSector = Sector10
-    val territoryFrom = dune_map.Arrakeen
+    val territoryFrom = Arrakeen
     val sectorFrom = Sector9
-    val territoryTo = dune_map.OldGap
+    val territoryTo = OldGap
     val sectorTo = Sector9
     val army = FremenArmy(2, 2)
     val mapWithArmy = ArmiesOnDune(
@@ -242,46 +247,46 @@ class MovementTest extends AnyFlatSpec {
 
   "movement.isMoveAllowed.canNotMoveOneTerritoryWhenStormIsBlocking" should "" in {
     val stormSector = Sector2
-    val territoryFrom = dune_map.CielagoDepression
+    val territoryFrom = CielagoDepression
     val sectorFrom = Sector1
-    val territoryTo = dune_map.CielagoEast
+    val territoryTo = CielagoEast
     val sectorTo = Sector3
     val army = FremenArmy(2, 2)
     val mapWithArmy = ArmiesOnDune(Map(territoryFrom -> Map(sectorFrom -> List(army))))
     assert(
-      false == isMoveAllowed(
+      not(isMoveAllowed(
         stormSector,
         mapWithArmy,
         hasOrnithopters = false,
         MoveDescriptor((territoryFrom, Map(sectorFrom -> army)), (territoryTo, sectorTo))
-      )
+      ))
     )
   }
 
   "movement.isMoveAllowed.canNotMoveWhenStormIsBlockingPartOfTheArmy" should "" in {
     val stormSector = Sector3
-    val territoryFrom = dune_map.FalseWallSouth
+    val territoryFrom = FalseWallSouth
     val sectorFrom0 = Sector3
     val sectorFrom1 = Sector4
-    val territoryTo = dune_map.PastyMesa
+    val territoryTo = PastyMesa
     val sectorTo = Sector4
     val army = FremenArmy(2, 2)
     val mapWithArmy = ArmiesOnDune(Map(territoryFrom -> Map(sectorFrom0 -> List(army), sectorFrom1 -> List(army))))
     assert(
-      false == isMoveAllowed(
+      not(isMoveAllowed(
         stormSector,
         mapWithArmy,
         hasOrnithopters = false,
         MoveDescriptor((territoryFrom, Map(sectorFrom0 -> army, sectorFrom1 -> army)), (territoryTo, sectorTo))
-      )
+      ))
     )
   }
 
   "movement.isMoveAllowed.canNotMoveTwoTerritoriesWithoutOrnithopters" should "" in {
     val stormSector = Sector7
-    val territoryFrom = dune_map.CielagoDepression
+    val territoryFrom = CielagoDepression
     val sectorFrom = Sector1
-    val territoryTo = dune_map.FalseWallSouth
+    val territoryTo = FalseWallSouth
     val sectorTo = Sector3
     val army = AtreidesArmy(2)
     val mapWithArmy = ArmiesOnDune(
@@ -290,20 +295,20 @@ class MovementTest extends AnyFlatSpec {
       )
     )
     assert(
-      false == isMoveAllowed(
+      not(isMoveAllowed(
         stormSector,
         mapWithArmy,
         hasOrnithopters = false,
         MoveDescriptor((territoryFrom, Map(sectorFrom -> army)), (territoryTo, sectorTo))
-      )
+      ))
     )
   }
 
   "movement.isMoveAllowed.canMoveTwoTerritoriesWithOrnithopters" should "" in {
     val stormSector = Sector7
-    val territoryFrom = dune_map.CielagoDepression
+    val territoryFrom = CielagoDepression
     val sectorFrom = Sector1
-    val territoryTo = dune_map.FalseWallSouth
+    val territoryTo = FalseWallSouth
     val sectorTo = Sector3
     val army = AtreidesArmy(2)
     val mapWithArmy = ArmiesOnDune(
@@ -323,9 +328,9 @@ class MovementTest extends AnyFlatSpec {
 
   "movement.isMoveAllowed.canMoveFromBlightOfTheCliffToPolarSinkWithOrnithopters" should "" in {
     val stormSector = Sector7
-    val territoryFrom = dune_map.CielagoDepression
+    val territoryFrom = CielagoDepression
     val sectorFrom = Sector1
-    val territoryTo = dune_map.FalseWallSouth
+    val territoryTo = FalseWallSouth
     val sectorTo = Sector3
     val army = AtreidesArmy(2)
     val mapWithArmy = ArmiesOnDune(
@@ -345,9 +350,9 @@ class MovementTest extends AnyFlatSpec {
 
   "movement.isMoveAllowed.canNotMoveWithOrnithoptersWhenStormIsBlocking" should "" in {
     val stormSector = Sector2
-    val territoryFrom = dune_map.CielagoSouth
+    val territoryFrom = CielagoSouth
     val sectorFrom = Sector1
-    val territoryTo = dune_map.FalseWallSouth
+    val territoryTo = FalseWallSouth
     val sectorTo = Sector3
     val army = AtreidesArmy(2)
     val mapWithArmy = ArmiesOnDune(
@@ -356,12 +361,12 @@ class MovementTest extends AnyFlatSpec {
       )
     )
     assert(
-      false == isMoveAllowed(
+      not(isMoveAllowed(
         stormSector,
         mapWithArmy,
         hasOrnithopters = true,
         MoveDescriptor((territoryFrom, Map(sectorFrom -> army)), (territoryTo, sectorTo))
-      )
+      ))
     )
   }
   

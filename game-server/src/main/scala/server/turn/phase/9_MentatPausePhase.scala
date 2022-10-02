@@ -1,9 +1,12 @@
 package server.turn.phase
 
-import game.turn.phase.phase.Phase
 import game.state.armies_on_dune.ArmiesOnDune
+import game.state.dune_map.Stronghold
 import game.state.faction.Faction
 import game.state.strongholds_controlled._
+import server.state.army.ArmyImpr
+import server.state.strongholds_controlled
+import server.turn.phase.phase.Phase
 
 object mentat_pause_phase {
 
@@ -17,15 +20,15 @@ object mentat_pause_phase {
     gameState.copy(tableState = newTableState)
   }
 
-  private final case class FactionControllingTerritory(faction: Faction, territory: StrongholdTerritory)
+  private final case class FactionControllingTerritory(faction: Faction, territory: Stronghold)
 
   private def getNewStrongholdsControlled(armiesOnDune: ArmiesOnDune): StrongholdsControlled = {
     val armies = armiesOnDune.armies
-    val factionToOccupiedStrongholds = strongholds
+    val factionToOccupiedStrongholds = strongholds_controlled.strongholds
       .flatMap { territory =>
         armies
           .get(territory)
-          .flatMap(_.get(strongholdSector(territory)))
+          .flatMap(_.get(strongholds_controlled.strongholdSector(territory)))
           .flatMap(_.filterNot(_.isOnlyAdvisor).headOption.map(_.faction))
           .map(FactionControllingTerritory(_, territory))
       }

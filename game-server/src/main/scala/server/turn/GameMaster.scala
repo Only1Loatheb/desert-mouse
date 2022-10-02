@@ -1,24 +1,21 @@
 package server.turn
 
 import utils.Not._
-
-import game.state.faction.Faction
 import game.state.turn_counter.TurnNumber
-import game.state.faction.{BeneGesserit, Guild, Fremen, Harkonnen, Atreides, Emperor}
-import game.state.dune_map.{HabbanyaRidgeSietch, SietchTabr}
-import game.state.strongholds_controlled.StrongholdTerritory
-
-import game.turn.phase.phase.Phase
-import game.turn.phase.phase.GameState
-import game.turn.phase.storm_phase._1_stormPhase
-import game.turn.phase.spice_blow_and_nexus_phase._2_spiceBlowAndNexusPhase
-import game.turn.phase.choam_charity_phase._3_choamCharityPhase
-import game.turn.phase.bidding_phase._4_biddingPhase
-import game.turn.phase.revival_phase._5_revivalPhase
-import game.turn.phase.shipment_and_movement_phase._6_shipmentAndMovementPhase
-import game.turn.phase.battle_phase._7_battlePhase
-import game.turn.phase.spice_collection_phase._8_spiceCollectionPhase
-import game.turn.phase.mentat_pause_phase._9_mentatPausePhase
+import game.state.faction.{Atreides, BeneGesserit, Emperor, Faction, Fremen, Guild, Harkonnen}
+import game.state.dune_map.{HabbanyaRidgeSietch, SietchTabr, Stronghold}
+import server.state.faction_circles.FactionCirclesOps
+import server.turn.phase.storm_phase._1_stormPhase
+import server.turn.phase.spice_blow_and_nexus_phase._2_spiceBlowAndNexusPhase
+import server.turn.phase.choam_charity_phase._3_choamCharityPhase
+import server.turn.phase.bidding_phase._4_biddingPhase
+import server.turn.phase.revival_phase._5_revivalPhase
+import server.turn.phase.shipment_and_movement_phase._6_shipmentAndMovementPhase
+import server.turn.phase.battle_phase._7_battlePhase
+import server.turn.phase.spice_collection_phase._8_spiceCollectionPhase
+import server.turn.phase.mentat_pause_phase._9_mentatPausePhase
+import server.state.turn_counter.TurnCounterOps
+import server.turn.phase.phase.{GameState, Phase}
 
 object game_master {
 
@@ -89,7 +86,7 @@ object game_master {
   }
 
   val requiredStrongholdsForFremen =
-    List[StrongholdTerritory](SietchTabr, HabbanyaRidgeSietch)
+    List[Stronghold](SietchTabr, HabbanyaRidgeSietch)
 
   val factionsBannedFromSietchTabrByFremen =
     List[Faction](Harkonnen, Atreides, Emperor)
@@ -116,8 +113,8 @@ object game_master {
   }
 
   private def isStrongholdOkForFremen(
-      strongholdsControlledToFaction: Map[StrongholdTerritory, Faction]
-  )(territory: StrongholdTerritory): Boolean = {
+      strongholdsControlledToFaction: Map[Stronghold, Faction]
+  )(territory: Stronghold): Boolean = {
     strongholdsControlledToFaction
       .get(territory)
       .fold(true)(faction => faction == Fremen)
@@ -133,8 +130,7 @@ object game_master {
       ._2.size
 
     lazy val factionWithMaxControlledStrongholds = factionToControlledStrongholds
-      .filter(_._2.size == maxControlledStrongholdsCount)
-      .map(_._1)
+      .filter(_._2.size == maxControlledStrongholdsCount).keys
 
     Option
       .when(gameState.tableState.factionCircles.isFactionPresent(Fremen))(Set(Fremen: Faction))

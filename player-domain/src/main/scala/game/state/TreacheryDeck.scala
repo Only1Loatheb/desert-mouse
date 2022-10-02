@@ -1,6 +1,5 @@
 package game.state
 
-import scala.util.Random
 object treachery_deck {
 
   sealed trait TreacheryCard extends Serializable with Product
@@ -25,7 +24,4 @@ object treachery_deck {
   case object TruthTrance extends TreacheryCard
   case object CheapHero extends TreacheryCard
 
-  final case class DrawResult(newTreacheryDeck: TreacheryDeck, drawnCards: List[TreacheryCard])
-
-  final case class TreacheryDeck(cards: List[TreacheryCard])
 }

@@ -1,15 +1,19 @@
 package game.state
 
-import scala.util.Random
-
-import game.state.dune_map._
+import game.state.SpiceDeck.SpiceCard
 import game.state.dune_map.Territory
 
-object spice_deck {
+final case class SpiceDeck(cards: List[SpiceCard])
+
+object SpiceDeck {
 
   sealed trait SpiceCard extends Serializable with Product
-  final case class SpiceBlow(territory: Territory) extends SpiceCard
-  case object ShaiHulud extends SpiceCard
 
-  final case class SpiceDeck(cards: List[SpiceCard])
+  object SpiceCard {
+    final case class SpiceBlow(territory: Territory) extends SpiceCard
+
+    case object ShaiHulud extends SpiceCard
+
+  }
+
 }

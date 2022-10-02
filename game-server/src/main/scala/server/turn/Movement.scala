@@ -3,21 +3,22 @@ package server.turn
 import scala.annotation.{nowarn, tailrec}
 import utils.Not.not
 import game.state.dune_map._
-import game.state.dune_map.duneMap
 import game.state.sector._
 import game.state.army._
 import game.state.armies_on_dune.{ArmiesOnDune, ArmySelection}
-import game.state.regions.isTerritoryOnThisSector
 import game.state.faction.{Faction, Fremen}
-
+import game.turn.movement.MoveDescriptor
+import server.state.armies_on_dune.ArmiesOnDuneOps
+import server.state.army.ArmyImpr
+import server.state.dune_map.{GetSectorOnEdgeEnd, duneMap}
+import server.state.regions.isTerritoryOnThisSector
+import server.state.sector.SectorOps
 
 /** An object that groups functions responsible for moving forces on the planet.
   */
 object movement {
 
-  final case class MoveDescriptor(from: (Territory, Map[Sector, Army]), to: (Territory, Sector))
-
-  private final case class MovementRange(val range: Int) extends AnyVal
+  private final case class MovementRange(range: Int) extends AnyVal
   private val withOrnithoptersRange = MovementRange(3)
   private val fremenRange = MovementRange(2)
   private val baseRange = MovementRange(1)
@@ -64,7 +65,7 @@ object movement {
   private def isStormBlockingThisMove(
       stormSector: Sector
   )(sectorFrom: Sector, sectorTarget: Sector): Boolean = {
-    lazy val traveledSectors = sectorFrom sectorsTo sectorTarget
+    lazy val traveledSectors = sectorFrom.sectorsTo(sectorTarget)
     if (sectorFrom == stormSector || sectorTarget == stormSector) true
     else if (sectorFrom == sectorTarget) false
     else traveledSectors.contains(stormSector)

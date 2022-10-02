@@ -1,8 +1,7 @@
 package server.state
 
 import org.scalatest.flatspec.AnyFlatSpec
-
-import game.state.spice_deck._
+import server.state.spice_deck.allSpiceCards
 
 class SpiceDeckTest extends AnyFlatSpec {
   "SpiceDeck.shuffledSpiceDeck.length" should "" in{

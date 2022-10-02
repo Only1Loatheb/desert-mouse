@@ -1,19 +1,18 @@
 package server.state
 
-import scala.util.Random
-
 import game.state.faction.Faction
-import game.state.sector._
+import game.state.faction_circles.FactionCircles
 import game.state.present_factions.PresentFactions
+import game.state.sector._
+
+import scala.util.Random
 
 object faction_circles {
 
-  type FactionsOnCircles = Map[Sector, Faction]
-
-  final case class FactionCircles(playersOnCircles: FactionsOnCircles) {
+  implicit class FactionCirclesOps(value: FactionCircles) {
 
     def isFactionPresent(faction: Faction): Boolean =
-      playersOnCircles.values.exists(_ == faction)
+      value.playersOnCircles.values.exists(_ == faction)
   }
 
   val playerCircles: List[Sector] = List(
@@ -24,12 +23,10 @@ object faction_circles {
     Sector13,
     Sector16,
   )
-  object FactionCircles {
 
-    def apply(presentFactions: PresentFactions): FactionCircles = {
-      FactionCircles(
-        playerCircles.zip(Random.shuffle(presentFactions.value)).toMap
-      )
-    }
+  def init(presentFactions: PresentFactions): FactionCircles = {
+    FactionCircles(
+      playerCircles.zip(Random.shuffle(presentFactions.value)).toMap
+    )
   }
 }

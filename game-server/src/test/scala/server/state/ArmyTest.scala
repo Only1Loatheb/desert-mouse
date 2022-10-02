@@ -2,9 +2,14 @@ package server.state
 
 import org.scalatest.flatspec.AnyFlatSpec
 import game.state.army._
+import game.state.non_neg_int.NonNegInt
+import server.state.army.{AddArmyOfDifferentTypeException, ArmyImpr}
 import utils.Not.not
 
 class ArmyTest extends AnyFlatSpec {
+
+  implicit val nonNegIntImplicitConversion: Int => NonNegInt = NonNegInt(_).get
+
   "Army.+" should "" in {
     val armies = List(
       FremenArmy(0, 0),

@@ -6,6 +6,6 @@ object Not{
 
   implicit class BooleanImprovements(val b: Boolean) {
     @inline
-    def not = !b
+    def not: Boolean = !b
   }
 }

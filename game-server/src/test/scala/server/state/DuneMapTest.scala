@@ -1,9 +1,8 @@
 package server.state
 
 import org.scalatest.flatspec.AnyFlatSpec
-
-import game.state.dune_map.duneMap
-import game.state.regions.isTerritoryOnThisSector
+import server.state.dune_map.duneMap
+import server.state.regions.isTerritoryOnThisSector
 import utils.TerritorySectors.sectorsOnTerritory
 
 class DuneMapTest extends AnyFlatSpec {

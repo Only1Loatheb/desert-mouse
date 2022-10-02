@@ -4,10 +4,16 @@ import org.scalatest.flatspec.AnyFlatSpec
 import game.state.armies_on_dune.{ArmiesOnDune, ArmySelection}
 import game.state.army._
 import game.state.dune_map.{Carthag, CielagoDepression}
+import game.state.non_neg_int.NonNegInt
 import game.state.sector.{Sector0, Sector1, Sector10, Sector2}
+import server.state.armies_on_dune.ArmiesOnDuneOps
+import server.state.army.ArmyImpr
 import utils.Not.not
 
 class ArmiesOnDuneTest extends AnyFlatSpec {
+
+  implicit val nonNegIntImplicitConversion: Int => NonNegInt = NonNegInt(_).get
+
   "armies_on_dune.hasSpaceToMoveTo.sameFaction" should "" in {
     val territory = Carthag
     val army = FremenArmy(2, 2)

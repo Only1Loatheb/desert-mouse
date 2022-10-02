@@ -22,7 +22,6 @@ object my_graph {
     }
   }
 
-
   final case class Edge[NODE, EDGE_LABEL](
       n1: NODE,
       n2: NODE,

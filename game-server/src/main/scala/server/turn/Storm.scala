@@ -4,11 +4,10 @@ import game.state.armies_on_dune.{ArmiesOnDune, ArmiesOnTerritory}
 import game.state.dune_map._
 import game.state.sector.Sector
 import utils.Not.not
-import utils.non_neg_int._
 import game.state.army._
-import game.state.regions._
 import game.state.spice.SpiceOnDune
-import game.state.spice.SpiceOnDune.spiceSector
+import server.state.regions.{TerritoriesBySector, duneTerritoriesBySector}
+import server.state.spice.spiceSector
 
 /** Storm moves anticlockwise. (Sectors are also indexed anticlockwise) Storm destroys armies in sand territories. Half
   * of the Fremen army can survive the storm (rounded up). Storm destroys spice.

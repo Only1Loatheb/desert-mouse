@@ -4,26 +4,25 @@ import game.state.faction._
 import game.state.sector._
 import game.state.dune_map._
 import game.state.present_factions.PresentFactions
+import game.state.strongholds_controlled.StrongholdsControlled
 
 object strongholds_controlled {
 
-  type StrongholdTerritory = Territory with Stronghold
-
-  val strongholds: Set[StrongholdTerritory] = dune_map.duneMap.getNodes
-    .collect { case stronghold: StrongholdTerritory => stronghold }
+  val strongholds: Set[Stronghold] = dune_map.duneMap.getNodes
+    .collect { case stronghold: Stronghold => stronghold }
   
-  val strongholdsWithOrnithopters: Set[StrongholdTerritory] = strongholds
+  val strongholdsWithOrnithopters: Set[Stronghold] = strongholds
     .filter { case _: HasOrnithopters => true; case _ => false }
     
-  final case class StrongholdsControlled(factionToControlledStrongholds: Map[Faction, Set[StrongholdTerritory]]) {
+  implicit class StrongholdsControlledOps(value: StrongholdsControlled) {
 
     def factionsWithOrnithopters: Set[Faction] = {
-      factionToControlledStrongholds
+      value.factionToControlledStrongholds
         .filter { case (_, controlled) => controlled.intersect(strongholdsWithOrnithopters).nonEmpty }
         .keySet
     }
 
-    def factionsWithMostStrongholds: Seq[(Faction, Int)] = factionToControlledStrongholds
+    def factionsWithMostStrongholds: Seq[(Faction, Int)] = value.factionToControlledStrongholds
       .toSeq
       .map { case (faction, controlled) => (faction, controlled.size) }
       .sortBy { case (_, controlled) => controlled }(Ordering[Int].reverse)
@@ -39,7 +38,7 @@ object strongholds_controlled {
 
   /** It may be dynamic, but in base game it is not
     */
-  private val startingStrongholdsControlled: Map[Faction, Set[StrongholdTerritory]] = Map(
+  private val startingStrongholdsControlled: Map[Faction, Set[Stronghold]] = Map(
     Fremen -> Set(),
     Atreides -> Set(Arrakeen),
     Harkonnen -> Set(Carthag),
@@ -48,13 +47,10 @@ object strongholds_controlled {
     Emperor -> Set()
   )
 
-  object StrongholdsControlled {
-
-    def init(presentFactions: PresentFactions): StrongholdsControlled = {
-      StrongholdsControlled(startingStrongholdsControlled.filter { 
-        case (k, _) => presentFactions.value.contains(k)
-      })
-    }
-
+  def init(presentFactions: PresentFactions): StrongholdsControlled = {
+    StrongholdsControlled(startingStrongholdsControlled.filter {
+      case (k, _) => presentFactions.value.contains(k)
+    })
   }
+
 }

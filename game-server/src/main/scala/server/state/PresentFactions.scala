@@ -1,13 +1,10 @@
 package server.state
 
-import game.state.faction
+import game.state.faction.Faction
+import game.state.present_factions.PresentFactions
 
 object present_factions {
-  final case class PresentFactions(value: Set[faction.Faction])
-
-  object PresentFactions {
-    def apply(value: Set[faction.Faction]) = 
+    def init(value: Set[Faction]) =
       if (value.isEmpty) throw new IllegalArgumentException
-      else new PresentFactions(value)
-  }
+      else PresentFactions(value)
 }

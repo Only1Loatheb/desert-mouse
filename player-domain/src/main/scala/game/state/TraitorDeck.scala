@@ -1,10 +1,7 @@
 package game.state
 
-import scala.util.Random
-
-import game.state.leaders.{Leader, leadersByFaction}
 import game.state.faction.Faction
-import game.state.present_factions.PresentFactions
+import game.state.leaders.Leader
 
 object traitor_deck {
 

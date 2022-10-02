@@ -1,14 +1,13 @@
 package server.turn.phase
 
+import game.state.SpiceDeck.SpiceCard.ShaiHulud
 import org.scalatest.flatspec.AnyFlatSpec
-
 import game.state.faction._
 import game.state.present_factions.PresentFactions
-import game.state.table_state.TableState
-import game.state.spice_deck.ShaiHulud
-
-import game.turn.phase.spice_blow_and_nexus_phase._2_spiceBlowAndNexusPhase
-import game.turn.phase.phase.GameState
+import server.state.spice_deck.SpiceDeckOps
+import server.state.table_state.TableState
+import server.turn.phase.phase.GameState
+import server.turn.phase.spice_blow_and_nexus_phase._2_spiceBlowAndNexusPhase
 
 class SpiceBlowAndNexusPhaseTest extends AnyFlatSpec {
   "movement.isMoveAllowed.simpleMove" should "" in {

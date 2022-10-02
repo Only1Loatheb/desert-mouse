@@ -1,7 +1,7 @@
 package server.turn.phase
 
-import game.state.table_state.TableState
 import game.player.player.Players
+import server.state.table_state.TableState
 
 object phase {  
 

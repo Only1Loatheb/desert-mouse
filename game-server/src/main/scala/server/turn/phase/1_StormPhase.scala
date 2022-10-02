@@ -1,14 +1,16 @@
 package server.turn.phase
 
-import game.state.table_state.TableState
-import game.state.spice.SpiceOnDune
-import game.state.sector.Sector
 import game.state.armies_on_dune
+import game.state.sector.Sector
+import game.state.spice.SpiceOnDune
 import game.state.storm_deck.StormDeck
-import game.state.turn_state.getPlayersOrder
-
-import game.turn.storm._
-import game.turn.phase.phase.Phase
+import server.state.sector.SectorOps
+import server.state.storm_deck.StormDeckOps
+import server.state.table_state.TableState
+import server.state.turn_counter.TurnCounterOps
+import server.state.turn_state.getPlayersOrder
+import server.turn.phase.phase.Phase
+import server.turn.storm.{affectArmiesOnSectors, affectSpiceOnSectors}
 
 object storm_phase {
 

@@ -1,23 +1,16 @@
 package server.state
 
-import scala.util.Random
-
-import game.state.leaders.{Leader, leadersByFaction}
 import game.state.faction.Faction
+
+import scala.util.Random
 import game.state.present_factions.PresentFactions
+import game.state.traitor_deck.{AllTraitorCandidates, TraitorCandidates, TraitorCard}
 
 object traitor_deck {
-
-  type TraitorCandidates = List[TraitorCard]
-
-  final case class TraitorCard(leader: Leader)
-
-  final case class AllTraitorCandidates(cards: Map[Faction, TraitorCandidates])
-
   private val traitorCandidatesForPlayer = 4
 
   private def getTraitors(presentFactions: Set[Faction]): TraitorCandidates = {
-    val possibleTraitors = presentFactions.flatMap(leadersByFaction)
+    val possibleTraitors = presentFactions.flatMap(leaders.leadersByFaction)
     possibleTraitors.map(TraitorCard).toList
   }
 
@@ -27,9 +20,6 @@ object traitor_deck {
     val traitorsShuffled = Random.shuffle(traitors)
     val traitorsDealt = traitorsShuffled.grouped(traitorCandidatesForPlayer)
     AllTraitorCandidates(presentFactionsSet.toList.zip(traitorsDealt).toMap)
-  }
-  object TraitorDeck {
-
   }
 }
 

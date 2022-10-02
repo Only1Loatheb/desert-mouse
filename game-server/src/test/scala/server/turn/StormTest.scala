@@ -1,16 +1,18 @@
 package server.turn
 
 import org.scalatest.flatspec.AnyFlatSpec
-
 import game.state.dune_map._
 import game.state.sector._
 import game.state.armies_on_dune.ArmiesOnDune
-import game.state.regions.duneTerritoriesBySector
 import game.state.army._
-
-import game.turn.storm._
+import game.state.non_neg_int.NonNegInt
+import server.state.regions.duneTerritoriesBySector
+import server.turn.storm.{affectArmiesOnSectors, stormTerritoriesBySector}
 
 class StormTest extends AnyFlatSpec {
+
+  implicit val nonNegIntImplicitConversion: Int => NonNegInt = NonNegInt(_).get
+
   "Storm.notAllSectorsAreAffected" should "" in {
     assert(stormTerritoriesBySector !== duneTerritoriesBySector)
   }

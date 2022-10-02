@@ -1,10 +1,9 @@
 package server.state
 
-import org.scalatest.flatspec.AnyFlatSpec
-
-import game.state.traitor_deck.getTraitorCandidates
 import game.state.faction._
 import game.state.present_factions.PresentFactions
+import org.scalatest.flatspec.AnyFlatSpec
+import server.state.traitor_deck.getTraitorCandidates
 
 class TraitorDeckTest extends AnyFlatSpec {
   "TraitorDeckTest.getTraitorCards.allFactions" should "" in {

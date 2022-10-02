@@ -1,8 +1,8 @@
 package server.state
 
 import org.scalatest.flatspec.AnyFlatSpec
-
 import game.state.sector._
+import server.state.sector.SectorOps
 
 class SectorTest extends AnyFlatSpec {
   "Sector.sameSectorsAreEqual" should "" in {

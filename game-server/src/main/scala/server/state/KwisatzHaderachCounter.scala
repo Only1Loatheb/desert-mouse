@@ -1,10 +1,8 @@
 package server.state
 
+import game.state.kwisatz_haderach_counter.KwisatzHaderachCounter
+
 object kwisatz_haderach_counter {
 
-  final case class KwisatzHaderachCounter(forcesLost: Int) extends AnyVal
-
-  object KwisatzHaderachCounter {
-    def apply(): KwisatzHaderachCounter = KwisatzHaderachCounter(0)
-  }
+  def init(): KwisatzHaderachCounter = KwisatzHaderachCounter(0)
 }

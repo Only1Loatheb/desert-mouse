@@ -1,11 +1,13 @@
 package server.turn.phase
 
+import game.state.SpiceDeck.SpiceCard
+import game.state.SpiceDeck.SpiceCard.SpiceBlow
 import game.state.spice.SpiceOnDune
 import game.state.sector.Sector
-import game.state.spice_deck.SpiceCard
-import game.state.spice_deck.SpiceBlow
-
-import game.turn.phase.phase.Phase
+import server.state.spice
+import server.state.spice.SpiceOnDuneOps
+import server.state.spice_deck.SpiceDeckOps
+import server.turn.phase.phase.Phase
 
 object spice_blow_and_nexus_phase {
 
@@ -35,7 +37,7 @@ object spice_blow_and_nexus_phase {
       spiceCard: SpiceCard,
   ): SpiceOnDune = {
     spiceCard match {
-      case SpiceBlow(territory) if SpiceOnDune.spiceSector(territory) != stormSector =>
+      case SpiceBlow(territory) if spice.spiceSector(territory) != stormSector =>
         spiceOnDune.addSpice(territory)
       case _ => spiceOnDune
     }

@@ -6,13 +6,12 @@ import game.state.faction._
 import game.state.faction_spice.FactionSpice
 import game.state.present_factions.PresentFactions
 import game.state.spice.Spice
-import game.state.table_state.TableState
-import game.state.{leaders, table_state, traitor_deck}
+import game.state.{leaders, table_state_view, traitor_deck}
 import game.turn.movement
-import game.turn.phase.choam_charity_phase._3_choamCharityPhase
-import game.turn.phase.phase.GameState
 import org.scalatest.flatspec.AnyFlatSpec
-
+import server.state.table_state.TableState
+import server.turn.phase.choam_charity_phase._3_choamCharityPhase
+import server.turn.phase.phase.GameState
 
 class ChoamCharityPhaseTest extends AnyFlatSpec {
   "isItRealyClaimed" should "" in {
@@ -40,43 +39,41 @@ class ChoamCharityPhaseTest extends AnyFlatSpec {
 
     override def chooseTraitors(presentFactions: PresentFactions, traitorCandidates: traitor_deck.TraitorCandidates): player.PlayerDecision[traitor_deck.TraitorCandidates] = ???
 
-    override def claimChoamCharity(gameStateView: table_state.TableStateView): player.PlayerDecision[Boolean] = player.PlayerDecision(this, true)
+    override def claimChoamCharity(gameStateView: table_state_view.TableStateView): player.PlayerDecision[Boolean] = player.PlayerDecision(this, true)
 
-    override def proposeAlliance(gameStateView: table_state.TableStateView): player.PlayerDecision[Faction] = ???
+    override def proposeAlliance(gameStateView: table_state_view.TableStateView): player.PlayerDecision[Faction] = ???
 
-    override def bidTreacheryCard(gameStateView: table_state.TableStateView, otherBids: Map[Faction,Int]): player.PlayerDecision[Option[Int]] = ???
+    override def bidTreacheryCard(gameStateView: table_state_view.TableStateView, otherBids: Map[Faction,Int]): player.PlayerDecision[Option[Int]] = ???
 
-    override def reviveArmyAndLeader(gameStateView: table_state.TableStateView): player.PlayerDecision[RevivalDecision] = ???
+    override def reviveArmyAndLeader(gameStateView: table_state_view.TableStateView): player.PlayerDecision[RevivalDecision] = ???
 
-    override def reviveLeader(gameStateView: table_state.TableStateView): player.PlayerDecision[Option[leaders.Leader]] = ???
+    override def reviveLeader(gameStateView: table_state_view.TableStateView): player.PlayerDecision[Option[leaders.Leader]] = ???
 
-    override def moveArmy(gameStateView: table_state.TableStateView): player.PlayerDecision[Option[movement.MoveDescriptor]] = ???
+    override def moveArmy(gameStateView: table_state_view.TableStateView): player.PlayerDecision[Option[movement.MoveDescriptor]] = ???
 
-    override def shipArmy(gameStateView: table_state.TableStateView): player.PlayerDecision[Option[ShipmentDestination]] = ???
-
-
+    override def shipArmy(gameStateView: table_state_view.TableStateView): player.PlayerDecision[Option[ShipmentDestination]] = ???
   }
 
-    val refuseBot = new player.Player {
+  val refuseBot = new player.Player {
 
-      override def implementedFactions: Set[Faction] = Set(Atreides, Harkonnen)
+    override def implementedFactions: Set[Faction] = Set(Atreides, Harkonnen)
 
-      override def firstStormMoveValue: player.PlayerDecision[Int] = ???
+    override def firstStormMoveValue: player.PlayerDecision[Int] = ???
 
-      override def chooseTraitors(presentFactions: PresentFactions, traitorCandidates: traitor_deck.TraitorCandidates): player.PlayerDecision[traitor_deck.TraitorCandidates] = ???
+    override def chooseTraitors(presentFactions: PresentFactions, traitorCandidates: traitor_deck.TraitorCandidates): player.PlayerDecision[traitor_deck.TraitorCandidates] = ???
 
-      override def claimChoamCharity(gameStateView: table_state.TableStateView): player.PlayerDecision[Boolean] = player.PlayerDecision(this, false)
+    override def claimChoamCharity(gameStateView: table_state_view.TableStateView): player.PlayerDecision[Boolean] = player.PlayerDecision(this, false)
 
-      override def proposeAlliance(gameStateView: table_state.TableStateView): player.PlayerDecision[Faction] = ???
+    override def proposeAlliance(gameStateView: table_state_view.TableStateView): player.PlayerDecision[Faction] = ???
 
-      override def bidTreacheryCard(gameStateView: table_state.TableStateView, otherBids: Map[Faction,Int]): player.PlayerDecision[Option[Int]] = ???
+    override def bidTreacheryCard(gameStateView: table_state_view.TableStateView, otherBids: Map[Faction,Int]): player.PlayerDecision[Option[Int]] = ???
 
-      override def reviveArmyAndLeader(gameStateView: table_state.TableStateView): player.PlayerDecision[RevivalDecision] = ???
+    override def reviveArmyAndLeader(gameStateView: table_state_view.TableStateView): player.PlayerDecision[RevivalDecision] = ???
 
-      override def reviveLeader(gameStateView: table_state.TableStateView): player.PlayerDecision[Option[leaders.Leader]] = ???
+    override def reviveLeader(gameStateView: table_state_view.TableStateView): player.PlayerDecision[Option[leaders.Leader]] = ???
 
-      override def moveArmy(gameStateView: table_state.TableStateView): player.PlayerDecision[Option[movement.MoveDescriptor]] = ???
+    override def moveArmy(gameStateView: table_state_view.TableStateView): player.PlayerDecision[Option[movement.MoveDescriptor]] = ???
 
-      override def shipArmy(gameStateView: table_state.TableStateView): player.PlayerDecision[Option[ShipmentDestination]] = ???
+    override def shipArmy(gameStateView: table_state_view.TableStateView): player.PlayerDecision[Option[ShipmentDestination]] = ???
   }
 }

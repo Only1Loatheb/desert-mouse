@@ -1,14 +1,13 @@
 package game.player
 
-import game.state.present_factions.PresentFactions
-import game.state.table_state._
-import game.state.faction.Faction
-import game.state.traitor_deck.TraitorCandidates
 import game.state.army.Army
-import game.state.sector.Sector
 import game.state.dune_map.Territory
+import game.state.faction.Faction
 import game.state.leaders.Leader
-
+import game.state.present_factions.PresentFactions
+import game.state.sector.Sector
+import game.state.table_state_view._
+import game.state.traitor_deck.TraitorCandidates
 import game.turn.movement.MoveDescriptor
 
 object player {
@@ -36,8 +35,6 @@ object player {
      * Storm is moved number of sectors equal to sum of this two numbers.
      */
     def firstStormMoveValue: PlayerDecision[Int]
-
-
     /**
      * Return one leader to become traitor.
      * Return all if you are Harkonnen.

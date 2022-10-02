@@ -2,15 +2,14 @@ package server.turn.phase
 
 import scala.annotation.tailrec
 import scala.annotation.nowarn
-import game.state.faction.Faction
-import game.state.faction.Harkonnen
-import game.state.treachery_deck.{DrawResult, TreacheryCard}
+import game.state.faction.{Faction, Harkonnen}
+import game.state.treachery_deck.{TreacheryCard}
 import game.state.faction_spice.FactionSpice
 import game.state.treachery_cards.TreacheryCards
 import game.state.spice.Spice
-import game.turn.phase.phase.Phase
 import game.player.player.Players
-
+import server.state.treachery_deck.DrawResult
+import server.turn.phase.phase.Phase
 
 object bidding_phase {
 
@@ -103,7 +102,6 @@ object bidding_phase {
     case Harkonnen => 8
     case _ => 4
   }
-
 
   sealed trait BidAction
   object BidAction {

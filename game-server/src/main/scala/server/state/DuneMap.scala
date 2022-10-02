@@ -1,6 +1,6 @@
 package server.state
 
-import game.state.dune_map.Territory
+import game.state.dune_map._
 import game.state.sector._
 import utils.my_graph._
 
@@ -12,7 +12,6 @@ object dune_map {
   }
   type GetSectorOnEdgeEnd = Sector => Set[Sector]
   type DuneMapGraph = MyGraph[Territory, GetSectorOnEdgeEnd]
-
 
   val duneMap: DuneMapGraph = {
     val edges: List[DuneMapEdge] = List(

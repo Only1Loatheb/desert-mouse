@@ -1,17 +1,17 @@
 package server.turn.phase
 
-import game.turn.phase.phase.Phase
-import utils.map._
-import game.state.faction_spice.FactionSpice
-import game.state.dune_map._
-import game.state.army.Army
-import game.state.faction._
 import game.state.armies_on_dune.ArmiesOnDune
-import game.state.spice.SpiceOnDune
-import game.state.spice.SpiceOnDune._
-import game.state.spice.Spice
+import game.state.army.Army
+import game.state.dune_map._
+import game.state.faction._
+import game.state.faction_spice.FactionSpice
 import game.state.sector.Sector
-import server.state.{dune_map, faction}
+import game.state.spice.{Spice, SpiceOnDune}
+import server.state.army.ArmyImpr
+import server.state.spice.spiceSector
+import server.state.strongholds_controlled.StrongholdsControlledOps
+import server.turn.phase.phase.Phase
+import utils.map._
 
 object spice_collection_phase {
 
@@ -37,13 +37,13 @@ object spice_collection_phase {
     gameState.copy(tableState = newTableState)
   }
 
-  private type TerritoryToSpice = Map[dune_map.Territory, Spice]
-  private type SpiceCollected = Map[faction.Faction, Spice]
-  private final case class FactionCollectedSpice(faction: faction.Faction, collectedSpice: Spice) {
+  private type TerritoryToSpice = Map[Territory, Spice]
+  private type SpiceCollected = Map[Faction, Spice]
+  private final case class FactionCollectedSpice(faction: Faction, collectedSpice: Spice) {
     def unapply = (faction, collectedSpice)
   }
-  private type FactionCollectionRate = faction.Faction => Spice
-  private[phase] final case class SpiceCollectedByFaction(collectedSpice: Map[faction.Faction, Spice])
+  private type FactionCollectionRate = Faction => Spice
+  private[phase] final case class SpiceCollectedByFaction(collectedSpice: Map[Faction, Spice])
 
   /** Calculates amounts of spice left on Dune and amounts of spice collected by each player. During
     * collection faze of the game there is only one army per territory exception being Advisors.
@@ -59,7 +59,7 @@ object spice_collection_phase {
   private[phase] def collectSpice(
       spiceOnDune: SpiceOnDune,
       armiesOnDune: ArmiesOnDune,
-      factionsWithOrnithopters: Set[faction.Faction]
+      factionsWithOrnithopters: Set[Faction]
   ): (SpiceOnDune, SpiceCollectedByFaction) = {
     val collectionRate: FactionCollectionRate = getCollectionRate(factionsWithOrnithopters)
     val (newSpice, collectedSpice) =
@@ -67,7 +67,7 @@ object spice_collection_phase {
     (SpiceOnDune(newSpice), SpiceCollectedByFaction(collectedSpice))
   }
 
-  private def getCollectionRate(factionsWithOrnithopters: Set[faction.Faction])(faction: faction.Faction): Spice = {
+  private def getCollectionRate(factionsWithOrnithopters: Set[Faction])(faction: Faction): Spice = {
     if (factionsWithOrnithopters.contains(faction)) Spice(3)
     else Spice(2)
   }
@@ -76,8 +76,8 @@ object spice_collection_phase {
       armiesOnDune: ArmiesOnDune,
       spiceOnDune: TerritoryToSpice,
       collectionRate: FactionCollectionRate
-  ): (Map[dune_map.Territory, Spice], SpiceCollected) = {
-    val territoryAndArmyOnSpiceSectors: Map[dune_map.Territory, FactionCollectedSpice] = spiceOnDune
+  ): (Map[Territory, Spice], SpiceCollected) = {
+    val territoryAndArmyOnSpiceSectors: Map[Territory, FactionCollectedSpice] = spiceOnDune
       .flatMap(armiesOnSpiceRegionsOption(armiesOnDune.armies, collectionRate))
 
     val newFactionToSpice = getCollectedSpiceByFaction(territoryAndArmyOnSpiceSectors)
@@ -90,9 +90,9 @@ object spice_collection_phase {
   }
 
   private def armiesOnSpiceRegionsOption(
-                                          armiesOnDune: Map[dune_map.Territory, Map[Sector, List[Army]]],
-                                          collectionRate: FactionCollectionRate,
-  )(territoryAndSpice: (dune_map.Territory, Spice)): Option[(dune_map.Territory, FactionCollectedSpice)] = {
+    armiesOnDune: Map[Territory, Map[Sector, List[Army]]],
+    collectionRate: FactionCollectionRate,
+  )(territoryAndSpice: (Territory, Spice)): Option[(Territory, FactionCollectedSpice)] = {
     val (territory, spice) = territoryAndSpice
     armiesOnDune
       .get(territory)
@@ -100,8 +100,6 @@ object spice_collection_phase {
       .flatMap(_.filterNot(_.isOnlyAdvisor).headOption)
       .map(army => (territory, collectSpice(spice, collectionRate, army)))
   }
-
-
   private def collectSpice(
       spiceCount: Spice,
       collectionRate: FactionCollectionRate,
@@ -113,7 +111,7 @@ object spice_collection_phase {
   }
 
   private def getCollectedSpiceByFaction(
-      territoryToCollectedSpice: Map[dune_map.Territory, FactionCollectedSpice]
+      territoryToCollectedSpice: Map[Territory, FactionCollectedSpice]
   ): SpiceCollected = {
     territoryToCollectedSpice
       .values

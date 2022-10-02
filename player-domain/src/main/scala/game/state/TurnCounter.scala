@@ -2,7 +2,7 @@ package game.state
 
 object turn_counter {
 
-  val pregameDecisionTurn = TurnNumber(0)
+  val pregameDecisionTurn: TurnNumber = TurnNumber(0)
 
   final case class TurnNumber(turn: Int) extends AnyVal
 

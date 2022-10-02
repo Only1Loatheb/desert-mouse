@@ -1,6 +1,5 @@
 package game.state
 
-import game.state.present_factions.PresentFactions
 import game.state.army._
 import game.state.faction._
 

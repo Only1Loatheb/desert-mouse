@@ -6,10 +6,10 @@ import game.state.faction.Faction
 import game.state.faction_spice.FactionSpice
 import game.state.reserves.Reserves
 import game.state.spice.Spice
-import game.state.table_state.TableState
-import game.turn.phase.phase.Phase
+import server.state.army.ArmyImpr
+import server.state.table_state.TableState
+import server.turn.phase.phase.Phase
 import utils.map.MapImprovements
-
 
 object shipment_and_movement_phase { // TODO
 

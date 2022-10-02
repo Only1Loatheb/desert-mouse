@@ -1,12 +1,12 @@
 package server.turn.phase
 
-import game.turn.phase.phase.Phase
-import game.state.faction_spice
-import game.state.faction.Faction
 import game.player.player.Player
-import game.state.table_state.TableState
-import utils.map._
+import game.state.faction.Faction
+import game.state.faction_spice
 import game.state.spice.Spice
+import server.state.table_state.TableState
+import server.turn.phase.phase.Phase
+import utils.map._
 
 object choam_charity_phase {
 

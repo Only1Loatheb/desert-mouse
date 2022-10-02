@@ -2,7 +2,7 @@ package utils
 
 import game.state.dune_map._
 import game.state.sector._
-import game.state.regions.duneTerritoriesBySector
+import server.state.regions.duneTerritoriesBySector
 
 object TerritorySectors {
 

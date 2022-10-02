@@ -1,7 +1,6 @@
 package server.state
 
-import game.state.army
-import game.state.army.{Army, AtreidesArmy, BeneGesseritArmy, EmperorArmy, FremenArmy, GuildArmy, HarkonnenArmy}
+import game.state.army._
 import game.state.faction._
 import game.state.non_neg_int.NonNegInt
 
