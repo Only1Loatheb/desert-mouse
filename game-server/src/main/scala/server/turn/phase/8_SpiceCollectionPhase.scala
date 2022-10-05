@@ -37,7 +37,7 @@ object spice_collection_phase {
     gameState.copy(tableState = newTableState)
   }
 
-  private type TerritoryToSpice = Map[Territory, Spice]
+  private type TerritoryToSpice = Map[SandWithSpiceBlows, Spice]
   private type SpiceCollected = Map[Faction, Spice]
   private final case class FactionCollectedSpice(faction: Faction, collectedSpice: Spice) {
     def unapply = (faction, collectedSpice)
@@ -76,8 +76,8 @@ object spice_collection_phase {
       armiesOnDune: ArmiesOnDune,
       spiceOnDune: TerritoryToSpice,
       collectionRate: FactionCollectionRate
-  ): (Map[Territory, Spice], SpiceCollected) = {
-    val territoryAndArmyOnSpiceSectors: Map[Territory, FactionCollectedSpice] = spiceOnDune
+  ): (Map[SandWithSpiceBlows, Spice], SpiceCollected) = {
+    val territoryAndArmyOnSpiceSectors: Map[SandWithSpiceBlows, FactionCollectedSpice] = spiceOnDune
       .flatMap(armiesOnSpiceRegionsOption(armiesOnDune.armies, collectionRate))
 
     val newFactionToSpice = getCollectedSpiceByFaction(territoryAndArmyOnSpiceSectors)
@@ -92,7 +92,7 @@ object spice_collection_phase {
   private def armiesOnSpiceRegionsOption(
     armiesOnDune: Map[Territory, Map[Sector, List[Army]]],
     collectionRate: FactionCollectionRate,
-  )(territoryAndSpice: (Territory, Spice)): Option[(Territory, FactionCollectedSpice)] = {
+  )(territoryAndSpice: (SandWithSpiceBlows, Spice)): Option[(SandWithSpiceBlows, FactionCollectedSpice)] = {
     val (territory, spice) = territoryAndSpice
     armiesOnDune
       .get(territory)
@@ -111,7 +111,7 @@ object spice_collection_phase {
   }
 
   private def getCollectedSpiceByFaction(
-      territoryToCollectedSpice: Map[Territory, FactionCollectedSpice]
+      territoryToCollectedSpice: Map[SandWithSpiceBlows, FactionCollectedSpice]
   ): SpiceCollected = {
     territoryToCollectedSpice
       .values

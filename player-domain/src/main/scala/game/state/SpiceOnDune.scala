@@ -12,5 +12,5 @@ object spice {
     def <(s: Spice): Boolean = spice < s.spice
   }
 
-  final case class SpiceOnDune(spice: Map[Territory, Spice])
+  final case class SpiceOnDune(spice: Map[SandWithSpiceBlows, Spice])
 }

@@ -1,23 +1,27 @@
 package server.state
 
 import game.state.treachery_deck._
+import utils.DeckDraw
 
 import scala.util.Random
 
 object treachery_deck {
 
-  final case class DrawResult(newTreacheryDeck: TreacheryDeck, drawnCards: List[TreacheryCard])
+  final case class TreacheryDrawResult(newTreacheryDeck: TreacheryDeck, drawnCards: List[TreacheryCard])
 
-  // todo implement Deck Typeclass
-  final case class TreacheryDeck(cards: List[TreacheryCard]) {
-    def drawCards(requestedCards: Int): DrawResult = {
-      val drawnCard = requestedCards.min(cards.length)
+  final case class TreacheryDeck(cards: List[TreacheryCard])
+    extends DeckDraw {
+    override type CARD = TreacheryCard
 
-      DrawResult(
-        newTreacheryDeck = TreacheryDeck(cards.drop(drawnCard)),
-        drawnCards = cards.take(drawnCard),
+    def drawCards(requestedCards: Int): TreacheryDrawResult = {
+      val DrawResult(newDeck, drawnCards) =  super.drawCards(cards, requestedCards)
+
+      TreacheryDrawResult(
+        newTreacheryDeck = TreacheryDeck(newDeck),
+        drawnCards = drawnCards,
       )
     }
+
   }
 
   // 33 cards in original game

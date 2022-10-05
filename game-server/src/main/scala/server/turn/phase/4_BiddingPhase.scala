@@ -2,13 +2,13 @@ package server.turn.phase
 
 import scala.annotation.tailrec
 import scala.annotation.nowarn
-import game.state.faction.{Faction, Harkonnen}
-import game.state.treachery_deck.{TreacheryCard}
+import game.state.faction._
+import game.state.treachery_deck.TreacheryCard
 import game.state.faction_spice.FactionSpice
 import game.state.treachery_cards.TreacheryCards
 import game.state.spice.Spice
 import game.player.player.Players
-import server.state.treachery_deck.DrawResult
+import server.state.treachery_deck.TreacheryDrawResult
 import server.turn.phase.phase.Phase
 
 object bidding_phase {
@@ -22,7 +22,7 @@ object bidding_phase {
       cards.size < factionCardsLimit(faction)
     }.keySet
 
-    val DrawResult(newTreacheryDeck, drawnCards) = gameState.tableState.treacheryDeck
+    val TreacheryDrawResult(newTreacheryDeck, drawnCards) = gameState.tableState.treacheryDeck
       .drawCards(biddingFactions.size)
 
     val factionOrder = gameState.tableState.turnState.factionInitiative
@@ -100,7 +100,7 @@ object bidding_phase {
   // move somewere else
   private val factionCardsLimit: Faction => Int = {
     case Harkonnen => 8
-    case _ => 4
+    case Atreides | Harkonnen | Fremen | Emperor | Guild | BeneGesserit => 4
   }
 
   sealed trait BidAction

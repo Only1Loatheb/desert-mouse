@@ -8,7 +8,7 @@ import game.state.reserves.Reserves
 
 object reserves {
 
-  implicit val nonNegIntImplicitConversion: Int => NonNegInt = NonNegInt(_).get
+  private implicit val nonNegIntImplicitConversion: Int => NonNegInt = NonNegInt(_).get
 
   private val startingReserves: Faction => Army = {
     case Fremen       => FremenArmy(0, 0)

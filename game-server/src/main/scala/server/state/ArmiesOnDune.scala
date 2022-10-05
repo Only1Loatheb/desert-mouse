@@ -14,7 +14,7 @@ object armies_on_dune {
 
   val maxArmiesOnStronghold = 2
 
-  implicit val nonNegIntImplicitConversion: Int => NonNegInt = NonNegInt(_).get
+  private implicit val nonNegIntImplicitConversion: Int => NonNegInt = NonNegInt(_).get
 
   val startingArmies: Map[Faction, (Territory, Map[Sector, List[Army]])] = Map(
     (Atreides, (Arrakeen, Map(Sector9 -> List(AtreidesArmy(10))))),

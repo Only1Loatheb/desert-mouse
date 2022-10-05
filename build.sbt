@@ -2,8 +2,9 @@ val defaultScalaVersion = "2.13.8"
 
 version := "1.0"
 
-val scalatestV = "3.2.10"
-val catsV = "2.6.1"
+val scalatestV = "3.2.14"
+val catsV = "2.8.0"
+val shapelessV = "2.3.10"
 
 lazy val compilerOptions = Seq(
   scalaVersion := defaultScalaVersion,
@@ -23,6 +24,7 @@ lazy val compilerOptions = Seq(
 lazy val dependencies = Seq(
   libraryDependencies ++= Seq(
     "org.typelevel" %% "cats-core" % catsV,
+    "com.chuusai" %% "shapeless" % shapelessV,
     "org.scalatest" %% "scalatest" % scalatestV % Test,
   )
 )

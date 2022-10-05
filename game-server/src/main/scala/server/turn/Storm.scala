@@ -1,5 +1,6 @@
 package server.turn
 
+import cats.implicits.{catsSyntaxOptionId, toFunctorFilterOps}
 import game.state.armies_on_dune.{ArmiesOnDune, ArmiesOnTerritory}
 import game.state.dune_map._
 import game.state.sector.Sector
@@ -21,11 +22,6 @@ object storm {
         case _                                             => false
       })
       .toMap
-  }
-
-  private val affectArmy: PartialFunction[Army, Army] = {
-    case FremenArmy(troops, fedaykins) =>
-      FremenArmy(troops.divideBy2RoundUp, fedaykins.divideBy2RoundUp)
   }
 
   def affectArmiesOnSectors(
@@ -57,14 +53,21 @@ object storm {
   private def affectArmies(
       armies: ArmiesOnTerritory,
       stormSectors: Set[Sector]
-  ) = {
+  ): Map[Sector, List[Army]] = {
     armies
       .map {
         case (sector, armies) if stormSectors.contains(sector) =>
-          (sector, armies.collect(affectArmy))
+          (sector, armies.mapFilter(affectArmy))
         case other => other
       }
       .filterNot(_._2.isEmpty)
+  }
+
+  private val affectArmy: Army => Option[Army] = {
+    case FremenArmy(troops, fedaykins) =>
+      FremenArmy(troops.divideBy2RoundUp, fedaykins.divideBy2RoundUp).some
+    case _: AtreidesArmy | _: HarkonnenArmy | _: EmperorArmy | _: GuildArmy | _: BeneGesseritArmy =>
+      None
   }
 
   def affectSpiceOnSectors(

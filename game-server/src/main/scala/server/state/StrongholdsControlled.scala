@@ -12,7 +12,7 @@ object strongholds_controlled {
     .collect { case stronghold: Stronghold => stronghold }
   
   val strongholdsWithOrnithopters: Set[Stronghold] = strongholds
-    .filter { case _: HasOrnithopters => true; case _ => false }
+    .filter(_.isInstanceOf[StrongholdWithOrnithopters])
     
   implicit class StrongholdsControlledOps(value: StrongholdsControlled) {
 
