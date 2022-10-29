@@ -1,5 +1,6 @@
 package game.state
 
+import game.state.SpiceDeck.SpiceCard.SpiceBlow
 import game.state.armies_on_dune.ArmiesOnDune
 import game.state.faction.Faction
 import game.state.faction_circles.FactionCircles
@@ -18,6 +19,7 @@ object table_state_view {
     playedFaction: Faction,
     turnCounter: TurnCounter,
     spiceOnDune: SpiceOnDune,
+    lastSpiceBlow: Option[SpiceBlow],
     armiesOnDune: ArmiesOnDune,
     tleilaxuTanks: TleilaxuTanks,
     reserves: Reserves,

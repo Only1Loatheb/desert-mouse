@@ -21,7 +21,7 @@ object spice_collection_phase {
     val (newSpiceOnDune, spiceCollectedByFaction) = collectSpice(
       tableState.spiceOnDune,
       tableState.armiesOnDune,
-      tableState.strongholdsControlled.factionsWithOrnithopters
+      tableState.strongholdsControlled.factionsWithOrnithopters()
     )
     
     val newFactionSpice = FactionSpice(
@@ -85,7 +85,7 @@ object spice_collection_phase {
       .view.mapValues(_.collectedSpice).toMap
     val newSpiceOnDune = spiceOnDune
       .diffWith(_ - _)(collectedSpice)
-      .filter(_._2 != Spice(0))
+      .filterNot(_._2 == Spice(0))
     (newSpiceOnDune, newFactionToSpice)
   }
 

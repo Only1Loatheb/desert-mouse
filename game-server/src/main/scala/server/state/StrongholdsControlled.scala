@@ -8,24 +8,30 @@ import game.state.strongholds_controlled.StrongholdsControlled
 
 object strongholds_controlled {
 
-  val strongholds: Set[Stronghold] = dune_map.duneMap.getNodes
+  val allStrongholds: Set[Stronghold] = dune_map.duneMap.getNodes
     .collect { case stronghold: Stronghold => stronghold }
-  
-  val strongholdsWithOrnithopters: Set[Stronghold] = strongholds
+
+  val allStrongholdsWithOrnithopters: Set[Stronghold] = allStrongholds
     .filter(_.isInstanceOf[StrongholdWithOrnithopters])
-    
+
   implicit class StrongholdsControlledOps(value: StrongholdsControlled) {
 
-    def factionsWithOrnithopters: Set[Faction] = {
+    def factionsWithOrnithopters(): Set[Faction] = {
       value.factionToControlledStrongholds
-        .filter { case (_, controlled) => controlled.intersect(strongholdsWithOrnithopters).nonEmpty }
+        .filter { case (_, controlled) => controlled.intersect(allStrongholdsWithOrnithopters).nonEmpty }
         .keySet
     }
 
-    def factionsWithMostStrongholds: Seq[(Faction, Int)] = value.factionToControlledStrongholds
+    def factionsWithMostStrongholds(): Seq[(Faction, Int)] = value.factionToControlledStrongholds
       .toSeq
       .map { case (faction, controlled) => (faction, controlled.size) }
       .sortBy { case (_, controlled) => controlled }(Ordering[Int].reverse)
+
+    def hasOrnithopters(faction: Faction): Boolean = {
+      value.factionToControlledStrongholds
+        .getOrElse(faction, Set.empty)
+        .exists(_.isInstanceOf[StrongholdWithOrnithopters])
+    }
   }
 
   val strongholdSector: Stronghold => Sector = { 

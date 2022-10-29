@@ -24,7 +24,7 @@ object mentat_pause_phase {
 
   private def getNewStrongholdsControlled(armiesOnDune: ArmiesOnDune): StrongholdsControlled = {
     val armies = armiesOnDune.armies
-    val factionToOccupiedStrongholds = strongholds_controlled.strongholds
+    val factionToOccupiedStrongholds = strongholds_controlled.allStrongholds
       .flatMap { territory =>
         armies
           .get(territory)

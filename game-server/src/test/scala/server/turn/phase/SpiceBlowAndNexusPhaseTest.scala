@@ -19,7 +19,7 @@ class SpiceBlowAndNexusPhaseTest extends AnyFlatSpec {
       newGameState.tableState.spiceDeck.cards.size + 2 == gameState.tableState.spiceDeck.cards.size
     )
     if (
-      gameState.tableState.spiceDeck.drawTwoCards._2 match {
+      gameState.tableState.spiceDeck.drawTwoCards()._2 match {
         case (ShaiHulud, ShaiHulud) => false
         case _                      => true
       }

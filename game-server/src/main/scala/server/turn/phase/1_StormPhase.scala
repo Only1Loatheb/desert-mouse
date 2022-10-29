@@ -10,7 +10,7 @@ import server.state.table_state.TableState
 import server.state.turn_counter.TurnCounterOps
 import server.state.turn_state.getPlayersOrder
 import server.turn.phase.phase.Phase
-import server.turn.storm.{affectArmiesOnSectors, affectSpiceOnSectors}
+import server.turn.storm.{affectArmiesOnStormSectors, affectSpiceOnSectors}
 
 object storm_phase {
 
@@ -49,7 +49,7 @@ object storm_phase {
   ): (SpiceOnDune, armies_on_dune.ArmiesOnDune) = {
     val stormSectors = tableState.stormSector.sectorsTo(newStormSector)
     val spiceOnDuneAfterStorm = affectSpiceOnSectors(tableState.spiceOnDune, stormSectors)
-    val newArmiesOnDune = affectArmiesOnSectors(tableState.armiesOnDune, stormSectors)
+    val newArmiesOnDune = affectArmiesOnStormSectors(tableState.armiesOnDune, stormSectors)
     (spiceOnDuneAfterStorm, newArmiesOnDune)
   }
 }

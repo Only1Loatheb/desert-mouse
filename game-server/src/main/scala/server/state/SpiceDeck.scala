@@ -1,12 +1,13 @@
 package server.state
 
-import shapeless._
-import shapeless.syntax.sized._
-import scala.util.Random
-import game.state.dune_map._
 import game.state.SpiceDeck
 import game.state.SpiceDeck.SpiceCard
+import game.state.dune_map._
+import shapeless._
+import shapeless.syntax.sized._
 import utils.DeckDraw
+
+import scala.util.Random
 
 object spice_deck {
 
@@ -14,13 +15,28 @@ object spice_deck {
     extends DeckDraw {
     override type CARD = SpiceCard
 
-    def drawTwoCards: (SpiceDeck, (SpiceCard, SpiceCard)) = {
-      val DrawResult(newDeck, drawnCards) =  super.drawCards(value.cards, 2)
+    def add(cards: List[SpiceCard]): SpiceDeck = {
+      SpiceDeck(Random.shuffle(cards ++ value.cards))
+    }
+
+    def drawOneCard(): (SpiceDeck, SpiceCard) = {
+      value.cards
+        .headOption
+        .fold {
+          val newDeck = shuffleCards()
+          (SpiceDeck(newDeck.tail), newDeck.head)
+        } { card =>
+          (SpiceDeck(value.cards.tail), card)
+        }
+    }
+
+    def drawTwoCards(): (SpiceDeck, (SpiceCard, SpiceCard)) = {
+      val DrawResult(newDeck, drawnCards) = super.drawCards(value.cards, 2)
       if(drawnCards.length < 2) {
         val DrawResult(newerDeck, moreDrawnCards) = super.drawCards(shuffleCards(), 2 - drawnCards.length)
-        (SpiceDeck(newerDeck), drawnCards.concat(moreDrawnCards))
+        (SpiceDeck(newerDeck), drawnCards.concat(moreDrawnCards).sized[Nat._2].map(_.tupled).get)
       } else {
-        (SpiceDeck(newDeck), (drawnCards(0), drawnCards(1)))
+        (SpiceDeck(newDeck), drawnCards.sized[Nat._2].map(_.tupled).get)
       }
     }
   }

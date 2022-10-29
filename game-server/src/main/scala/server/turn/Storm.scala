@@ -1,12 +1,13 @@
 package server.turn
 
-import cats.implicits.{catsSyntaxOptionId, toFunctorFilterOps}
+import cats.implicits.catsSyntaxOptionId
 import game.state.armies_on_dune.{ArmiesOnDune, ArmiesOnTerritory}
 import game.state.dune_map._
 import game.state.sector.Sector
 import utils.Not.not
 import game.state.army._
 import game.state.spice.SpiceOnDune
+import server.state.armies_on_dune.affectArmiesOnSectorWith
 import server.state.regions.{TerritoriesBySector, duneTerritoriesBySector}
 import server.state.spice.spiceSector
 
@@ -24,7 +25,7 @@ object storm {
       .toMap
   }
 
-  def affectArmiesOnSectors(
+  def affectArmiesOnStormSectors(
       armiesOnDune: ArmiesOnDune,
       stormSectors: Set[Sector]
   ): ArmiesOnDune = {
@@ -39,35 +40,27 @@ object storm {
 
   private def affectTerritory(
       stormRegions: Set[Territory],
-      stormSectors: Set[Sector]
+      stormSectors: Set[Sector],
   )(
       territoryAndArmies: (Territory, ArmiesOnTerritory)
   ): (Territory, ArmiesOnTerritory) = {
     territoryAndArmies match {
       case (territory, armies) if stormRegions.contains(territory) =>
-        (territory, affectArmies(armies, stormSectors))
+        (territory, affectArmiesOnSectorWith(affectArmyWithStorm(stormSectors))(armies))
       case other => other
     }
   }
 
-  private def affectArmies(
-      armies: ArmiesOnTerritory,
-      stormSectors: Set[Sector]
-  ): Map[Sector, List[Army]] = {
-    armies
-      .map {
-        case (sector, armies) if stormSectors.contains(sector) =>
-          (sector, armies.mapFilter(affectArmy))
-        case other => other
+  private def affectArmyWithStorm(stormSectors: Set[Sector]): Sector => Army => Option[Army] = armySector => army => {
+    if(stormSectors.contains(armySector))
+      army match {
+        case FremenArmy(troops, fedaykins) =>
+          FremenArmy(troops.divideBy2RoundUp, fedaykins.divideBy2RoundUp).some
+        case _: AtreidesArmy | _: HarkonnenArmy | _: EmperorArmy | _: GuildArmy | _: BeneGesseritArmy =>
+          None
       }
-      .filterNot(_._2.isEmpty)
-  }
-
-  private val affectArmy: Army => Option[Army] = {
-    case FremenArmy(troops, fedaykins) =>
-      FremenArmy(troops.divideBy2RoundUp, fedaykins.divideBy2RoundUp).some
-    case _: AtreidesArmy | _: HarkonnenArmy | _: EmperorArmy | _: GuildArmy | _: BeneGesseritArmy =>
-      None
+    else
+      army.some
   }
 
   def affectSpiceOnSectors(

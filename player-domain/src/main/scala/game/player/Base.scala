@@ -1,7 +1,7 @@
 package game.player
 
 import game.state.army.Army
-import game.state.dune_map.Territory
+import game.state.dune_map.{SandWithSpiceBlows, Territory}
 import game.state.faction.Faction
 import game.state.leaders.Leader
 import game.state.present_factions.PresentFactions
@@ -55,6 +55,10 @@ object player {
     def reviveLeader(gameStateView: TableStateView): PlayerDecision[Option[Leader]]
 
     def moveArmy(gameStateView: TableStateView): PlayerDecision[Option[MoveDescriptor]]
+
+    def selectNewSandworm(gameStateView: TableStateView): PlayerDecision[SandWithSpiceBlows]
+
+    def rideSandworm(gameStateView: TableStateView): PlayerDecision[Option[MoveDescriptor]]
 
     def shipArmy(gameStateView: TableStateView): PlayerDecision[Option[ShipmentDestination]]
 

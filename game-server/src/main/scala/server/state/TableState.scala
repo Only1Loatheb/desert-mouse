@@ -1,6 +1,7 @@
 package server.state
 
 import game.state.SpiceDeck
+import game.state.SpiceDeck.SpiceCard.SpiceBlow
 import game.state.turn_counter.TurnCounter
 import game.state.spice.SpiceOnDune
 import game.state.armies_on_dune.ArmiesOnDune
@@ -29,24 +30,25 @@ object table_state {
 
     def apply(presentFactions: PresentFactions, turns: Int): TableState = {
       TableState(
-        turn_counter.init(turns),
-        spice.noSpiceOnDune,
-        armies_on_dune.init(presentFactions),
-        treachery_deck.shuffledTreacheryDeck,
-        spice_deck.shuffledSpiceDeck,
-        storm_deck.shuffledStormDeck,
-        tleilaxu_tanks.init,
-        reserves.init(presentFactions),
-        faction_circles.init(presentFactions),
-        faction_spice.init(presentFactions),
-        AllTraitors(traitor_deck.getTraitorCandidates(presentFactions)),
-        stormStart,
-        kwisatz_haderach_counter.init(),
+        turn = turn_counter.init(turns),
+        spiceOnDune = spice.noSpiceOnDune,
+        armiesOnDune = armies_on_dune.init(presentFactions),
+        treacheryDeck = treachery_deck.shuffledTreacheryDeck,
+        spiceDeck = spice_deck.shuffledSpiceDeck,
+        lastSpiceBlow = None,
+        stormDeck = storm_deck.shuffledStormDeck,
+        tleilaxuTanks = tleilaxu_tanks.init,
+        reserves = reserves.init(presentFactions),
+        factionCircles = faction_circles.init(presentFactions),
+        factionSpice = faction_spice.init(presentFactions),
+        traitors = AllTraitors(traitor_deck.getTraitorCandidates(presentFactions)),
+        stormSector = stormStart,
+        kwisatzHaderachCounter = kwisatz_haderach_counter.init(),
         isShieldWallDestroyed = false,
-        turn_state.init(),
-        treachery_cards.init(presentFactions),
-        strongholds_controlled.init(presentFactions),
-        None,
+        turnState = turn_state.init(),
+        treacheryCards = treachery_cards.init(presentFactions),
+        strongholdsControlled = strongholds_controlled.init(presentFactions),
+        beneGesseritGues = None,
       )
     }
   }
@@ -57,6 +59,7 @@ object table_state {
     armiesOnDune: ArmiesOnDune,
     treacheryDeck: TreacheryDeck,
     spiceDeck: SpiceDeck,
+    lastSpiceBlow: Option[SpiceBlow],
     stormDeck: StormDeck,
     tleilaxuTanks: TleilaxuTanks,
     reserves: Reserves,
@@ -76,6 +79,7 @@ object table_state {
         playedFaction,
         turn,
         spiceOnDune,
+        lastSpiceBlow,
         armiesOnDune,
         tleilaxuTanks,
         reserves,

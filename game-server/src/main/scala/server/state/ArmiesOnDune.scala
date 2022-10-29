@@ -1,18 +1,18 @@
 package server.state
 
+import cats.implicits.toFunctorFilterOps
 import game.state.armies_on_dune.{ArmiesOnDune, ArmiesOnTerritory, ArmySelection}
-import game.state.dune_map._
-import game.state.sector._
-import game.state.army.Army
-import game.state.faction._
 import game.state.army._
+import game.state.dune_map._
+import game.state.faction._
 import game.state.non_neg_int.NonNegInt
 import game.state.present_factions._
+import game.state.sector._
 import server.state.army.ArmyImpr
 
 object armies_on_dune {
 
-  val maxArmiesOnStronghold = 2
+  val maxArmiesOnStronghold: Int = 2
 
   private implicit val nonNegIntImplicitConversion: Int => NonNegInt = NonNegInt(_).get
 
@@ -62,5 +62,17 @@ object armies_on_dune {
       }
     }
 
+  }
+
+  def affectArmiesWith(affectArmy: Army => Option[Army])(armies: ArmiesOnTerritory): Map[Sector, List[Army]] = {
+    armies
+      .map(sectorAndArmies => (sectorAndArmies._1, sectorAndArmies._2.mapFilter(affectArmy)))
+      .filterNot(_._2.isEmpty)
+  }
+
+  def affectArmiesOnSectorWith(affectArmy: Sector => Army => Option[Army])(armies: ArmiesOnTerritory): Map[Sector, List[Army]] = {
+    armies
+      .map(sectorAndArmies => (sectorAndArmies._1, sectorAndArmies._2.mapFilter(affectArmy(sectorAndArmies._1))))
+      .filterNot(_._2.isEmpty)
   }
 }

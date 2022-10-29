@@ -6,7 +6,7 @@ import game.state.faction._
 import game.state.faction_spice.FactionSpice
 import game.state.present_factions.PresentFactions
 import game.state.spice.Spice
-import game.state.{leaders, table_state_view, traitor_deck}
+import game.state.{dune_map, leaders, table_state_view, traitor_deck}
 import game.turn.movement
 import org.scalatest.flatspec.AnyFlatSpec
 import server.state.table_state.TableState
@@ -52,6 +52,10 @@ class ChoamCharityPhaseTest extends AnyFlatSpec {
     override def moveArmy(gameStateView: table_state_view.TableStateView): player.PlayerDecision[Option[movement.MoveDescriptor]] = ???
 
     override def shipArmy(gameStateView: table_state_view.TableStateView): player.PlayerDecision[Option[ShipmentDestination]] = ???
+
+    override def selectNewSandworm(gameStateView: table_state_view.TableStateView): player.PlayerDecision[dune_map.SandWithSpiceBlows] = ???
+
+    override def rideSandworm(gameStateView: table_state_view.TableStateView): player.PlayerDecision[Option[movement.MoveDescriptor]] = ???
   }
 
   val refuseBot = new player.Player {
@@ -75,5 +79,9 @@ class ChoamCharityPhaseTest extends AnyFlatSpec {
     override def moveArmy(gameStateView: table_state_view.TableStateView): player.PlayerDecision[Option[movement.MoveDescriptor]] = ???
 
     override def shipArmy(gameStateView: table_state_view.TableStateView): player.PlayerDecision[Option[ShipmentDestination]] = ???
+
+    override def selectNewSandworm(gameStateView: table_state_view.TableStateView): player.PlayerDecision[dune_map.SandWithSpiceBlows] = ???
+
+    override def rideSandworm(gameStateView: table_state_view.TableStateView): player.PlayerDecision[Option[movement.MoveDescriptor]] = ???
   }
 }
